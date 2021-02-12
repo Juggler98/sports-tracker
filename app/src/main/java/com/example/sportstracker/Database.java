@@ -9,6 +9,10 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
+import static java.lang.Math.round;
+
 public class Database extends SQLiteOpenHelper {
 
     private static final String TABLE_TYPE = "type_activity";
@@ -16,7 +20,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_POINT = "point";
 
     public Database(@Nullable Context context) {
-        super(context, "tracking.db", null, 1);
+        super(context, "tracking.db", null, 7);
     }
 
     @Override
@@ -28,8 +32,8 @@ public class Database extends SQLiteOpenHelper {
         String createTableActivity = "CREATE TABLE " + TABLE_ACTIVITY +
                 "(id_activity INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "type_id INTEGER NOT NULL," +
-                "time_start TEXT NOT NULL," +
-                "time_end TEXT," +
+                "time_start REAL NOT NULL," +
+                "time_end REAL," +
                 "title TEXT," +
                 "FOREIGN KEY(type_id) REFERENCES " + TABLE_TYPE + "(id_type_activity))";
 
@@ -38,11 +42,11 @@ public class Database extends SQLiteOpenHelper {
                 "id_activity INTEGER NOT NULL," +
                 "lat REAL NOT NULL," +
                 "lon REAL NOT NULL," +
-                "ele REAL NOT NULL," +
-                "time TEXT NOT NULL," +
-                "speed REAL," +
-                "hdop REAL," +
-                "course REAL," +
+                "alt REAL NOT NULL," +
+                "time REAL NOT NULL," +
+                "speed REAL NOT NULL," +
+                "acc REAL NOT NULL," +
+                "bear REAL NOT NULL," +
                 "FOREIGN KEY(id_activity) REFERENCES " + TABLE_ACTIVITY + "(id_activity)," +
                 "PRIMARY KEY (id_point, id_activity))";
 
@@ -78,7 +82,7 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
-    private boolean createActivity(Activity activity) {
+    public boolean createActivity(Activity activity) {
         Log.d("DB_LC", "DB_ADD_Activity");
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -92,44 +96,42 @@ public class Database extends SQLiteOpenHelper {
         if (insert == -1) {
             return false;
         } else {
+            Log.d("DB_LC", "DB_ADD_Activity_Succes");
             return true;
         }
     }
 
-    private boolean addPoint(Activity activity, Point point) {
+    public boolean addPoint(Point point) {
         Log.d("DB_LC", "DB_ADD_Point");
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put("id_point", point.getId());
-        cv.put("id_activity", activity.getId());
+        cv.put("id_activity", point.getIdActivity());
         cv.put("lat", point.getLat());
         cv.put("lon", point.getLon());
-        cv.put("ele", point.getEle());
+        cv.put("alt", point.getAlt());
         cv.put("time", point.getTime());
-        if (point.getSpeed() != -1)
-            cv.put("speed", point.getSpeed());
-        if (point.getHdop() != -1)
-            cv.put("hdop", point.getHdop());
-        if (point.getCourse() != -1)
-            cv.put("course", point.getCourse());
+        cv.put("speed", point.getSpeed());
+        cv.put("acc", point.getAcc());
+        cv.put("bear", point.getBear());
         long insert = db.insert(TABLE_POINT, null, cv);
         db.close();
 
         if (insert == -1) {
             return false;
         } else {
+            Log.d("DB_LC", "DB_ADD_Point_Succes");
             return true;
         }
     }
 
 
-
     public void checkTypes() {
         String queryString = "SELECT * FROM " + TABLE_TYPE;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery(queryString,null);
+        Cursor cursor = db.rawQuery(queryString, null);
         if (!cursor.moveToFirst()) {
             this.addTypes("Hike");
             this.addTypes("Bike");
@@ -144,7 +146,7 @@ public class Database extends SQLiteOpenHelper {
     public String getType(int type) {
         String queryString = "SELECT type FROM " + TABLE_TYPE + " WHERE id_type_activity = " + type;
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery(queryString,null);
+        Cursor cursor = db.rawQuery(queryString, null);
         String typeStr = "";
         if (cursor.moveToFirst()) {
             typeStr = cursor.getString(0);
@@ -152,6 +154,78 @@ public class Database extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return typeStr;
+    }
+
+    public int getLastActivityID() {
+        String queryString = "SELECT id_activity FROM " + TABLE_ACTIVITY;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+        int lastID = 0;
+        if (cursor.moveToLast()) {
+            lastID = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return lastID;
+    }
+
+    public int getLastPointID(int idActivity) {
+        String queryString = "SELECT id_point FROM " + TABLE_POINT + " WHERE id_activity = " + idActivity;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+        int lastID = 0;
+        if (cursor.moveToLast()) {
+            lastID = cursor.getInt(0);
+        }
+        cursor.close();
+        db.close();
+        return lastID;
+    }
+
+    public double getDistance(int idActivity) {
+        double lat1 = 0;
+        double lat2 = 0;
+        double lon1 = 0;
+        double lon2 = 0;
+        double distance = 0;
+
+        String queryString = "SELECT * FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + idActivity;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+
+        boolean firstIterationCheck = true;
+        if (cursor.moveToFirst()) {
+            do {
+            if (!firstIterationCheck) {
+                lat2 = cursor.getDouble(2);
+                lon2 = cursor.getDouble(3);
+                distance += haversineFormula(lat1, lat2, lon1, lon2);
+                lat1 = lat2;
+                lon1 = lon2;
+            } else {
+                lat1 = cursor.getDouble(2);
+                lon1 = cursor.getDouble(3);
+            }
+            firstIterationCheck = false;
+                Log.d("DB_LC", "DB_getDistance");
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return round(distance / 10) / 100.0;
+    }
+
+
+    // this is haversine Formula for calculating distance between two coordinates
+    private double haversineFormula(double lat1, double lat2, double lon1, double lon2) {
+        double r = 6371000;
+        double fi1 = lat1 * Math.PI / 180;
+        double fi2 = lat2 * Math.PI / 180;
+        double deltaFi = (lat2 - lat1) * Math.PI / 180;
+        double deltaLambda = (lon2 - lon1) * Math.PI / 180;
+        double a = Math.sin(deltaFi / 2) * Math.sin(deltaFi / 2) + Math.cos(fi1) * Math.cos(fi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return r * c;
     }
 
 

@@ -6,19 +6,22 @@ public class Point {
     private int idActivity;
     private double lat;
     private double lon;
-    private double ele;
+    private double alt;
     private double time;
-    private double speed = -1;
-    private double hdop = -1;
-    private double course = -1;
+    private double speed;
+    private double acc;
+    private double bear;
 
-    public Point(int id, int idActivity, double lat, double lon, double ele, double time) {
+    public Point(int id, int idActivity, double lat, double lon, double alt, double time, double speed, double acc, double bear) {
         this.id = id;
         this.idActivity = idActivity;
         this.lat = lat;
         this.lon = lon;
-        this.ele = ele;
+        this.alt = alt;
         this.time = time;
+        this.speed = speed;
+        this.acc = acc;
+        this.bear = bear;
     }
 
     public Point() {
@@ -31,11 +34,11 @@ public class Point {
                 ", idActivity=" + idActivity +
                 ", lat=" + lat +
                 ", lon=" + lon +
-                ", ele=" + ele +
+                ", alt=" + alt +
                 ", time=" + time +
                 ", speed=" + speed +
-                ", hdop=" + hdop +
-                ", course=" + course +
+                ", acc=" + acc +
+                ", bear=" + bear +
                 '}';
     }
 
@@ -71,12 +74,12 @@ public class Point {
         this.lon = lon;
     }
 
-    public double getEle() {
-        return ele;
+    public double getAlt() {
+        return alt;
     }
 
-    public void setEle(double ele) {
-        this.ele = ele;
+    public void setAlt(double alt) {
+        this.alt = alt;
     }
 
     public double getTime() {
@@ -95,19 +98,19 @@ public class Point {
         this.speed = speed;
     }
 
-    public double getHdop() {
-        return hdop;
+    public double getAcc() {
+        return acc;
     }
 
-    public void setHdop(double hdop) {
-        this.hdop = hdop;
+    public void setAcc(double acc) {
+        this.acc = acc;
     }
 
-    public double getCourse() {
-        return course;
+    public double getBear() {
+        return bear;
     }
 
-    public void setCourse(double course) {
-        this.course = course;
+    public void setBear(double bear) {
+        this.bear = bear;
     }
 }

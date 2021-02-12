@@ -4,12 +4,11 @@ public class Activity {
 
     private int id;
     private int idType;
-    private String timeStart;
-    private String timeEnd = null;
+    private double timeStart;
+    private double timeEnd = -1;
     private String title = null;
 
-    public Activity(int id, int idType, String timeStart) {
-        this.id = id;
+    public Activity(int idType, double timeStart) {
         this.idType = idType;
         this.timeStart = timeStart;
     }
@@ -44,19 +43,19 @@ public class Activity {
         this.idType = idType;
     }
 
-    public String getTimeStart() {
+    public double getTimeStart() {
         return timeStart;
     }
 
-    public void setTimeStart(String timeStart) {
+    public void setTimeStart(double timeStart) {
         this.timeStart = timeStart;
     }
 
-    public String getTimeEnd() {
+    public double getTimeEnd() {
         return timeEnd;
     }
 
-    public void setTimeEnd(String timeEnd) {
+    public void setTimeEnd(double timeEnd) {
         this.timeEnd = timeEnd;
     }
 
