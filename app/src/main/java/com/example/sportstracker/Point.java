@@ -10,17 +10,20 @@ public class Point {
     private double time;
     private double speed;
     private double hdop;
+    private double vdop;
     private double course;
 
-    public Point(int id, int idActivity, double lat, double lon, double ele, double time, double speed, double hdop, double course) {
-        this.id = id;
+    public Point(int idActivity, int id, double lat, double lon, double ele,
+                 double time, double speed, double hdop, double vdop, double course) {
         this.idActivity = idActivity;
+        this.id = id;
         this.lat = lat;
         this.lon = lon;
         this.ele = ele;
         this.time = time;
         this.speed = speed;
         this.hdop = hdop;
+        this.vdop = vdop;
         this.course = course;
     }
 
@@ -30,14 +33,15 @@ public class Point {
     @Override
     public String toString() {
         return "Point{" +
-                "id=" + id +
-                ", idActivity=" + idActivity +
+                "idActivity=" + idActivity +
+                ",id=" + id +
                 ", lat=" + lat +
                 ", lon=" + lon +
                 ", ele=" + ele +
                 ", time=" + time +
                 ", speed=" + speed +
                 ", hdop=" + hdop +
+                ", vdop=" + vdop +
                 ", course=" + course +
                 '}';
     }
@@ -112,5 +116,13 @@ public class Point {
 
     public void setCourse(double course) {
         this.course = course;
+    }
+
+    public double getVdop() {
+        return vdop;
+    }
+
+    public void setVdop(double vdop) {
+        this.vdop = vdop;
     }
 }

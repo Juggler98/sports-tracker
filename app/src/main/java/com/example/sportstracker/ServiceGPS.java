@@ -10,11 +10,13 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import java.text.DateFormat;
@@ -56,18 +58,22 @@ public class ServiceGPS extends Service {
             double time = location.getTime();
             double speed = location.getSpeed();
             double hdop = location.getAccuracy();
+            double vdop = 0.0;
+            if (Build.VERSION.SDK_INT >= 26) {
+                vdop = location.getVerticalAccuracyMeters();
+            }
             double course = location.getBearing();
 
+            Log.d("GPS_LC_TIME",location.getTime() + "");
 
 //            DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
 //            Date date = new Date(location.getTime());
 //            String time = format.format(date);
-            Log.d("GPS_LC_TIME",location.getTime() + "");
 
-            String data = latitude + "," + longitude + "," + elevation + "," + time + "\n";
+//            String data = latitude + "," + longitude + "," + elevation + "," + time + "\n";
 
-            Point point = new Point(database.getLastPointID(routeID) + 1, routeID,
-                    latitude, longitude, elevation, time, speed, hdop, course);
+            Point point = new Point(routeID, database.getLastPointID(routeID) + 1,
+                    latitude, longitude, elevation, time, speed, hdop, vdop, course);
 //            routesMethods.write(routeID, data, getApplicationContext());
             database.addPoint(point);
 
@@ -131,11 +137,11 @@ public class ServiceGPS extends Service {
         broadCastIntent.putExtra(EXTRA,"stop this");
         PendingIntent actionIntent = PendingIntent.getBroadcast(this, 0,broadCastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-        Date date = new Date();
-        String time = format.format(date);
+//        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+//        Date date = new Date();
+//        String time = format.format(date);
 
-        Log.d("GPS_LC",  routeID + " " + time);
+        Log.d("GPS_LC",  routeID + " ");
 
         // creates notification
         notification = new NotificationCompat.Builder(this, CHANNEL_ID).setContentTitle("GPS Tracking is running").setContentText("0.0 km").setSmallIcon(R.drawable.ic_notification)

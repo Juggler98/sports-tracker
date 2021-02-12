@@ -25,7 +25,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import static com.example.sportstracker.MainActivity.EXTRA;
 import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
@@ -57,8 +61,6 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private Database database;
 
 
-
-
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +87,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         Log.d("RouteInfo_LC", "onCreate Route: " + routeID);
 
-        String date = this.getDate(routeID);
+//        String date = this.getDate(routeID);
 
         String name = "";
 
@@ -97,28 +99,32 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         getSupportActionBar().setTitle(name);
 
-        dateView.setText(date);
+        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+        Date date = new Date((long)database.getActivity(routeID).getTimeStart());
+        String timeStr = format.format(date);
+
+        dateView.setText(timeStr);
 
 //        double distanceD = routesMethods.getDistance(routeID,getApplicationContext());
         double distanceD = database.getDistance(routeID);
-        distance.setText(distanceD +  " " + getString(R.string.km));
+        distance.setText(distanceD + " " + getString(R.string.km));
 
         // calculate hours minutes and seconds from hours
-        double hoursD = routesMethods.getTime(routeID, getApplicationContext());
-        int hours = (int)hoursD;
+//        double hoursD = routesMethods.getTime(routeID, getApplicationContext());
+        double hoursD = database.getHours(routeID);
+        int hours = (int) hoursD;
         double minutesD = (hoursD - hours) * 60.0;
-        int minutes = (int)minutesD;
+        int minutes = (int) minutesD;
         double secondsD = (minutesD - minutes) * 60.0;
-        int seconds = (int)secondsD;
+        int seconds = (int) secondsD;
 
         time.setText(getString(R.string.time_data, hours, minutes, seconds));
-        elevationGain.setText(getString(R.string.metres, (int)routesMethods.getElevationGain(routeID, getApplicationContext())));
+//        elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGain(routeID, getApplicationContext())));
+        elevationGain.setText(getString(R.string.metres, (int) database.getElevationGain(routeID)));
 
-        if (hoursD == 0)
-        {
+        if (hoursD == 0) {
             this.avg = 0.0;
-        } else
-        {
+        } else {
             this.avg = round(distanceD / hoursD * 100.0) / 100.0;
         }
 
@@ -142,7 +148,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         });
 
 
-        latLngArrayList = routesMethods.loadLatLng(routeID, getApplicationContext());
+//        latLngArrayList = routesMethods.loadLatLng(routeID, getApplicationContext());
+        latLngArrayList = database.getLatLng(routeID);
 
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -190,15 +197,15 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
                 return true;
-            default: return super.onOptionsItemSelected(item);
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        if (!latLngArrayList.isEmpty())
-        {
+        if (!latLngArrayList.isEmpty()) {
             // show map of recorded route
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngArrayList.get(latLngArrayList.size() / 2), 14f));
             googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
@@ -225,10 +232,10 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 //            if (tokens[0].equals(routeID))
 //            {
 //                dataArrayList.set(i, routeID + "," + this.getDate(routeID) + "," + name);
-                database.updateActivity(routeID,0,0.0, name);
-                name = name.equals("") ? "Details" : name;
-                getSupportActionBar().setTitle(name);
-                Log.d("RouteInfo_LC", "Renaming: " + routeID + " " + name);
+        database.updateActivity(routeID, 0, 0.0, name);
+        name = name.equals("") ? "Details" : name;
+        getSupportActionBar().setTitle(name);
+        Log.d("RouteInfo_LC", "Renaming: " + routeID + " " + name);
 //                break;
 //            }
 //        }
@@ -242,7 +249,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         editor.apply();
     }
 
-    private String getDate(int routeID) {
+//    private String getDate(int routeID) {
 //        ArrayList<String> arrayList = routesMethods.loadData(getApplicationContext());
 //        for (int i = 0; i < arrayList.size(); ++i)
 //        {
@@ -255,10 +262,10 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 //                    return "";
 //            }
 //        }
-        return "";
-    }
+//        return "";
+//    }
 
-    private String getName(int routeID) {
+//    private String getName(int routeID) {
 //        ArrayList<String> arrayList = routesMethods.loadData(getApplicationContext());
 //        for (int i = 0; i < arrayList.size(); ++i)
 //        {
@@ -272,23 +279,22 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 //            }
 //
 //        }
-        return "";
-    }
+//        return "";
+//    }
 
 
     // if click on avg speed it changed to avg pace and opposite
     @SuppressLint("SetTextI18n")
     private void changeAvgPace() {
-        if (avgVsPace){
+        if (avgVsPace) {
             avgInfo.setText(getString(R.string.avg_pace));
-            if (avg == 0)
-            {
+            if (avg == 0) {
                 avgSpeed.setText(getString(R.string.avg_pace_null));
             } else {
                 double minutesD = 60 / avg;
-                int minutes = (int)minutesD;
+                int minutes = (int) minutesD;
                 double secondsD = (minutesD - minutes) * 60.0;
-                int seconds = (int)secondsD;
+                int seconds = (int) secondsD;
                 avgSpeed.setText(getString(R.string.avgPace_data, minutes, seconds));
             }
         } else {

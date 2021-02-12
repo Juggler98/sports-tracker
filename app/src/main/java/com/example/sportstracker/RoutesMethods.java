@@ -24,17 +24,17 @@ public class RoutesMethods {
 
     private final String TXT = ".txt";
 
-    public RoutesMethods() {
 
+    public RoutesMethods() {
     }
 
-    /**
-     * Write to file.
-     *
-     * @param name of file
-     * @param text to write
-     * @param context application context
-     */
+//    /**
+//     * Write to file.
+//     *
+//     * @param name of file
+//     * @param text to write
+//     * @param context application context
+//     */
 //    public void write(String name, String text, Context context) {
 //        try {
 //            FileOutputStream fileOutputStream = context.openFileOutput(name + TXT, Context.MODE_APPEND);
@@ -45,45 +45,44 @@ public class RoutesMethods {
 //        }
 //    }
 
-    /**
-     *
-     * @param name
-     * @param context
-     * @return time of doing activity
-     */
-    public double getTime(int name, Context context) {
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(name + TXT)));
+//    /**
+//     *
+//     * @param name
+//     * @param context
+//     * @return time of doing activity
+//     */
+//    public double getTime(int name, Context context) {
+//        try {
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(name + TXT)));
+//
+//            String line;
+//            String firstDate = "";
+//            String lastDate = "";
+//            boolean firstLineCheck = true;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                String[] tokens = line.split(",");
+//                if (firstLineCheck)
+//                    firstDate = tokens[3];
+//                firstLineCheck = false;
+//                lastDate = tokens[3];
+//            }
+//
+//            Date date1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).parse(firstDate);
+//            Date date2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).parse(lastDate);
+//            double time = date2.getTime() - date1.getTime();
+//            return round(time / 1000 / 3600 * 100000.0) / 100000.0;
+//        } catch (ParseException | IOException e) {
+//            e.printStackTrace();
+//        }
+//        return 0.0;
+//    }
 
-            String line;
-            String firstDate = "";
-            String lastDate = "";
-            boolean firstLineCheck = true;
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] tokens = line.split(",");
-                if (firstLineCheck)
-                    firstDate = tokens[3];
-                firstLineCheck = false;
-                lastDate = tokens[3];
-            }
-
-            Date date1 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).parse(firstDate);
-            Date date2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).parse(lastDate);
-            double time = date2.getTime() - date1.getTime();
-            return round(time / 1000 / 3600 * 100000.0) / 100000.0;
-        } catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
-        return 0.0;
-
-    }
-
-    /**
-     *
-     * @param name
-     * @param context
-     * @return distance of route
-     */
+//    /**
+//     *
+//     * @param name
+//     * @param context
+//     * @return distance of route
+//     */
 //    public double getDistance(int name, Context context) {
 //        double lat1 = 0;
 //        double lat2 = 0;
@@ -117,43 +116,43 @@ public class RoutesMethods {
 //        return 0.0;
 //    }
 
-    /**
-     *
-     * @param name
-     * @param context
-     * @return elevation gain of route
-     */
-    public double getElevationGain(int name, Context context) {
-        double ele1 = 0;
-        double ele2 = 0;
-
-        double elevationGain = 0;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(name + TXT)));
-
-            double elevationDifference = 0;
-            boolean firstIterationCheck = true;
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] tokens = line.split(",");
-                if (!firstIterationCheck) {
-                    ele2 = Double.parseDouble(tokens[2]);
-                    elevationDifference = ele2 - ele1;
-                    if (elevationDifference > 0) {
-                        elevationGain += elevationDifference;
-                    }
-                    ele1 = ele2;
-                } else {
-                    ele1 = Double.parseDouble(tokens[2]);
-                }
-                firstIterationCheck = false;
-            }
-            return round(elevationGain);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
+//    /**
+//     *
+//     * @param name
+//     * @param context
+//     * @return elevation gain of route
+//     */
+//    public double getElevationGain(int name, Context context) {
+//        double ele1 = 0;
+//        double ele2 = 0;
+//
+//        double elevationGain = 0;
+//        try {
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(name + TXT)));
+//
+//            double elevationDifference = 0;
+//            boolean firstIterationCheck = true;
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                String[] tokens = line.split(",");
+//                if (!firstIterationCheck) {
+//                    ele2 = Double.parseDouble(tokens[2]);
+//                    elevationDifference = ele2 - ele1;
+//                    if (elevationDifference > 0) {
+//                        elevationGain += elevationDifference;
+//                    }
+//                    ele1 = ele2;
+//                } else {
+//                    ele1 = Double.parseDouble(tokens[2]);
+//                }
+//                firstIterationCheck = false;
+//            }
+//            return round(elevationGain);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return 0;
+//    }
 
     // this is haversine Formula for calculating distance between two coordinates
 //    private double haversineFormula(double lat1, double lat2, double lon1, double lon2) {
@@ -167,33 +166,34 @@ public class RoutesMethods {
 //        return r * c;
 //    }
 
-    /**
-     *
-     * @param name
-     * @param context
-     * @return arrayList with all coordinates
-     */
-    public ArrayList<LatLng> loadLatLng(int name, Context context) {
-        double lat = 0;
-        double lon = 0;
-        ArrayList<LatLng> arrayList = new ArrayList<>();
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(name + TXT)));
 
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] tokens = line.split(",");
-                lat = Double.parseDouble(tokens[0]);
-                lon = Double.parseDouble(tokens[1]);
-                LatLng latlng = new LatLng(lat, lon);
-                arrayList.add(latlng);
-            }
-            return arrayList;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return arrayList;
-    }
+//    /**
+//     *
+//     * @param name
+//     * @param context
+//     * @return arrayList with all coordinates
+//     */
+//    public ArrayList<LatLng> loadLatLng(int name, Context context) {
+//        double lat = 0;
+//        double lon = 0;
+//        ArrayList<LatLng> arrayList = new ArrayList<>();
+//        try {
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(name + TXT)));
+//
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                String[] tokens = line.split(",");
+//                lat = Double.parseDouble(tokens[0]);
+//                lon = Double.parseDouble(tokens[1]);
+//                LatLng latlng = new LatLng(lat, lon);
+//                arrayList.add(latlng);
+//            }
+//            return arrayList;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return arrayList;
+//    }
 
     /**
      *

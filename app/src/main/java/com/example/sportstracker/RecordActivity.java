@@ -61,10 +61,14 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
     private CameraPosition cameraPosition;
     private ArrayList<LatLng> latLngArrayList = new ArrayList<>();
 
+    private Database database;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+
+        database = new Database(RecordActivity.this);
 
         sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         routeID = sharedPreferences.getInt(NAME_OF_ACTIVITY, 0);
@@ -204,7 +208,8 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         }
         // load coordinates
         if (routeID != 0) {
-            latLngArrayList = routesMethods.loadLatLng(routeID, getApplicationContext());
+//            latLngArrayList = routesMethods.loadLatLng(routeID, getApplicationContext());
+            latLngArrayList = database.getLatLng(routeID);
         } else {
             Log.d("RECORD_LC", "Route ID is null");
         }

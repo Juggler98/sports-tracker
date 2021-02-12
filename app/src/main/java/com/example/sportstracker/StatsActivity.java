@@ -56,8 +56,10 @@ public class StatsActivity extends AppCompatActivity {
             activityID = activities.get(i).getId();
 //            double distancePartial = routesMethods.getDistance(Integer.parseInt(name), getApplicationContext());
             double distancePartial = database.getDistance(activityID);
-            double timePartial = routesMethods.getTime(activityID, getApplicationContext());
-            double elevationGainPartial = routesMethods.getElevationGain(activityID, getApplicationContext());
+//            double timePartial = routesMethods.getTime(activityID, getApplicationContext());
+            double timePartial = database.getHours(activityID);
+//            double elevationGainPartial = routesMethods.getElevationGain(activityID, getApplicationContext());
+            double elevationGainPartial = database.getElevationGain(activityID);
             distanceD += distancePartial;
             timeD += timePartial;
             elevationGainD += elevationGainPartial;
@@ -89,7 +91,7 @@ public class StatsActivity extends AppCompatActivity {
             builder.setMessage("Delete all activities?").setCancelable(true).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    deleteAll();
+                    database.deleteAll();
                     finish();
                 }
             }).setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -107,9 +109,9 @@ public class StatsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void deleteAll() {
+//    private void deleteAll() {
 //        dataArrayList = routesMethods.loadData(getApplicationContext());
-        activities = database.getActivities();
+//        activities = database.getActivities();
 //        String name;
 //        int activityID;
 //        for (int i = 0; i < activities.size(); i++) {
@@ -118,5 +120,7 @@ public class StatsActivity extends AppCompatActivity {
 //        }
 //        deleteFile("data.txt");
 //        dataArrayList.clear();
-    }
+//        database.deleteAll();
+//    }
+
 }
