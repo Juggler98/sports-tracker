@@ -22,8 +22,10 @@ import static java.lang.Math.round;
  */
 public class StatsActivity extends AppCompatActivity {
 
-    private ArrayList<String> dataArrayList = new ArrayList<>();
+    //    private ArrayList<String> dataArrayList = new ArrayList<>();
+    private ArrayList<Activity> activities = new ArrayList<>();
     private RoutesMethods routesMethods = new RoutesMethods();
+    private Database database;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -31,39 +33,44 @@ public class StatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
 
+        database = new Database(StatsActivity.this);
+
         TextView distance = findViewById(R.id.textView3);
         TextView time = findViewById(R.id.textView4);
         TextView activityCount = findViewById(R.id.textView2);
         TextView elevationGain = findViewById(R.id.textView5);
 
-        dataArrayList = routesMethods.loadData(getApplicationContext());
+//        dataArrayList = routesMethods.loadData(getApplicationContext());
+        activities = database.getActivities();
 
         double distanceD = 0;
         double timeD = 0;
         double elevationGainD = 0;
 
-        String name;
-        for (int i = 0; i < dataArrayList.size(); ++i)
-        {
-            String[] tokens = dataArrayList.get(i).split(",");
-            name = tokens[0];
-            double distancePartial = routesMethods.getDistance(Integer.parseInt(name), getApplicationContext());
-            double timePartial = routesMethods.getTime(Integer.parseInt(name), getApplicationContext());
-            double elevationGainPartial = routesMethods.getElevationGain(Integer.parseInt(name), getApplicationContext());
+//        String name;
+        int activityID;
+
+        for (int i = 0; i < activities.size(); ++i) {
+//            String[] tokens = dataArrayList.get(i).split(",");
+//            name = tokens[0];
+            activityID = activities.get(i).getId();
+//            double distancePartial = routesMethods.getDistance(Integer.parseInt(name), getApplicationContext());
+            double distancePartial = database.getDistance(activityID);
+            double timePartial = routesMethods.getTime(activityID, getApplicationContext());
+            double elevationGainPartial = routesMethods.getElevationGain(activityID, getApplicationContext());
             distanceD += distancePartial;
             timeD += timePartial;
             elevationGainD += elevationGainPartial;
         }
 
-        int hours = (int)timeD;
+        int hours = (int) timeD;
         double minutesD = (timeD - hours) * 60.0;
-        int minutes = (int)minutesD;
+        int minutes = (int) minutesD;
 
-        distance.setText(round(distanceD) +  " " + getString(R.string.km));
+        distance.setText(round(distanceD) + " " + getString(R.string.km));
         time.setText(getString(R.string.time_data_stats, hours, minutes));
         elevationGain.setText(getString(R.string.metres, round(elevationGainD)));
-        activityCount.setText(getString(R.string.activitiesCount, dataArrayList.size()));
-
+        activityCount.setText(getString(R.string.activitiesCount, activities.size()));
 
 
     }
@@ -77,8 +84,7 @@ public class StatsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.item1)
-        {
+        if (item.getItemId() == R.id.item1) {
             AlertDialog.Builder builder = new AlertDialog.Builder(StatsActivity.this);
             builder.setMessage("Delete all activities?").setCancelable(true).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
@@ -102,14 +108,15 @@ public class StatsActivity extends AppCompatActivity {
     }
 
     private void deleteAll() {
-        dataArrayList = routesMethods.loadData(getApplicationContext());
-        String name;
-        for (int i = 0; i < dataArrayList.size(); i++)
-        {
-            String[] tokens = dataArrayList.get(i).split(",");
-            deleteFile(tokens[0] + ".txt");
-        }
-        deleteFile( "data.txt");
-        dataArrayList.clear();
+//        dataArrayList = routesMethods.loadData(getApplicationContext());
+        activities = database.getActivities();
+//        String name;
+//        int activityID;
+//        for (int i = 0; i < activities.size(); i++) {
+//            String[] tokens = dataArrayList.get(i).split(",");
+//            deleteFile(tokens[0] + ".txt");
+//        }
+//        deleteFile("data.txt");
+//        dataArrayList.clear();
     }
 }

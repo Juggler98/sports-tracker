@@ -31,6 +31,9 @@ public class RoutesActivity extends AppCompatActivity {
 
     private ArrayList<String> arrayListListView = new ArrayList<>();
     private ArrayList<String> dataArrayList = new ArrayList<>();
+    private ArrayList<Activity> activities = new ArrayList<>();
+
+    private Database database;
 
     private final String TXT = ".txt";
 
@@ -39,28 +42,35 @@ public class RoutesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
 
+        database = new Database(RoutesActivity.this);
+        activities = database.getActivities();
+
+
         final RoutesMethods routesMethods = new RoutesMethods();
 
         Log.d("Routes_LC", "onCreate Routes");
 
         listView = findViewById(R.id.listView);
 
-        loadListView();
-        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListListView));
+//        loadListView();
+        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activities));
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
                 final int positionFinal = position;
                 AlertDialog.Builder builder = new AlertDialog.Builder(RoutesActivity.this);
                 builder.setMessage("Delete this activity?").setCancelable(true).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dataArrayList = routesMethods.loadData(getApplicationContext());
-                        String[] tokens = dataArrayList.get(positionFinal).split(",");
-                        routesMethods.delete(Integer.parseInt(tokens[0]), getApplicationContext());
-                        loadListView();
-                        listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
+//                        dataArrayList = routesMethods.loadData(getApplicationContext());
+//                        String[] tokens = dataArrayList.get(positionFinal).split(",");
+//                        routesMethods.delete(Integer.parseInt(tokens[0]), getApplicationContext());
+//                        loadListView();
+                        database.deleteActivity(activities.get(position).getId());
+                        activities = database.getActivities();
+//                        listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
+                        listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, activities));
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
@@ -78,9 +88,9 @@ public class RoutesActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                dataArrayList = routesMethods.loadData(getApplicationContext());
-                String[] tokens = dataArrayList.get(position).split(",");
-                openStats(tokens[0]);
+//                dataArrayList = routesMethods.loadData(getApplicationContext());
+//                String[] tokens = dataArrayList.get(position).split(",");
+                openStats(activities.get(position).getId());
             }
         });
 
@@ -118,8 +128,12 @@ public class RoutesActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         boolean isReloadNeeded = sharedPreferences.getBoolean(IS_RELOAD_NEEDED, false);
         if (isReloadNeeded) {
-            loadListView();
-            listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
+//            loadListView();
+            activities = database.getActivities();
+            listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, activities));
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(IS_RELOAD_NEEDED, false);
+            editor.apply();
         }
 
     }
@@ -136,22 +150,22 @@ public class RoutesActivity extends AppCompatActivity {
         Log.d("Routes_LC", "onStop Routes");
     }
 
-    private void loadListView() {
-        dataArrayList = routesMethods.loadData(getApplicationContext());
-        arrayListListView.clear();
-        for (int i = 0; i < dataArrayList.size(); ++i) {
-            String[] tokens = dataArrayList.get(i).split(",");
-            if (tokens.length > 2) {
-                arrayListListView.add((i + 1) + ". " + tokens[2]);
-            } else {
-                arrayListListView.add((i + 1) + ". " + tokens[1]);
-            }
-        }
-    }
+//    private void loadListView() {
+//        dataArrayList = routesMethods.loadData(getApplicationContext());
+//        arrayListListView.clear();
+//        for (int i = 0; i < dataArrayList.size(); ++i) {
+//            String[] tokens = dataArrayList.get(i).split(",");
+//            if (tokens.length > 2) {
+//                arrayListListView.add((i + 1) + ". " + tokens[2]);
+//            } else {
+//                arrayListListView.add((i + 1) + ". " + tokens[1]);
+//            }
+//        }
+//    }
 
-    private void openStats(String name) {
+    private void openStats(int activityID) {
         Intent intent = new Intent(this, RouteInfoActivity.class);
-        intent.putExtra(EXTRA, name);
+        intent.putExtra(EXTRA, activityID);
         startActivity(intent);
     }
 }

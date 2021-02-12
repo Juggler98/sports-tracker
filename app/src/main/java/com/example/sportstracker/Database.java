@@ -9,6 +9,8 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 import static java.lang.Math.round;
 
 public class Database extends SQLiteOpenHelper {
@@ -18,7 +20,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_POINT = "point";
 
     public Database(@Nullable Context context) {
-        super(context, "tracking.db", null, 2);
+        super(context, "tracking.db", null, 1);
     }
 
     @Override
@@ -88,6 +90,7 @@ public class Database extends SQLiteOpenHelper {
 
         cv.put("type_id", activity.getIdType());
         cv.put("time_start", activity.getTimeStart());
+//        cv.put("title", "Hello");
         long insert = db.insert(TABLE_ACTIVITY, null, cv);
         db.close();
 
@@ -187,7 +190,7 @@ public class Database extends SQLiteOpenHelper {
         double lon2 = 0;
         double distance = 0;
 
-        String queryString = "SELECT * FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + idActivity;
+        String queryString = "SELECT * FROM " + TABLE_POINT + " WHERE id_activity = " + idActivity;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
 
@@ -224,6 +227,74 @@ public class Database extends SQLiteOpenHelper {
         double a = Math.sin(deltaFi / 2) * Math.sin(deltaFi / 2) + Math.cos(fi1) * Math.cos(fi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return r * c;
+    }
+
+    public ArrayList<Activity> getActivities() {
+        ArrayList<Activity> activities = new ArrayList<>();
+        String queryString = "SELECT * FROM " + TABLE_ACTIVITY;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+        if (cursor.moveToFirst()) {
+            do {
+                int id =  cursor.getInt(0);
+                int type = cursor.getInt(1);
+                double timeStart = cursor.getDouble(2);
+                Activity activity = new Activity(type, timeStart);
+                activity.setId(id);
+                Log.d("DB_LC","Column count: " + cursor.getColumnCount());
+                Log.d("DB_LC","Row count: " + cursor.getCount());
+                if (cursor.getType(3) != 0) {
+                    activity.setTimeEnd(cursor.getDouble(3));
+                    Log.d("DB_LC","EndTime is: " + cursor.getDouble(3));
+                }
+                if (cursor.getType(4) != 0) {
+                    activity.setTitle(cursor.getString(4));
+                    Log.d("DB_LC","Title is: " + cursor.getString(4));
+                }
+//                if (activity.getTimeEnd() != 0.0) {
+//                    activities.add(activity);
+//                }
+                activities.add(activity);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return activities;
+    }
+
+    public boolean deleteActivity(int activityID) {
+        String deletePoints = "DELETE FROM " + TABLE_POINT + " WHERE id_activity = " + activityID;
+        String deleteActivity = "DELETE FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + activityID;
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(deletePoints);
+        db.execSQL(deleteActivity);
+        db.close();
+        Log.d("DB_LC","Delete Activity: " + activityID);
+        return true;
+    }
+
+    public boolean updateActivity(int activityID, int type, double endTime,String name) {
+        String changeType = "UPDATE " + TABLE_ACTIVITY + " SET type_id = " + type + " WHERE id_activity = " + activityID;
+        String setEndTime = "UPDATE " + TABLE_ACTIVITY + " SET time_end = " + endTime + " WHERE id_activity = " + activityID;
+        String setTitle = "UPDATE " + TABLE_ACTIVITY + " SET title = " + name + " WHERE id_activity = " + activityID;
+
+        SQLiteDatabase db = getWritableDatabase();
+        if (type != 0) {
+            db.execSQL(changeType);
+        }
+        if (endTime != 0.0) {
+            db.execSQL(setEndTime);
+        }
+        if (!name.equals("")) {
+            ContentValues cv = new ContentValues();
+            cv.put("title", name);
+            String[] whereArgs = {activityID + ""};
+            db.update(TABLE_ACTIVITY, cv, "id_activity=?", whereArgs);
+//            db.execSQL(setTitle);
+        }
+        db.close();
+        Log.d("DB_LC","Change Activity: " + activityID + ", " + type + ", " + endTime + ", " + name);
+        return true;
     }
 
 

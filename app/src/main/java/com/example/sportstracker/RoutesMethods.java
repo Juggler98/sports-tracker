@@ -35,7 +35,7 @@ public class RoutesMethods {
      * @param text to write
      * @param context application context
      */
-    public void write(String name, String text, Context context) {
+//    public void write(String name, String text, Context context) {
 //        try {
 //            FileOutputStream fileOutputStream = context.openFileOutput(name + TXT, Context.MODE_APPEND);
 //            fileOutputStream.write(text.getBytes());
@@ -43,7 +43,7 @@ public class RoutesMethods {
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-    }
+//    }
 
     /**
      *
@@ -84,38 +84,38 @@ public class RoutesMethods {
      * @param context
      * @return distance of route
      */
-    public double getDistance(int name, Context context) {
-        double lat1 = 0;
-        double lat2 = 0;
-        double lon1 = 0;
-        double lon2 = 0;
-
-        double distance = 0;
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(name + TXT)));
-
-            boolean firstIterationCheck = true;
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                String[] tokens = line.split(",");
-                if (!firstIterationCheck) {
-                    lat2 = Double.parseDouble(tokens[0]);
-                    lon2 = Double.parseDouble(tokens[1]);
-                    distance += haversineFormula(lat1, lat2, lon1, lon2);
-                    lat1 = lat2;
-                    lon1 = lon2;
-                } else {
-                    lat1 = Double.parseDouble(tokens[0]);
-                    lon1 = Double.parseDouble(tokens[1]);
-                }
-                firstIterationCheck = false;
-            }
-            return round(distance / 10) / 100.0;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return 0.0;
-    }
+//    public double getDistance(int name, Context context) {
+//        double lat1 = 0;
+//        double lat2 = 0;
+//        double lon1 = 0;
+//        double lon2 = 0;
+//
+//        double distance = 0;
+//        try {
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput(name + TXT)));
+//
+//            boolean firstIterationCheck = true;
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                String[] tokens = line.split(",");
+//                if (!firstIterationCheck) {
+//                    lat2 = Double.parseDouble(tokens[0]);
+//                    lon2 = Double.parseDouble(tokens[1]);
+//                    distance += haversineFormula(lat1, lat2, lon1, lon2);
+//                    lat1 = lat2;
+//                    lon1 = lon2;
+//                } else {
+//                    lat1 = Double.parseDouble(tokens[0]);
+//                    lon1 = Double.parseDouble(tokens[1]);
+//                }
+//                firstIterationCheck = false;
+//            }
+//            return round(distance / 10) / 100.0;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return 0.0;
+//    }
 
     /**
      *
@@ -156,16 +156,16 @@ public class RoutesMethods {
     }
 
     // this is haversine Formula for calculating distance between two coordinates
-    private double haversineFormula(double lat1, double lat2, double lon1, double lon2) {
-        double r = 6371000;
-        double fi1 = lat1 * Math.PI / 180;
-        double fi2 = lat2 * Math.PI / 180;
-        double deltaFi = (lat2 - lat1) * Math.PI / 180;
-        double deltaLambda = (lon2 - lon1) * Math.PI / 180;
-        double a = Math.sin(deltaFi / 2) * Math.sin(deltaFi / 2) + Math.cos(fi1) * Math.cos(fi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return r * c;
-    }
+//    private double haversineFormula(double lat1, double lat2, double lon1, double lon2) {
+//        double r = 6371000;
+//        double fi1 = lat1 * Math.PI / 180;
+//        double fi2 = lat2 * Math.PI / 180;
+//        double deltaFi = (lat2 - lat1) * Math.PI / 180;
+//        double deltaLambda = (lon2 - lon1) * Math.PI / 180;
+//        double a = Math.sin(deltaFi / 2) * Math.sin(deltaFi / 2) + Math.cos(fi1) * Math.cos(fi2) * Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+//        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+//        return r * c;
+//    }
 
     /**
      *
@@ -200,44 +200,44 @@ public class RoutesMethods {
      * @param context
      * @return arrayList with id of route, date and name
      */
-    public ArrayList<String> loadData(Context context) {
-        ArrayList<String> arrayList = new ArrayList<>();
-        try {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput( "data.txt")));
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                arrayList.add(line);
-            }
-            return arrayList;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return arrayList;
-    }
+//    public ArrayList<String> loadData(Context context) {
+//        ArrayList<String> arrayList = new ArrayList<>();
+//        try {
+//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.openFileInput( "data.txt")));
+//            String line;
+//            while ((line = bufferedReader.readLine()) != null) {
+//                arrayList.add(line);
+//            }
+//            return arrayList;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return arrayList;
+//    }
 
     /**
      * delete specific route
      * @param name of route to delete
      * @param context
      */
-    public void delete(int name, Context context) {
-        ArrayList<String> arrayList = this.loadData(context);
-        context.deleteFile(name + TXT);
-        for (int i = 0; i < arrayList.size(); ++i) {
-            String[] tokens = arrayList.get(i).split(",");
-            if (tokens[0].equals(name))
-            {
-                arrayList.remove(i);
-                Log.d("RouteInfo_LC", "Removing: " + arrayList.get(i));
-                break;
-            }
-        }
-        context.deleteFile( "data" + TXT);
-        for (int i = 0; i < arrayList.size(); i++)
-        {
-            this.write("data", arrayList.get(i) + "\n", context);
-        }
-
-    }
+//    public void delete(int name, Context context) {
+//        ArrayList<String> arrayList = this.loadData(context);
+//        context.deleteFile(name + TXT);
+//        for (int i = 0; i < arrayList.size(); ++i) {
+//            String[] tokens = arrayList.get(i).split(",");
+//            if (tokens[0].equals(name))
+//            {
+//                arrayList.remove(i);
+//                Log.d("RouteInfo_LC", "Removing: " + arrayList.get(i));
+//                break;
+//            }
+//        }
+//        context.deleteFile( "data" + TXT);
+//        for (int i = 0; i < arrayList.size(); i++)
+//        {
+//            this.write("data", arrayList.get(i) + "\n", context);
+//        }
+//
+//    }
 
 }

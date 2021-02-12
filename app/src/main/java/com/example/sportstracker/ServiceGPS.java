@@ -111,6 +111,7 @@ public class ServiceGPS extends Service {
         if (locationManager != null) {
             locationManager.removeUpdates(locationListener);
         }
+        database.updateActivity(routeID,0, System.currentTimeMillis(), "");
         stopSelf();
     }
 
@@ -142,7 +143,7 @@ public class ServiceGPS extends Service {
 
         startForeground(1, notification.build());
 
-        routesMethods.write("data", routeID + "," + time + "," + "" + "\n", getApplicationContext());
+//        routesMethods.write("data", routeID + "," + time + "," + "" + "\n", getApplicationContext());
 
         Log.d("GPS_LC", "Creating new Route: " + routeID);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);

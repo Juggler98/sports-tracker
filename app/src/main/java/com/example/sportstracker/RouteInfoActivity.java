@@ -54,6 +54,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private boolean avgVsPace;
     private double avg;
 
+    private Database database;
+
 
 
 
@@ -62,6 +64,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routeinfo);
+
+        database = new Database(RouteInfoActivity.this);
 
         avgInfo = findViewById(R.id.textView9);
         TextView distance = findViewById(R.id.textView2);
@@ -92,7 +96,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         dateView.setText(date);
 
-        double distanceD = routesMethods.getDistance(routeID,getApplicationContext());
+//        double distanceD = routesMethods.getDistance(routeID,getApplicationContext());
+        double distanceD = database.getDistance(routeID);
         distance.setText(distanceD +  " " + getString(R.string.km));
 
         // calculate hours minutes and seconds from hours
@@ -166,7 +171,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //delete activity
-                        routesMethods.delete(routeID, getApplication());
+                        database.deleteActivity(routeID);
+//                        routesMethods.delete(routeID, getApplication());
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(IS_RELOAD_NEEDED, true);
                         editor.apply();
@@ -210,61 +216,59 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void rename(String name) {
-        ArrayList<String> dataArrayList = routesMethods.loadData(getApplicationContext());
-        for (int i = 0; i < dataArrayList.size(); ++i) {
-            String[] tokens = dataArrayList.get(i).split(",");
-            if (tokens[0].equals(routeID))
-            {
-                dataArrayList.set(i, routeID + "," + this.getDate(routeID) + "," + name);
-                if (name.equals(""))
-                {
-                    name = "Details";
-                }
+//        ArrayList<String> dataArrayList = routesMethods.loadData(getApplicationContext());
+//        for (int i = 0; i < dataArrayList.size(); ++i) {
+//            String[] tokens = dataArrayList.get(i).split(",");
+//            if (tokens[0].equals(routeID))
+//            {
+//                dataArrayList.set(i, routeID + "," + this.getDate(routeID) + "," + name);
+                database.updateActivity(routeID,0,0.0, name);
+                name = name.equals("") ? "Details" : name;
                 getSupportActionBar().setTitle(name);
-                Log.d("RouteInfo_LC", "Renaming: " + dataArrayList.get(i) + " " + name);
-                break;
-            }
-        }
-        deleteFile( "data.txt");
-        for (int i = 0; i < dataArrayList.size(); i++)
-        {
-            routesMethods.write("data", dataArrayList.get(i) + "\n", getApplicationContext());
-        }
+                Log.d("RouteInfo_LC", "Renaming: " + routeID + " " + name);
+//                break;
+//            }
+//        }
+//        deleteFile( "data.txt");
+//        for (int i = 0; i < dataArrayList.size(); i++)
+//        {
+//            routesMethods.write("data", dataArrayList.get(i) + "\n", getApplicationContext());
+//        }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(IS_RELOAD_NEEDED, true);
         editor.apply();
     }
 
     private String getDate(int routeID) {
-        ArrayList<String> arrayList = routesMethods.loadData(getApplicationContext());
-        for (int i = 0; i < arrayList.size(); ++i)
-        {
-            String[] tokens = arrayList.get(i).split(",");
-            if (tokens[0].equals(routeID))
-            {
-                if (tokens.length > 1)
-                    return tokens[1];
-                else
-                    return "";
-            }
-        }
+//        ArrayList<String> arrayList = routesMethods.loadData(getApplicationContext());
+//        for (int i = 0; i < arrayList.size(); ++i)
+//        {
+//            String[] tokens = arrayList.get(i).split(",");
+//            if (tokens[0].equals(routeID))
+//            {
+//                if (tokens.length > 1)
+//                    return tokens[1];
+//                else
+//                    return "";
+//            }
+//        }
         return "";
     }
 
     private String getName(int routeID) {
-        ArrayList<String> arrayList = routesMethods.loadData(getApplicationContext());
-        for (int i = 0; i < arrayList.size(); ++i)
-        {
-            String[] tokens = arrayList.get(i).split(",");
-            if (tokens[0].equals(routeID))
-            {
-                if (tokens.length > 2)
-                    return tokens[2];
-                else
-                    return "";
-            }
-
-        }
+//        ArrayList<String> arrayList = routesMethods.loadData(getApplicationContext());
+//        for (int i = 0; i < arrayList.size(); ++i)
+//        {
+//            String[] tokens = arrayList.get(i).split(",");
+//            if (tokens[0].equals(routeID))
+//            {
+//                if (tokens.length > 2)
+//                    return tokens[2];
+//                else
+//                    return "";
+//            }
+//
+//        }
         return "";
     }
 

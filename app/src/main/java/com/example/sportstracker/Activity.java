@@ -5,8 +5,8 @@ public class Activity {
     private int id;
     private int idType;
     private double timeStart;
-    private double timeEnd = -1;
-    private String title = null;
+    private double timeEnd = 0.0;
+    private String title = "";
 
     public Activity(int idType, double timeStart) {
         this.idType = idType;
