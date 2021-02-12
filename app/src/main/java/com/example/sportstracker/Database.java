@@ -9,8 +9,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
-
 import static java.lang.Math.round;
 
 public class Database extends SQLiteOpenHelper {
@@ -20,7 +18,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_POINT = "point";
 
     public Database(@Nullable Context context) {
-        super(context, "tracking.db", null, 7);
+        super(context, "tracking.db", null, 2);
     }
 
     @Override
@@ -38,15 +36,15 @@ public class Database extends SQLiteOpenHelper {
                 "FOREIGN KEY(type_id) REFERENCES " + TABLE_TYPE + "(id_type_activity))";
 
         String createTablePoint = "CREATE TABLE " + TABLE_POINT +
-                "(id_point INTEGER NOT NULL, " +
-                "id_activity INTEGER NOT NULL," +
+                "(id_activity INTEGER NOT NULL," +
+                "id_point INTEGER NOT NULL, " +
                 "lat REAL NOT NULL," +
                 "lon REAL NOT NULL," +
-                "alt REAL NOT NULL," +
+                "ele REAL NOT NULL," +
                 "time REAL NOT NULL," +
                 "speed REAL NOT NULL," +
-                "acc REAL NOT NULL," +
-                "bear REAL NOT NULL," +
+                "hdop REAL NOT NULL," +
+                "course REAL NOT NULL," +
                 "FOREIGN KEY(id_activity) REFERENCES " + TABLE_ACTIVITY + "(id_activity)," +
                 "PRIMARY KEY (id_point, id_activity))";
 
@@ -102,27 +100,27 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public boolean addPoint(Point point) {
-        Log.d("DB_LC", "DB_ADD_Point");
+        Log.d("DB_LC", "DB_AddPoint");
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put("id_point", point.getId());
         cv.put("id_activity", point.getIdActivity());
+        cv.put("id_point", point.getId());
         cv.put("lat", point.getLat());
         cv.put("lon", point.getLon());
-        cv.put("alt", point.getAlt());
+        cv.put("ele", point.getEle());
         cv.put("time", point.getTime());
         cv.put("speed", point.getSpeed());
-        cv.put("acc", point.getAcc());
-        cv.put("bear", point.getBear());
+        cv.put("hdop", point.getHdop());
+        cv.put("course", point.getCourse());
         long insert = db.insert(TABLE_POINT, null, cv);
         db.close();
 
         if (insert == -1) {
             return false;
         } else {
-            Log.d("DB_LC", "DB_ADD_Point_Succes");
+            Log.d("DB_LC", "DB_Add_Point_Succes");
             return true;
         }
     }
