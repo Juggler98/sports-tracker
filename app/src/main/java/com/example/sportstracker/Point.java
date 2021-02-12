@@ -14,7 +14,7 @@ public class Point {
     private double course;
 
     public Point(int idActivity, int id, double lat, double lon, double ele,
-                 double time, double speed, double hdop, double vdop, double course) {
+                 double time, double speed, double course, double hdop, double vdop) {
         this.idActivity = idActivity;
         this.id = id;
         this.lat = lat;
@@ -22,9 +22,9 @@ public class Point {
         this.ele = ele;
         this.time = time;
         this.speed = speed;
+        this.course = course;
         this.hdop = hdop;
         this.vdop = vdop;
-        this.course = course;
     }
 
     public Point() {
@@ -40,9 +40,9 @@ public class Point {
                 ", ele=" + ele +
                 ", time=" + time +
                 ", speed=" + speed +
+                ", course=" + course +
                 ", hdop=" + hdop +
                 ", vdop=" + vdop +
-                ", course=" + course +
                 '}';
     }
 

@@ -73,7 +73,7 @@ public class ServiceGPS extends Service {
 //            String data = latitude + "," + longitude + "," + elevation + "," + time + "\n";
 
             Point point = new Point(routeID, database.getLastPointID(routeID) + 1,
-                    latitude, longitude, elevation, time, speed, hdop, vdop, course);
+                    latitude, longitude, elevation, time, speed, course, hdop, vdop);
 //            routesMethods.write(routeID, data, getApplicationContext());
             database.addPoint(point);
 
@@ -154,7 +154,7 @@ public class ServiceGPS extends Service {
         Log.d("GPS_LC", "Creating new Route: " + routeID);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         //missing permission check, it is not needed, because app will be closed without getting permission in main
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 4, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 4, locationListener);
 
         return START_NOT_STICKY;
     }

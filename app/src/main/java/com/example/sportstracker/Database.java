@@ -47,9 +47,9 @@ public class Database extends SQLiteOpenHelper {
                 "ele REAL NOT NULL," +
                 "time REAL NOT NULL," +
                 "speed REAL NOT NULL," +
+                "course REAL NOT NULL," +
                 "hdop REAL NOT NULL," +
                 "vdop REAL NOT NULL," +
-                "course REAL NOT NULL," +
                 "FOREIGN KEY(id_activity) REFERENCES " + TABLE_ACTIVITY + "(id_activity)," +
                 "PRIMARY KEY (id_point, id_activity))";
 
@@ -62,12 +62,11 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE);
-//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACTIVITY);
-//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_POINT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACTIVITY);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_POINT);
 
-//        onCreate(db);
-        db.execSQL("ALTER TABLE " + TABLE_POINT + " ADD COLUMN vdop REAL;");
+        onCreate(db);
     }
 
     private boolean addTypes(String type) {
@@ -107,8 +106,6 @@ public class Database extends SQLiteOpenHelper {
     }
 
     public boolean addPoint(Point point) {
-        Log.d("DB_LC", "DB_AddPoint");
-
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -119,16 +116,16 @@ public class Database extends SQLiteOpenHelper {
         cv.put("ele", point.getEle());
         cv.put("time", point.getTime());
         cv.put("speed", point.getSpeed());
+        cv.put("course", point.getCourse());
         cv.put("hdop", point.getHdop());
         cv.put("vdop", point.getVdop());
-        cv.put("course", point.getCourse());
         long insert = db.insert(TABLE_POINT, null, cv);
         db.close();
 
         if (insert == -1) {
             return false;
         } else {
-            Log.d("DB_LC", "DB_Add_Point_Succes");
+            Log.d("DB_LC", "DB_Add_Point");
             return true;
         }
     }
@@ -222,6 +219,7 @@ public class Database extends SQLiteOpenHelper {
 //    }
 
     public double getDistance(int idActivity) {
+        Log.d("DB_LC", "DB_getDistance");
         double lat1 = 0;
         double lat2 = 0;
         double lon1 = 0;
@@ -229,7 +227,6 @@ public class Database extends SQLiteOpenHelper {
         double distance = 0;
         ArrayList<Point> points = this.getPoints(idActivity);
         for (int i = 0; i < points.size(); i++) {
-            Log.d("DB_LC", "DB_getDistance");
             Point point = points.get(i);
             if (i != 0) {
                 lat2 = point.getLat();
@@ -276,8 +273,8 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
         if (cursor.moveToFirst()) {
-            Log.d("DB_LC", "Column count: " + cursor.getColumnCount());
-            Log.d("DB_LC", "Row count: " + cursor.getCount());
+//            Log.d("DB_LC", "Column count: " + cursor.getColumnCount());
+//            Log.d("DB_LC", "Row count: " + cursor.getCount());
             do {
                 int id = cursor.getInt(0);
                 int type = cursor.getInt(1);
@@ -286,11 +283,11 @@ public class Database extends SQLiteOpenHelper {
                 activity.setId(id);
                 if (cursor.getType(3) != 0) {
                     activity.setTimeEnd(cursor.getDouble(3));
-                    Log.d("DB_LC", "EndTime is: " + cursor.getDouble(3));
+//                    Log.d("DB_LC", "EndTime is: " + cursor.getDouble(3));
                 }
                 if (cursor.getType(4) != 0) {
                     activity.setTitle(cursor.getString(4));
-                    Log.d("DB_LC", "Title is: " + cursor.getString(4));
+//                    Log.d("DB_LC", "Title is: " + cursor.getString(4));
                 }
 //                if (activity.getTimeEnd() != 0.0) {
 //                    activities.add(activity);
@@ -354,8 +351,8 @@ public class Database extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
         if (cursor.moveToFirst()) {
-            Log.d("DB_LC", "Column count: " + cursor.getColumnCount());
-            Log.d("DB_LC", "Row count: " + cursor.getCount());
+//            Log.d("DB_LC", "Column count: " + cursor.getColumnCount());
+//            Log.d("DB_LC", "Row count: " + cursor.getCount());
             do {
                 int idActivity = cursor.getInt(0);
                 int idPoint = cursor.getInt(1);
@@ -364,12 +361,13 @@ public class Database extends SQLiteOpenHelper {
                 double ele = cursor.getDouble(4);
                 double time = cursor.getDouble(5);
                 double speed = cursor.getDouble(6);
+                double course = cursor.getDouble(8);
                 double hdop = cursor.getDouble(7);
 //                Log.d("DB_LC", "VDOP: " +  cursor.getDouble(8));
                 double vdop = cursor.getDouble(9);
-                double course = cursor.getDouble(8);
-                //TODO vdop a course je v novej databaze opacne
-                Point point = new Point(idActivity, idPoint, lat, lon, ele, time, speed, hdop, vdop, course);
+                //TODO v novej databaze treba preusporiadat
+
+                Point point = new Point(idActivity, idPoint, lat, lon, ele, time, speed, course, hdop, vdop);
                 points.add(point);
             } while (cursor.moveToNext());
         }
