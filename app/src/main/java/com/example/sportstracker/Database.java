@@ -251,10 +251,10 @@ public class Database extends SQLiteOpenHelper {
                     activity.setTitle(cursor.getString(4));
                     Log.d("DB_LC","Title is: " + cursor.getString(4));
                 }
-//                if (activity.getTimeEnd() != 0.0) {
-//                    activities.add(activity);
-//                }
-                activities.add(activity);
+                if (activity.getTimeEnd() != 0.0) {
+                    activities.add(activity);
+                }
+//                activities.add(activity);
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -262,9 +262,19 @@ public class Database extends SQLiteOpenHelper {
         return activities;
     }
 
+    public Activity getActivity(int activityID) {
+        ArrayList<Activity> activities = this.getActivities();
+        for (int i = 0; i < activities.size(); i++) {
+            if (activities.get(i).getId() == activityID)
+                return activities.get(i);
+        }
+        return null;
+    }
+
     public boolean deleteActivity(int activityID) {
         String deletePoints = "DELETE FROM " + TABLE_POINT + " WHERE id_activity = " + activityID;
-        String deleteActivity = "DELETE FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + activityID;
+        String deleteActivity = "DELETE FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + activityID +
+                " AND time_end IS NOT NULL";
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(deletePoints);
         db.execSQL(deleteActivity);

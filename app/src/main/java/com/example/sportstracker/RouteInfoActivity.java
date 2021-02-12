@@ -86,12 +86,15 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         Log.d("RouteInfo_LC", "onCreate Route: " + routeID);
 
         String date = this.getDate(routeID);
-        String name = this.getName(routeID);
+
+        String name = "";
+
+        if (database.getActivity(routeID) != null)
+            name = database.getActivity(routeID).getTitle();
 
         if (name.equals(""))
-        {
             name = "Details";
-        }
+
         getSupportActionBar().setTitle(name);
 
         dateView.setText(date);
