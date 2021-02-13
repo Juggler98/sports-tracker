@@ -55,11 +55,14 @@ public class StatsActivity extends AppCompatActivity {
 //            name = tokens[0];
             activityID = activities.get(i).getId();
 //            double distancePartial = routesMethods.getDistance(Integer.parseInt(name), getApplicationContext());
-            double distancePartial = database.getDistance(activityID);
+//            double distancePartial = database.getDistance(activityID);
+            double distancePartial = routesMethods.getDistance(database.getPoints(activityID));
 //            double timePartial = routesMethods.getTime(activityID, getApplicationContext());
-            double timePartial = database.getHours(activityID);
+//            double timePartial = database.getHours(activityID);
+            double timePartial = routesMethods.getHours(database.getPoints(activityID));
 //            double elevationGainPartial = routesMethods.getElevationGain(activityID, getApplicationContext());
-            double elevationGainPartial = database.getElevationGain(activityID);
+//            double elevationGainPartial = database.getElevationGain(activityID);
+            double elevationGainPartial = routesMethods.getElevationGain(database.getPoints(activityID));
             distanceD += distancePartial;
             timeD += timePartial;
             elevationGainD += elevationGainPartial;

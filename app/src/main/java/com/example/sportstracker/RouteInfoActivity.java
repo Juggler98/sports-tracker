@@ -106,12 +106,14 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         dateView.setText(timeStr);
 
 //        double distanceD = routesMethods.getDistance(routeID,getApplicationContext());
-        double distanceD = database.getDistance(routeID);
+//        double distanceD = database.getDistance(routeID);
+        double distanceD = routesMethods.getDistance(database.getPoints(routeID));
         distance.setText(distanceD + " " + getString(R.string.km));
 
         // calculate hours minutes and seconds from hours
 //        double hoursD = routesMethods.getTime(routeID, getApplicationContext());
-        double hoursD = database.getHours(routeID);
+//        double hoursD = database.getHours(routeID);
+        double hoursD = routesMethods.getHours(database.getPoints(routeID));
         int hours = (int) hoursD;
         double minutesD = (hoursD - hours) * 60.0;
         int minutes = (int) minutesD;
@@ -120,7 +122,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         time.setText(getString(R.string.time_data, hours, minutes, seconds));
 //        elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGain(routeID, getApplicationContext())));
-        elevationGain.setText(getString(R.string.metres, (int) database.getElevationGain(routeID)));
+//        elevationGain.setText(getString(R.string.metres, (int) database.getElevationGain(routeID)));
+        elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGain(database.getPoints(routeID))));
 
         if (hoursD == 0) {
             this.avg = 0.0;
@@ -149,7 +152,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
 
 //        latLngArrayList = routesMethods.loadLatLng(routeID, getApplicationContext());
-        latLngArrayList = database.getLatLng(routeID);
+//        latLngArrayList = database.getLatLng(routeID);
+        latLngArrayList = routesMethods.getLatLng(database.getPoints(routeID));
 
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);

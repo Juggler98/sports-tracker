@@ -80,7 +80,8 @@ public class ServiceGPS extends Service {
             // when location is changed notification is updated
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
 //            notification.setContentText(routesMethods.getDistance(routeID, getApplicationContext()) + " km ");
-            notification.setContentText(database.getDistance(routeID) + " km ");
+//            notification.setContentText(database.getDistance(routeID) + " km ");
+            notification.setContentText(routesMethods.getDistance(database.getPoints(routeID)) + " km ");
             notificationManager.notify(1, notification.build());
 
             // send coordinates to record activity to write lines on map
