@@ -48,7 +48,7 @@ public class StatsActivity extends AppCompatActivity {
             ArrayList<Point> points = database.getPoints(activityID);
             double distancePartial = routesMethods.getDistance(points);
             double timePartial = routesMethods.getHours(points);
-            double elevationGainPartial = routesMethods.getElevationGain(points);
+            double elevationGainPartial = routesMethods.getElevationGainLoss(points)[0];
             distanceD += distancePartial;
             timeD += timePartial;
             elevationGainD += elevationGainPartial;

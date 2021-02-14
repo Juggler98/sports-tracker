@@ -116,7 +116,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
 
         time.setText(getString(R.string.time_data, hours, minutesStr, secondsStr));
-        elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGain(database.getPoints(routeID))));
+        elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGainLoss(database.getPoints(routeID))[0]));
 
         if (hoursD == 0) {
             this.avg = 0.0;

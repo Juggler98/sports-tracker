@@ -60,10 +60,12 @@ public class RoutesMethods {
      * @param points
      * @return elevation gain of route
      */
-    public double getElevationGain(ArrayList<Point> points) {
+    public double[] getElevationGainLoss(ArrayList<Point> points) {
+        double[] elevationGainLoss = new double[2];
         double ele1 = 0.0;
         double ele2 = 0.0;
         double elevationGain = 0.0;
+        double elevationLoss = 0.0;
         double elevationDifference = 0.0;
         for (int i = 0; i < points.size(); i = i + 3) {
             Point point = points.get(i);
@@ -72,13 +74,17 @@ public class RoutesMethods {
                 elevationDifference = ele2 - ele1;
                 if (elevationDifference > 5) {
                     elevationGain += elevationDifference;
+                } else if (elevationDifference < -5) {
+                    elevationLoss += elevationDifference * -1;
                 }
                 ele1 = ele2;
             } else {
                 ele1 = point.getEle();
             }
         }
-        return elevationGain;
+        elevationGainLoss[0] = elevationGain;
+        elevationGainLoss[1] = elevationLoss;
+        return elevationGainLoss;
     }
 
         /**
