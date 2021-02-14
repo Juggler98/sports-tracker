@@ -7,6 +7,7 @@ public class Activity {
     private double timeStart;
     private double timeEnd = 0.0;
     private String title = "";
+    private boolean autoPause = true;
 
     public Activity(int idType, double timeStart) {
         this.idType = idType;
@@ -24,6 +25,7 @@ public class Activity {
                 ", timeStart='" + timeStart + '\'' +
                 ", timeEnd='" + timeEnd + '\'' +
                 ", title='" + title + '\'' +
+                ", autoPause='" + autoPause + '\'' +
                 '}';
     }
 
@@ -65,5 +67,13 @@ public class Activity {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public boolean getAutoPause() {
+        return autoPause;
+    }
+
+    public void setAutoPause(boolean autoPause) {
+        this.autoPause = autoPause;
     }
 }

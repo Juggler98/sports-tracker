@@ -13,6 +13,8 @@ public class Point {
     private double vdop;
     private double course;
 
+    private boolean paused = false;
+
     public Point(int idActivity, int id, double lat, double lon, double ele,
                  double time, double speed, double course, double hdop, double vdop) {
         this.idActivity = idActivity;
@@ -43,6 +45,7 @@ public class Point {
                 ", course=" + course +
                 ", hdop=" + hdop +
                 ", vdop=" + vdop +
+                ", paused=" + paused +
                 '}';
     }
 
@@ -124,5 +127,13 @@ public class Point {
 
     public void setVdop(double vdop) {
         this.vdop = vdop;
+    }
+
+    public boolean getPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean paused) {
+        this.paused = paused;
     }
 }

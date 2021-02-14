@@ -67,10 +67,10 @@ public class RoutesMethods {
         double elevationDifference = 0.0;
         for (int i = 0; i < points.size(); i = i + 3) {
             Point point = points.get(i);
-            if (i != 0) {
+            if (i != 0 && point.getVdop() < 8) {
                 ele2 = point.getEle();
                 elevationDifference = ele2 - ele1;
-                if (elevationDifference > 3.9) {
+                if (elevationDifference > 5) {
                     elevationGain += elevationDifference;
                 }
                 ele1 = ele2;

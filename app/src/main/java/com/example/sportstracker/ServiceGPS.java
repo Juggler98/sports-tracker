@@ -44,6 +44,8 @@ public class ServiceGPS extends Service {
 
     private Database database = new Database(ServiceGPS.this);
 
+    private SharedPreferences sharedPreferences;
+
 
     @Override
     public void onCreate() {
@@ -76,23 +78,25 @@ public class ServiceGPS extends Service {
             Point point = new Point(routeID, database.getLastPointID(routeID) + 1,
                     latitude, longitude, elevation, time, speed, course, hdop, vdop);
 
+            if (sharedPreferences.getBoolean(PAUSE,false)) {
+                point.setPaused(true);
+                database.setPause(routeID, database.getLastPointID(routeID));
+            } else {
 //            if (point.getHdop() < 20 && point.getVdop() < 10) {
                 database.addPoint(point);
+                // send coordinates to record activity to write lines on map
+                Intent intent = new Intent(EXTRA);
+                intent.putExtra(EXTRA, latitude + "," + longitude);
+                sendBroadcast(intent);
 //            }
-
+            }
 
             // when location is changed notification is updated
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notification.setContentText(routesMethods.getDistance(database.getPoints(routeID)) + " km ");
             notificationManager.notify(1, notification.build());
 
-            // send coordinates to record activity to write lines on map
-            Intent intent = new Intent(EXTRA);
-            intent.putExtra(EXTRA, latitude + "," + longitude);
-            sendBroadcast(intent);
-
             Log.d("GPS_LC", "Write Location to: " + routeID);
-
         }
 
         //this method is deprecated in API level 29. This callback will never be invoked on Android Q and above.
@@ -122,7 +126,7 @@ public class ServiceGPS extends Service {
         }
         database.updateActivity(routeID,0, System.currentTimeMillis(), "");
 
-        SharedPreferences.Editor editor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(PAUSE, false);
         editor.apply();
         stopSelf();
@@ -134,6 +138,7 @@ public class ServiceGPS extends Service {
         Log.d("GPS_LC", "onStartCommand");
 
         routeID = intent.getIntExtra(EXTRA,1);
+        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
 
         // pending intent for click on notification
         Intent notificationIntent = new Intent(this, RecordActivity.class);

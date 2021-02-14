@@ -22,7 +22,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_POINT = "point";
 
     public Database(@Nullable Context context) {
-        super(context, "tracking.db", null, 2);
+        super(context, "tracking.db", null, 3);
     }
 
     @Override
@@ -37,6 +37,7 @@ public class Database extends SQLiteOpenHelper {
                 "time_start REAL NOT NULL," +
                 "time_end REAL," +
                 "title TEXT," +
+                "auto_pause INTEGER," +
                 "FOREIGN KEY(type_id) REFERENCES " + TABLE_TYPE + "(id_type_activity))";
 
         String createTablePoint = "CREATE TABLE " + TABLE_POINT +
@@ -50,6 +51,7 @@ public class Database extends SQLiteOpenHelper {
                 "course REAL NOT NULL," +
                 "hdop REAL NOT NULL," +
                 "vdop REAL NOT NULL," +
+                "paused INTEGER," +
                 "FOREIGN KEY(id_activity) REFERENCES " + TABLE_ACTIVITY + "(id_activity)," +
                 "PRIMARY KEY (id_point, id_activity))";
 
@@ -62,11 +64,17 @@ public class Database extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACTIVITY);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_POINT);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TYPE);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACTIVITY);
+//        db.execSQL("DROP TABLE IF EXISTS " + TABLE_POINT);
+//
+//        onCreate(db);
 
-        onCreate(db);
+//        db.execSQL("ALTER TABLE " + TABLE_POINT + " RENAME COLUMN hdop to hacc;");
+//        db.execSQL("ALTER TABLE " + TABLE_POINT + " CHANGE TO hacc;");
+
+        db.execSQL("ALTER TABLE " + TABLE_ACTIVITY + " ADD COLUMN auto_pause INTEGER;");
+        db.execSQL("ALTER TABLE " + TABLE_POINT + " ADD COLUMN paused INTEGER;");
     }
 
     private boolean addTypes(String type) {
@@ -119,6 +127,9 @@ public class Database extends SQLiteOpenHelper {
         cv.put("course", point.getCourse());
         cv.put("hdop", point.getHdop());
         cv.put("vdop", point.getVdop());
+        if (point.getPaused()) {
+            cv.put("paused", point.getPaused());
+        }
         long insert = db.insert(TABLE_POINT, null, cv);
         db.close();
 
@@ -296,6 +307,22 @@ public class Database extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return points;
+    }
+
+    public boolean setPause(int activityID, int pointID) {
+        String updatePause = "UPDATE " + TABLE_POINT + " SET paused = " + 1 + " WHERE id_activity = " + activityID +
+                " AND id_point = " + pointID;
+
+        SQLiteDatabase db = getWritableDatabase();
+        int update = 0;
+        db.execSQL(updatePause);
+//            ContentValues cv = new ContentValues();
+//            cv.put("paused", 1);
+//            String[] whereArgs = {activityID + "", pointID + ""};
+//            update = db.update(TABLE_POINT, cv, "id_activity=? AND id_point=?", whereArgs);
+        db.close();
+        Log.d("DB_LC", "setPause: " + activityID + ", " + pointID);
+        return true;
     }
 
     public void deleteAll() {
