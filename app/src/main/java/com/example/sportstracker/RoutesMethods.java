@@ -149,7 +149,7 @@ public class RoutesMethods {
             if (i != 0) {
                 ele2 = point.getEle();
                 elevationDifference = ele2 - ele1;
-                if (elevationDifference > 5) {
+                if (elevationDifference > 3.9) {
                     elevationGain += elevationDifference;
                 }
                 ele1 = ele2;

@@ -102,7 +102,7 @@ public class ServiceGPS extends Service {
 
         @Override
         public void onProviderEnabled(String provider) {
-            //Log.d("GPS_LC", "GPS Provider enable");
+            Log.d("GPS_LC", "GPS Provider enable");
         }
 
         @Override
@@ -155,7 +155,7 @@ public class ServiceGPS extends Service {
         Log.d("GPS_LC", "Creating new Route: " + routeID);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         //missing permission check, it is not needed, because app will be closed without getting permission in main
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 4, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 10, locationListener);
 
         return START_NOT_STICKY;
     }
