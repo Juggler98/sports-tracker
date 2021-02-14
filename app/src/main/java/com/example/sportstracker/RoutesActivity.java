@@ -25,7 +25,7 @@ import static com.example.sportstracker.RouteInfoActivity.IS_RELOAD_NEEDED;
  */
 public class RoutesActivity extends AppCompatActivity {
 
-//    private RoutesMethods routesMethods = new RoutesMethods();
+    private RoutesMethods routesMethods = new RoutesMethods();
 
     private ListView listView;
 
@@ -33,8 +33,6 @@ public class RoutesActivity extends AppCompatActivity {
     private ArrayList<Activity> activities = new ArrayList<>();
 
     private Database database;
-
-    private final String TXT = ".txt";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +49,8 @@ public class RoutesActivity extends AppCompatActivity {
 
         listView = findViewById(R.id.listView);
 
-//        loadListView();
-        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activities));
+        loadListView();
+        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListListView));
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -62,10 +60,10 @@ public class RoutesActivity extends AppCompatActivity {
                 builder.setMessage("Delete this activity?").setCancelable(true).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                      loadListView();
                         database.deleteActivity(activities.get(position).getId());
                         activities = database.getActivities();
-                        listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, activities));
+                        loadListView();
+                        listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                     @Override
@@ -121,9 +119,9 @@ public class RoutesActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         boolean isReloadNeeded = sharedPreferences.getBoolean(IS_RELOAD_NEEDED, false);
         if (isReloadNeeded) {
-//            loadListView();
             activities = database.getActivities();
-            listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, activities));
+            loadListView();
+            listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(IS_RELOAD_NEEDED, false);
             editor.apply();
@@ -143,18 +141,17 @@ public class RoutesActivity extends AppCompatActivity {
         Log.d("Routes_LC", "onStop Routes");
     }
 
-//    private void loadListView() {
-//        dataArrayList = routesMethods.loadData(getApplicationContext());
-//        arrayListListView.clear();
-//        for (int i = 0; i < dataArrayList.size(); ++i) {
-//            String[] tokens = dataArrayList.get(i).split(",");
-//            if (tokens.length > 2) {
-//                arrayListListView.add((i + 1) + ". " + tokens[2]);
-//            } else {
-//                arrayListListView.add((i + 1) + ". " + tokens[1]);
-//            }
-//        }
-//    }
+    private void loadListView() {
+        arrayListListView.clear();
+        for (int i = 0; i < activities.size(); ++i) {
+            Activity activity = activities.get(i);
+            if (activity.getTitle().equals("")) {
+                arrayListListView.add((i + 1) + ". " + routesMethods.getDate(activity.getTimeStart()));
+            } else {
+                arrayListListView.add((i + 1) + ". " + activity.getTitle());
+            }
+        }
+    }
 
     private void openStats(int activityID) {
         Intent intent = new Intent(this, RouteInfoActivity.class);
