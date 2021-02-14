@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -26,6 +27,8 @@ import java.util.Locale;
 
 import static com.example.sportstracker.App.CHANNEL_ID;
 import static com.example.sportstracker.MainActivity.EXTRA;
+import static com.example.sportstracker.MainActivity.PAUSE;
+import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
 import static java.lang.Math.round;
 
 
@@ -118,6 +121,10 @@ public class ServiceGPS extends Service {
             locationManager.removeUpdates(locationListener);
         }
         database.updateActivity(routeID,0, System.currentTimeMillis(), "");
+
+        SharedPreferences.Editor editor = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE).edit();
+        editor.putBoolean(PAUSE, false);
+        editor.apply();
         stopSelf();
     }
 

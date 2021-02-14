@@ -31,6 +31,7 @@ import java.util.ArrayList;
 
 import static com.example.sportstracker.MainActivity.EXTRA;
 import static com.example.sportstracker.MainActivity.NAME_OF_ACTIVITY;
+import static com.example.sportstracker.MainActivity.PAUSE;
 import static com.example.sportstracker.MainActivity.RECORDING_PREF;
 import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
 
@@ -75,6 +76,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
         Button stopButton = findViewById(R.id.button7);
         Button infoButton = findViewById(R.id.button8);
+        final Button pauseButton = findViewById(R.id.button9);
 
         mapView = findViewById(R.id.mapView2);
 
@@ -125,6 +127,21 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
+        pauseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean pause = sharedPreferences.getBoolean(PAUSE, false);
+                pause = !pause;
+                if (pause)
+                    pauseButton.setText("START");
+                else
+                    pauseButton.setText("PAUSE");
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean(PAUSE, pause);
+                editor.apply();
+            }
+        });
+
         cameraPosition = getCameraPosition();
         firstStart = sharedPreferences.getBoolean(FIRST_START, true);
 
@@ -139,6 +156,11 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         editor.remove(FIRST_START);
         editor.apply();
 
+        boolean pause = sharedPreferences.getBoolean(PAUSE, false);
+        if (pause)
+            pauseButton.setText("START");
+        else
+            pauseButton.setText("PAUSE");
 
         Log.d("RECORD_LC", "onCreate");
     }
@@ -189,8 +211,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     /**
-     *  Create map and every time is location changed is written polyline on the map.
-     *
+     * Create map and every time is location changed is written polyline on the map.
      *
      * @param googleMap
      */

@@ -36,6 +36,9 @@ public class MainActivity extends AppCompatActivity {
     /** NAME_OF_ACTIVITY = value data for SharedPreferences to locate id of actual recording route */
     public static final String NAME_OF_ACTIVITY = "name";
 
+    public static final String PAUSE = "pause";
+
+
     private Button buttonRecord;
     private int routeID = 0;
     private boolean newActivity = true;

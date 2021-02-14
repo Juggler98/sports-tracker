@@ -55,7 +55,7 @@
         android:layout_width="95dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"
-        android:text="PAUSE"
+        android:text="@string/pause"
         app:layout_constraintEnd_toStartOf="@id/button7"
         app:layout_constraintStart_toEndOf="@id/button8"
         app:layout_constraintTop_toTopOf="@+id/button8" />
