@@ -100,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
                     database.createActivity(activity);
 
                     newActivity = false;
-//                  routeID = getRouteID();
                     routeID = database.getLastActivityID();
 
                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -134,26 +133,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-    // get new routeID. It look at last routeID and return ID + 1
-    private String getRouteID() {
-//        try {
-//            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(openFileInput("data.txt")));
-//            String line;
-//            String lastLine = "";
-//            while ((line = bufferedReader.readLine()) != null) {
-//                String[] tokens = line.split(",");
-//                lastLine = tokens[0];
-//            }
-//            int index;
-//            index = Integer.parseInt(lastLine);
-//            ++index;
-//            return index + "";
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return "1";
-        return "";
-    }
 
     /**
      * Check if user permit GPS access. If yes, app will continue and he can start recording  and if not app is closed.

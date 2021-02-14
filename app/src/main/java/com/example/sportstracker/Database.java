@@ -227,6 +227,10 @@ public class Database extends SQLiteOpenHelper {
         return null;
     }
 
+    /**
+     * delete specific route
+     * @param activityID id of route to delete
+     */
     public void deleteActivity(int activityID) {
         String deletePoints = "DELETE FROM " + TABLE_POINT + " WHERE id_activity = " + activityID;
         String deleteActivity = "DELETE FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + activityID +

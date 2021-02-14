@@ -70,17 +70,16 @@ public class ServiceGPS extends Service {
 //            Date date = new Date(location.getTime());
 //            String time = format.format(date);
 
-//            String data = latitude + "," + longitude + "," + elevation + "," + time + "\n";
-
             Point point = new Point(routeID, database.getLastPointID(routeID) + 1,
                     latitude, longitude, elevation, time, speed, course, hdop, vdop);
-//            routesMethods.write(routeID, data, getApplicationContext());
-            database.addPoint(point);
+
+//            if (point.getHdop() < 20 && point.getVdop() < 10) {
+                database.addPoint(point);
+//            }
+
 
             // when location is changed notification is updated
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-//            notification.setContentText(routesMethods.getDistance(routeID, getApplicationContext()) + " km ");
-//            notification.setContentText(database.getDistance(routeID) + " km ");
             notification.setContentText(routesMethods.getDistance(database.getPoints(routeID)) + " km ");
             notificationManager.notify(1, notification.build());
 
@@ -150,7 +149,6 @@ public class ServiceGPS extends Service {
 
         startForeground(1, notification.build());
 
-//        routesMethods.write("data", routeID + "," + time + "," + "" + "\n", getApplicationContext());
 
         Log.d("GPS_LC", "Creating new Route: " + routeID);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);

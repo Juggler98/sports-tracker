@@ -87,13 +87,9 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         Log.d("RouteInfo_LC", "onCreate Route: " + routeID);
 
-//        String date = this.getDate(routeID);
-
         String name = "";
-
         if (database.getActivity(routeID) != null)
             name = database.getActivity(routeID).getTitle();
-
         if (name.equals(""))
             name = "Details";
 
@@ -105,14 +101,10 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         dateView.setText(timeStr);
 
-//        double distanceD = routesMethods.getDistance(routeID,getApplicationContext());
-//        double distanceD = database.getDistance(routeID);
         double distanceD = routesMethods.getDistance(database.getPoints(routeID));
         distance.setText(distanceD + " " + getString(R.string.km));
 
         // calculate hours minutes and seconds from hours
-//        double hoursD = routesMethods.getTime(routeID, getApplicationContext());
-//        double hoursD = database.getHours(routeID);
         double hoursD = routesMethods.getHours(database.getPoints(routeID));
         int hours = (int) hoursD;
         double minutesD = (hoursD - hours) * 60.0;
@@ -120,9 +112,10 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         double secondsD = (minutesD - minutes) * 60.0;
         int seconds = (int) secondsD;
 
-        time.setText(getString(R.string.time_data, hours, minutes, seconds));
-//        elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGain(routeID, getApplicationContext())));
-//        elevationGain.setText(getString(R.string.metres, (int) database.getElevationGain(routeID)));
+        String minutesStr = minutes < 10 ? "0" + minutes : "" + minutes;
+        String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
+
+        time.setText(getString(R.string.time_data, hours, minutesStr, secondsStr));
         elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGain(database.getPoints(routeID))));
 
         if (hoursD == 0) {
@@ -150,9 +143,6 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
-
-//        latLngArrayList = routesMethods.loadLatLng(routeID, getApplicationContext());
-//        latLngArrayList = database.getLatLng(routeID);
         latLngArrayList = routesMethods.getLatLng(database.getPoints(routeID));
 
         mapView.onCreate(savedInstanceState);
@@ -186,7 +176,6 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                     public void onClick(DialogInterface dialog, int which) {
                         //delete activity
                         database.deleteActivity(routeID);
-//                        routesMethods.delete(routeID, getApplication());
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putBoolean(IS_RELOAD_NEEDED, true);
                         editor.apply();
@@ -230,62 +219,14 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void rename(String name) {
-//        ArrayList<String> dataArrayList = routesMethods.loadData(getApplicationContext());
-//        for (int i = 0; i < dataArrayList.size(); ++i) {
-//            String[] tokens = dataArrayList.get(i).split(",");
-//            if (tokens[0].equals(routeID))
-//            {
-//                dataArrayList.set(i, routeID + "," + this.getDate(routeID) + "," + name);
         database.updateActivity(routeID, 0, 0.0, name);
         name = name.equals("") ? "Details" : name;
         getSupportActionBar().setTitle(name);
         Log.d("RouteInfo_LC", "Renaming: " + routeID + " " + name);
-//                break;
-//            }
-//        }
-//        deleteFile( "data.txt");
-//        for (int i = 0; i < dataArrayList.size(); i++)
-//        {
-//            routesMethods.write("data", dataArrayList.get(i) + "\n", getApplicationContext());
-//        }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(IS_RELOAD_NEEDED, true);
         editor.apply();
     }
-
-//    private String getDate(int routeID) {
-//        ArrayList<String> arrayList = routesMethods.loadData(getApplicationContext());
-//        for (int i = 0; i < arrayList.size(); ++i)
-//        {
-//            String[] tokens = arrayList.get(i).split(",");
-//            if (tokens[0].equals(routeID))
-//            {
-//                if (tokens.length > 1)
-//                    return tokens[1];
-//                else
-//                    return "";
-//            }
-//        }
-//        return "";
-//    }
-
-//    private String getName(int routeID) {
-//        ArrayList<String> arrayList = routesMethods.loadData(getApplicationContext());
-//        for (int i = 0; i < arrayList.size(); ++i)
-//        {
-//            String[] tokens = arrayList.get(i).split(",");
-//            if (tokens[0].equals(routeID))
-//            {
-//                if (tokens.length > 2)
-//                    return tokens[2];
-//                else
-//                    return "";
-//            }
-//
-//        }
-//        return "";
-//    }
-
 
     // if click on avg speed it changed to avg pace and opposite
     @SuppressLint("SetTextI18n")
@@ -299,7 +240,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                 int minutes = (int) minutesD;
                 double secondsD = (minutesD - minutes) * 60.0;
                 int seconds = (int) secondsD;
-                avgSpeed.setText(getString(R.string.avgPace_data, minutes, seconds));
+                String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
+                avgSpeed.setText(getString(R.string.avgPace_data, minutes, secondsStr));
             }
         } else {
             avgInfo.setText(getString(R.string.avg_speed));

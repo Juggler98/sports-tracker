@@ -25,12 +25,11 @@ import static com.example.sportstracker.RouteInfoActivity.IS_RELOAD_NEEDED;
  */
 public class RoutesActivity extends AppCompatActivity {
 
-    private RoutesMethods routesMethods = new RoutesMethods();
+//    private RoutesMethods routesMethods = new RoutesMethods();
 
     private ListView listView;
 
     private ArrayList<String> arrayListListView = new ArrayList<>();
-    private ArrayList<String> dataArrayList = new ArrayList<>();
     private ArrayList<Activity> activities = new ArrayList<>();
 
     private Database database;
@@ -46,7 +45,7 @@ public class RoutesActivity extends AppCompatActivity {
         activities = database.getActivities();
 
 
-        final RoutesMethods routesMethods = new RoutesMethods();
+//        final RoutesMethods routesMethods = new RoutesMethods();
 
         Log.d("Routes_LC", "onCreate Routes");
 
@@ -63,13 +62,9 @@ public class RoutesActivity extends AppCompatActivity {
                 builder.setMessage("Delete this activity?").setCancelable(true).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-//                        dataArrayList = routesMethods.loadData(getApplicationContext());
-//                        String[] tokens = dataArrayList.get(positionFinal).split(",");
-//                        routesMethods.delete(Integer.parseInt(tokens[0]), getApplicationContext());
-//                        loadListView();
+//                      loadListView();
                         database.deleteActivity(activities.get(position).getId());
                         activities = database.getActivities();
-//                        listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
                         listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, activities));
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -88,8 +83,6 @@ public class RoutesActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                dataArrayList = routesMethods.loadData(getApplicationContext());
-//                String[] tokens = dataArrayList.get(position).split(",");
                 openStats(activities.get(position).getId());
             }
         });

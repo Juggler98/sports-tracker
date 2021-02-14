@@ -22,8 +22,6 @@ import static java.lang.Math.round;
  */
 public class StatsActivity extends AppCompatActivity {
 
-    //    private ArrayList<String> dataArrayList = new ArrayList<>();
-    private ArrayList<Activity> activities = new ArrayList<>();
     private RoutesMethods routesMethods = new RoutesMethods();
     private Database database;
 
@@ -33,36 +31,24 @@ public class StatsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
 
-        database = new Database(StatsActivity.this);
-
         TextView distance = findViewById(R.id.textView3);
         TextView time = findViewById(R.id.textView4);
         TextView activityCount = findViewById(R.id.textView2);
         TextView elevationGain = findViewById(R.id.textView5);
 
-//        dataArrayList = routesMethods.loadData(getApplicationContext());
-        activities = database.getActivities();
+        database = new Database(StatsActivity.this);
+        ArrayList<Activity> activities = database.getActivities();
 
         double distanceD = 0;
         double timeD = 0;
         double elevationGainD = 0;
 
-//        String name;
-        int activityID;
-
         for (int i = 0; i < activities.size(); ++i) {
-//            String[] tokens = dataArrayList.get(i).split(",");
-//            name = tokens[0];
-            activityID = activities.get(i).getId();
-//            double distancePartial = routesMethods.getDistance(Integer.parseInt(name), getApplicationContext());
-//            double distancePartial = database.getDistance(activityID);
-            double distancePartial = routesMethods.getDistance(database.getPoints(activityID));
-//            double timePartial = routesMethods.getTime(activityID, getApplicationContext());
-//            double timePartial = database.getHours(activityID);
-            double timePartial = routesMethods.getHours(database.getPoints(activityID));
-//            double elevationGainPartial = routesMethods.getElevationGain(activityID, getApplicationContext());
-//            double elevationGainPartial = database.getElevationGain(activityID);
-            double elevationGainPartial = routesMethods.getElevationGain(database.getPoints(activityID));
+            int activityID = activities.get(i).getId();
+            ArrayList<Point> points = database.getPoints(activityID);
+            double distancePartial = routesMethods.getDistance(points);
+            double timePartial = routesMethods.getHours(points);
+            double elevationGainPartial = routesMethods.getElevationGain(points);
             distanceD += distancePartial;
             timeD += timePartial;
             elevationGainD += elevationGainPartial;
@@ -111,19 +97,5 @@ public class StatsActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-//    private void deleteAll() {
-//        dataArrayList = routesMethods.loadData(getApplicationContext());
-//        activities = database.getActivities();
-//        String name;
-//        int activityID;
-//        for (int i = 0; i < activities.size(); i++) {
-//            String[] tokens = dataArrayList.get(i).split(",");
-//            deleteFile(tokens[0] + ".txt");
-//        }
-//        deleteFile("data.txt");
-//        dataArrayList.clear();
-//        database.deleteAll();
-//    }
 
 }

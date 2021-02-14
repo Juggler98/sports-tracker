@@ -208,8 +208,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         }
         // load coordinates
         if (routeID != 0) {
-//            latLngArrayList = routesMethods.loadLatLng(routeID, getApplicationContext());
-//            latLngArrayList = database.getLatLng(routeID);
             latLngArrayList = routesMethods.getLatLng(database.getPoints(routeID));
         } else {
             Log.d("RECORD_LC", "Route ID is null");
