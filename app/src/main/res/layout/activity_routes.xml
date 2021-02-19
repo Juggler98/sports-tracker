@@ -3,11 +3,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RoutesActivity"
-    android:background="@drawable/gradient_background">
+    tools:context=".RoutesActivity" >
+<!--    android:background="@color/background">-->
 
     <ListView
         android:id="@+id/listView"
+        style="@style/Widget.AppCompat.ListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/recyclerView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:padding="4dp"-->
+<!--        android:scrollbars="vertical"-->
+<!--        android:background="@android:color/darker_gray"-->
+
+<!--        />-->
+
 </RelativeLayout>

@@ -33,4 +33,6 @@
     <string name="km">km</string>
     <string name="kmh">km/h</string>
     <string name="metres">%1$d m</string>
+
+    <string name="text">Light Mode</string>
 </resources>

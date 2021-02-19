@@ -1,12 +1,13 @@
  <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/action_bar_color</item>
         <item name="colorPrimaryDark">@color/color_panel</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="buttonStyle">@style/CustomButton</item>
+<!--        <item name="android:textColorPrimary">@android:color/white</item>-->
 
     </style>
 
@@ -17,11 +18,11 @@
 
      <style name="CustomButton" parent="Widget.AppCompat.Button">
          <item name="android:background">@drawable/button_design</item>
-         <item name="android:textSize">15sp</item>
+         <item name="android:textSize">12sp</item>
      </style>
 
      <style name="CustomTextSize" parent="Widget.AppCompat.TextView">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">12sp</item>
      </style>
 
 

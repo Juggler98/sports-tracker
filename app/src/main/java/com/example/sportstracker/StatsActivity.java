@@ -2,6 +2,7 @@ package com.example.sportstracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -28,8 +29,12 @@ public class StatsActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
+
+
 
         TextView distance = findViewById(R.id.textView3);
         TextView time = findViewById(R.id.textView4);

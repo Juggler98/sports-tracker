@@ -3,13 +3,13 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="action_bar_color">#4CAF50</color>
-    <color name="color_panel">#C44CAF50</color>
+    <color name="action_bar_color">#474747</color>
+    <color name="color_panel">#636363</color>
     <color name="button_color">#30cfd0</color>
     <color name="background">#FFFFFF</color>
     <color name="backgroundBlack">#1B1B1B</color>
-    <color name="dashboard">#80DC84</color>
+    <color name="dashboard">#474747</color>
 
-    <color name="textColor">#000000</color>
+    <color name="textColor">#FFFFFF</color>
 <!--    <color name="ic_launcher_background">#8BC34A</color>-->
 </resources>
