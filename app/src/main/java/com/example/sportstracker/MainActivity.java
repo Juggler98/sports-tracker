@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,12 +18,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+import android.widget.Toolbar;
+
+import com.google.android.material.navigation.NavigationView;
 
 /**
  * Entry activity for application.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private DrawerLayout drawer;
 
     /**  EXTRA - key for intent over whole app */
     public static final String EXTRA = "extra";
@@ -35,18 +42,36 @@ public class MainActivity extends AppCompatActivity {
     public static final String PAUSE = "pause";
 
 
-    private Button buttonRecord;
-    private int routeID = 0;
-    private boolean newActivity = true;
-    private SharedPreferences sharedPreferences;
-
     private Database database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().setTitle(getString(R.string.title_activity_main));
+
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        try {
+            getSupportActionBar().setTitle(getString(R.string.title_activity_main));
+        } catch (Exception e) {
+            Log.d("MAIN_LC", "Cannot set Title of Action Bar");
+        }
+
+        drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.bringToFront();
+        navigationView.setNavigationItemSelectedListener(this);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DashboardFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_dashboard);
+        }
 
         database = new Database(MainActivity.this);
 
@@ -54,67 +79,53 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d("MAIN_LC", "onCreate");
 
-        buttonRecord = findViewById(R.id.button1);
-        Button buttonActivities = findViewById(R.id.button2);
-        Button buttonStats = findViewById(R.id.button3);
-
-        // write this because I want to change something so I can tag this commit final. but I used tag final accidentally before to tag 2 commit. so I am using finall tag to make it work properly
-
-        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
-        newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
-        routeID = sharedPreferences.getInt(NAME_OF_ACTIVITY, 0);
-
-        buttonStats.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), StatsActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        buttonActivities.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RoutesActivity.class);
-                startActivity(intent);
-            }
-        });
-
         // permit start tracking only with getting GPS permission
         if (!permission()) {
             enableRecording();
         }
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Log.d("Main_LC", "NavigationBar clicked");
+        switch (item.getItemId()) {
+            case R.id.nav_dashboard:
+                getSupportActionBar().setTitle("Dashboard");
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DashboardFragment()).commit();
+                break;
+            case R.id.nav_map:
+                getSupportActionBar().setTitle("Map");
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment()).commit();
+                break;
+            case R.id.nav_import:
+                break;
+            case R.id.nav_settings:
+                break;
+            case R.id.nav_info:
+                AboutAppDialog aboutAppDialog = new AboutAppDialog();
+                aboutAppDialog.show(getSupportFragmentManager(), "about app");
+                Toast.makeText(this, "Dashboard", Toast.LENGTH_SHORT).show();
+
+                Log.d("Main_LC", "About App");
+                break;
+
+        }
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     // boolean new activity permit start GPS service only one time, until stop
     private void enableRecording() {
-        buttonRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
-                if (newActivity) {
 
-                    double time = System.currentTimeMillis();
-                    Activity activity = new Activity(1, time);
-                    database.createActivity(activity);
-
-                    newActivity = false;
-                    routeID = database.getLastActivityID();
-
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(RECORDING_PREF, newActivity);
-                    editor.putInt(NAME_OF_ACTIVITY, routeID);
-                    editor.apply();
-
-                    Intent intent = new Intent(getApplicationContext(), ServiceGPS.class);
-                    intent.putExtra(EXTRA, routeID);
-                    startService(intent);
-
-                    Log.d("RECORD_LC", "Starting new Service GPS");
-                }
-                openMap();
-            }
-        });
     }
 
     private void openMap() {

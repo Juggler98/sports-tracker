@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Sports Tracker</string>
-    <string name="title_activity_main">Menu</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_main">Dashboard</string>
     <string name="title_activity_routes">Activities</string>
     <string name="title_activity_stats">Details</string>
     <string name="title_all_stats">All Time Stats</string>

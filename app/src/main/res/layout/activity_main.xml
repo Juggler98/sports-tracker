@@ -2,239 +2,40 @@
 <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity"
-    >
+    tools:openDrawer="start">
 
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        >
+        android:orientation="vertical">
 
-        <RelativeLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/action_bar_color"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-            <TextView
-                android:id="@+id/title_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="Sports Tracker"
-                android:textColor="@color/textColor"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp"
-                />
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
+    </LinearLayout>
 
-            <GridLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@id/title_view"
-                android:rowCount="2"
-                android:columnCount="2"
-
-                android:layout_marginTop="300dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                >
-
-                <androidx.cardview.widget.CardView
-                app:cardBackgroundColor="@color/dashboard"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:layout_gravity="fill_horizontal"
-                android:layout_rowWeight="1"
-                android:layout_columnWeight="1"
-                android:layout_margin="8dp"
-                app:cardCornerRadius="8dp"
-                app:cardElevation="8dp"
-                >
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    >
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="RECORD"
-                        android:textStyle="bold"
-                        android:textAlignment="center" />
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_row="0"
-                    android:layout_column="1"
-                    android:layout_gravity="fill_horizontal"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1.4"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp"
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:layout_gravity="center_vertical|center_horizontal"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="MAP"
-                            android:textStyle="bold"
-                            android:textAlignment="center" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_row="1"
-                    android:layout_column="0"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp"
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:layout_gravity="center_vertical|center_horizontal"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="ACTIVITIES"
-                            android:textStyle="bold"
-                            android:textAlignment="center" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_row="1"
-                    android:layout_column="1"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_margin="8dp"
-                    app:cardCornerRadius="8dp"
-                    app:cardElevation="8dp"
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center"
-                        android:layout_gravity="center_vertical|center_horizontal"
-                        >
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="STATS"
-                            android:textStyle="bold"
-                            android:textAlignment="center" />
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-            </GridLayout>
-        </RelativeLayout>
-
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="160dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="256dp"
-        android:layout_marginEnd="64dp"
-        android:text="@string/stats"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.495" />
-
-
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="160dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/activities"
-        app:layout_constraintBottom_toTopOf="@+id/button3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="160dp"
-        android:layout_height="65dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="8dp"
-        android:text="@string/record"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="297dp"
-        android:layout_height="260dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="8dp"
-        android:contentDescription="@string/gps_icon"
-        app:layout_constraintBottom_toTopOf="@+id/button1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/ic_main_icon" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    
     <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
-        />
-
+        app:headerLayout="@layout/navigation_header"
+        app:menu="@menu/drawer_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
