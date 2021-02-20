@@ -3,8 +3,8 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/action_bar_color</item>
-        <item name="colorPrimaryDark">@color/color_panel</item>
+<!--        <item name="colorPrimary">@color/action_bar_color</item>-->
+<!--        <item name="colorPrimaryDark">@color/color_panel</item>-->
         <item name="colorAccent">@color/colorAccent</item>
         <item name="buttonStyle">@style/CustomButton</item>
 <!--        <item name="android:textColorPrimary">@android:color/white</item>-->
