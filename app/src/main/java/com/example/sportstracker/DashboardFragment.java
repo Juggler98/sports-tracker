@@ -1,7 +1,9 @@
 package com.example.sportstracker;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import static com.example.sportstracker.MainActivity.EXTRA;
@@ -58,7 +61,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
 
         switch (v.getId()) {
             case R.id.record_card:
-                record(v);
+                if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+                    record(v);
                 break;
             case R.id.activities_card:
                 intent = new Intent(v.getContext(), RoutesActivity.class);
@@ -72,6 +76,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         }
     }
 
+    // boolean new activity permit start GPS service only one time, until stop
     private void record(View view) {
         newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
         if (newActivity) {

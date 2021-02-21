@@ -8,6 +8,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -17,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.Toolbar;
@@ -30,19 +33,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
 
-    /**  EXTRA - key for intent over whole app */
+    private int i = 0;
+
+    /**
+     * EXTRA - key for intent over whole app
+     */
     public static final String EXTRA = "extra";
-    /** SHARED_PREFERENCES - key for Shared Preferences over whole app */
+    /**
+     * SHARED_PREFERENCES - key for Shared Preferences over whole app
+     */
     public static final String SHARED_PREFERENCES = "sharedPreferences";
-    /** RECORDING_PREF - value data for SharedPreferences to indicate if recording can be execute */
+    /**
+     * RECORDING_PREF - value data for SharedPreferences to indicate if recording can be execute
+     */
     public static final String RECORDING_PREF = "boolean";
-    /** NAME_OF_ACTIVITY = value data for SharedPreferences to locate id of actual recording route */
+    /**
+     * NAME_OF_ACTIVITY = value data for SharedPreferences to locate id of actual recording route
+     */
     public static final String NAME_OF_ACTIVITY = "name";
 
     public static final String PAUSE = "pause";
 
-
-    private Database database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +84,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_dashboard);
         }
 
-        database = new Database(MainActivity.this);
-
-        database.checkTypes();
+        new Database(MainActivity.this).checkTypes();
 
         Log.d("MAIN_LC", "onCreate");
 
-        // permit start tracking only with getting GPS permission
-        if (!permission()) {
-            enableRecording();
-        }
+        // permit start app only with getting GPS permission
+        permission();
     }
 
     @Override
@@ -94,8 +101,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DashboardFragment()).commit();
                 break;
             case R.id.nav_map:
-                getSupportActionBar().setTitle("Map");
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment()).commit();
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    getSupportActionBar().setTitle("Map");
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment()).commit();
+                }
                 break;
             case R.id.nav_import:
                 break;
@@ -104,11 +113,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_info:
                 AboutAppDialog aboutAppDialog = new AboutAppDialog();
                 aboutAppDialog.show(getSupportFragmentManager(), "about app");
-                Toast.makeText(this, "Dashboard", Toast.LENGTH_SHORT).show();
-
-                Log.d("Main_LC", "About App");
                 break;
-
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -123,26 +128,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    // boolean new activity permit start GPS service only one time, until stop
-    private void enableRecording() {
-
-    }
-
-    private void openMap() {
-        Intent intent = new Intent(getApplicationContext(), RecordActivity.class);
-        startActivity(intent);
-    }
-
     // check and ask for permission
-    private boolean permission() {
+    private void permission() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 100);
-            return true;
         }
-        return false;
     }
-
 
     /**
      * Check if user permit GPS access. If yes, app will continue and he can start recording  and if not app is closed.
@@ -155,35 +147,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 100) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                enableRecording();
+            if (grantResults[0] != PackageManager.PERMISSION_GRANTED || grantResults[1] != PackageManager.PERMISSION_GRANTED) {
+                String forbidden;
+                if (shouldShowRequestPermissionRationale(permissions[0])) {
+                    forbidden = "\n" + "GPS access is necessary for running app." + "\n";
+
+                } else {
+                    forbidden = "\n" + "GPS access is necessary for running app." + "\n\n" +
+                            "For activation go to Settings -> Apps. " +
+                            "Find Sports Tracker and activate GPS permission.";
+                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                builder.setTitle("GPS Permission").setMessage(forbidden).setCancelable(false).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        permission();
+                    }
+                }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             } else {
-                finish();
+                PermissionDialog permissionDialog = new PermissionDialog();
+                permissionDialog.show(getSupportFragmentManager(), "permission_dialog");
             }
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        return true;
-    }
-
-    /**
-     * Open about app dialog if was item clicked successful
-     * @param item which was clicked.
-     * @return true if item was clicked
-     */
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.item1) {
-            AboutAppDialog aboutAppDialog = new AboutAppDialog();
-            aboutAppDialog.show(getSupportFragmentManager(), "about app");
-            Log.d("Main_LC", "About App");
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
 
