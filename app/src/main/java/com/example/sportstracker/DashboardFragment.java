@@ -1,6 +1,8 @@
 package com.example.sportstracker;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -10,12 +12,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListAdapter;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+
+import java.util.ArrayList;
 
 import static com.example.sportstracker.MainActivity.EXTRA;
 import static com.example.sportstracker.MainActivity.NAME_OF_ACTIVITY;
@@ -31,6 +38,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
     private SharedPreferences sharedPreferences;
 
     private Database database;
+
+    private int activityType = 1;
 
 
     @Nullable
@@ -61,8 +70,14 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
 
         switch (v.getId()) {
             case R.id.record_card:
-                if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-                    record(v);
+                if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
+                    if (newActivity) {
+                        createActivityTypeDialog();
+                    } else {
+                        openMap();
+                    }
+                }
                 break;
             case R.id.activities_card:
                 intent = new Intent(v.getContext(), RoutesActivity.class);
@@ -77,12 +92,12 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
     }
 
     // boolean new activity permit start GPS service only one time, until stop
-    private void record(View view) {
+    private void record(View view, int activityType) {
         newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
         if (newActivity) {
 
             double time = System.currentTimeMillis();
-            Activity activity = new Activity(1, time);
+            Activity activity = new Activity(activityType, time);
             database.createActivity(activity);
 
             newActivity = false;
@@ -99,8 +114,47 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
 
             Log.d("RECORD_LC", "Starting new Service GPS");
         }
+        openMap();
+    }
+
+    private void createActivityTypeDialog() {
+        int type = 1;
+        String typeStr;
+        ArrayList<String> arrayList = new ArrayList<>();
+        do {
+            typeStr = database.getType(type++);
+            if (!typeStr.equals("")) {
+                arrayList.add(typeStr);
+            }
+        } while (!typeStr.equals(""));
+
+        String[] types = new String[arrayList.size()];
+        types = arrayList.toArray(types);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Select Activity Type").setSingleChoiceItems(types, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                activityType = which + 1;
+            }
+        }).setPositiveButton("START", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                record(getView(), activityType);
+            }
+        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void openMap() {
         Intent intent = new Intent(getContext(), RecordActivity.class);
         startActivity(intent);
     }
+
 
 }

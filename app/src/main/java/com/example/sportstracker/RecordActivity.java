@@ -82,7 +82,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         final Button pauseButton = findViewById(R.id.button9);
 
         mapView = findViewById(R.id.mapView2);
-
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
@@ -210,7 +209,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         float tilt = sharedPreferences.getFloat(TILT, 0);
         float bear = sharedPreferences.getFloat(BEAR, 0);
         return new CameraPosition(target, zoom, tilt, bear);
-
     }
 
     /**

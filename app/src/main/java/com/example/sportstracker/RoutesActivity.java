@@ -50,7 +50,7 @@ public class RoutesActivity extends AppCompatActivity {
         listView = findViewById(R.id.listView);
 
         loadListView();
-        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListListView));
+        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activities));
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
