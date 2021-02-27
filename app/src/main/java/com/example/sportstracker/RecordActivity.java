@@ -1,7 +1,10 @@
 package com.example.sportstracker;
 
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -15,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 
@@ -28,6 +32,7 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
@@ -85,6 +90,11 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
 
+        final DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+
+//        navigationView.bringToFront();
+
         // Stop tracking.
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,9 +133,15 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), RouteInfoActivity.class);
-                intent.putExtra(EXTRA, routeID);
-                startActivity(intent);
+//                Intent intent = new Intent(getApplicationContext(), RouteInfoActivity.class);
+//                intent.putExtra(EXTRA, routeID);
+//                startActivity(intent);
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawer(GravityCompat.START);
+                } else {
+                    drawer.openDrawer(GravityCompat.START);
+
+                }
             }
         });
 
@@ -172,6 +188,14 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onStart();
         mapView.onStart();
         Log.d("RECORD_LC", "onStart");
+    }
+
+    public void openFragment(View v) {
+        DashboardFragment fragment = new DashboardFragment();
+        fragment.setEnterTransition(android.R.transition.slide_bottom);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, fragment)
+                .commit();
     }
 
     @Override

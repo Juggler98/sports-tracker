@@ -53,5 +53,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         gMap = null;
         mapView.onDestroy();
         super.onDestroy();
+        Log.d("LC_MapFragment", "MapFragment OnDestroy");
     }
+
+
 }

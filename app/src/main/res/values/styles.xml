@@ -22,6 +22,16 @@
          <item name="android:textSize">12sp</item>
      </style>
 
+     <style name="divider">
+         <item name ="android:layout_width">match_parent</item>
+         <item name ="android:layout_height">1dp</item>
+         <item name ="android:layout_marginStart">4dp</item>
+         <item name ="android:layout_marginEnd">4dp</item>
+         <item name ="android:layout_marginTop">4dp</item>
+         <item name ="android:layout_marginBottom">4dp</item>
+         <item name ="android:background">?android:attr/listDivider</item>
+     </style>
+
      <style name="CustomTextSize" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">12sp</item>
      </style>
