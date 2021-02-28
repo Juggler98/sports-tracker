@@ -37,7 +37,11 @@
                 android:fillColor="@android:color/darker_gray"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+
                 >
+
 
             </ImageView>
 

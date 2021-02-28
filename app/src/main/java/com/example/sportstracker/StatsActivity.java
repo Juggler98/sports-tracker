@@ -36,10 +36,10 @@ public class StatsActivity extends AppCompatActivity {
 
 
 
-        TextView distance = findViewById(R.id.textView3);
-        TextView time = findViewById(R.id.textView4);
-        TextView activityCount = findViewById(R.id.textView2);
-        TextView elevationGain = findViewById(R.id.textView5);
+        TextView distance = findViewById(R.id.distance);
+        TextView time = findViewById(R.id.time);
+        TextView activityCount = findViewById(R.id.activities);
+        TextView elevationGain = findViewById(R.id.elevationGain);
 
         database = new Database(StatsActivity.this);
         ArrayList<Activity> activities = database.getActivities();
