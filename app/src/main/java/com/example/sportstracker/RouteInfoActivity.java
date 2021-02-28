@@ -69,13 +69,13 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         database = new Database(RouteInfoActivity.this);
 
-        avgInfo = findViewById(R.id.textView9);
-        TextView distance = findViewById(R.id.textView2);
-        TextView time = findViewById(R.id.textView3);
-        avgSpeed = findViewById(R.id.textView4);
-        TextView elevationGain = findViewById(R.id.textView5);
+        avgInfo = findViewById(R.id.avgInfo);
+        TextView distance = findViewById(R.id.distance);
+        TextView time = findViewById(R.id.time);
+        avgSpeed = findViewById(R.id.avgSpeed);
+        TextView elevationGain = findViewById(R.id.elevationGain);
         mapView = findViewById(R.id.mapView);
-        TextView dateView = findViewById(R.id.textView6);
+        TextView dateView = findViewById(R.id.date);
 
         sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
 
