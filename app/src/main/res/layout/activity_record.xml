@@ -83,9 +83,7 @@
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="150dp">
-
-                <View style="@style/divider" />
+                android:layout_marginTop="140dp">
 
                 <TableRow>
 
@@ -262,7 +260,6 @@
 
                 </TableRow>
 
-                <View style="@style/divider" />
 
             </TableLayout>
 

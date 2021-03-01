@@ -57,7 +57,7 @@
             android:layout_width="340dp"
             android:layout_height="150dp"
             android:layout_margin="10dp"
-            app:cardBackgroundColor="@color/dashboard"
+            app:cardBackgroundColor="@color/dashboardCard"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp">
 
@@ -99,7 +99,7 @@
             android:layout_width="160dp"
             android:layout_height="190dp"
             android:layout_margin="10dp"
-            app:cardBackgroundColor="@color/dashboard"
+            app:cardBackgroundColor="@color/dashboardCard"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp">
 
@@ -131,7 +131,7 @@
             android:layout_width="160dp"
             android:layout_height="190dp"
             android:layout_margin="10dp"
-            app:cardBackgroundColor="@color/dashboard"
+            app:cardBackgroundColor="@color/dashboardCard"
             app:cardCornerRadius="8dp"
             app:cardElevation="8dp">
 

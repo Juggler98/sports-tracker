@@ -1,14 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
-    <color name="action_bar_color">#4CAF50</color>
-    <color name="color_panel">#C44CAF50</color>
-    <color name="button_color">#30cfd0</color>
-    <color name="background">#FFFFFF</color>
-    <color name="backgroundBlack">#1B1B1B</color>
-    <color name="dashboard">#80DC84</color>
+    <!--   color for the app bar and other primary UI elements -->
+    <color name="colorPrimary">#4CAF50</color>
+    <!--   a darker variant of the primary color, used for
+           the status bar (on Android 5.0+) and contextual app bars -->
+    <color name="colorPrimaryDark">#C44CAF50</color>
+    <!--   a secondary color for controls like checkboxes and text fields -->
+    <color name="colorAccent">#48D64E</color>
+
+<!--    <color name="button_color">#30cfd0</color>-->
+<!--    <color name="background">#FFFFFF</color>-->
+<!--    <color name="backgroundBlack">#1B1B1B</color>-->
+    <color name="dashboardCard">#80DC84</color>
+    <color name="colorIcon">#616161</color>
 
     <color name="textColor">#000000</color>
 <!--    <color name="ic_launcher_background">#8BC34A</color>-->

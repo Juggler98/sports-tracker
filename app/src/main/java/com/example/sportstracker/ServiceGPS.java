@@ -102,6 +102,8 @@ public class ServiceGPS extends Service {
             Log.d("GPS_LC", "Write Location to: " + routeID);
         }
 
+
+
         //this method is deprecated in API level 29. This callback will never be invoked on Android Q and above.
 
         /** @deprecated in API level 29 */

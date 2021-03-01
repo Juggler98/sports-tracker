@@ -34,7 +34,7 @@
             <ImageView
                 android:layout_weight="1"
                 android:src="@drawable/ic_hike"
-                android:fillColor="@android:color/darker_gray"
+                android:tint="@color/colorIcon"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
