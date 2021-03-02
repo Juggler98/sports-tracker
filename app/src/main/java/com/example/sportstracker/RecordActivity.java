@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -82,9 +83,13 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         routeID = sharedPreferences.getInt(NAME_OF_ACTIVITY, 0);
 
-        Button stopButton = findViewById(R.id.button7);
-        Button infoButton = findViewById(R.id.button8);
-        final Button pauseButton = findViewById(R.id.button9);
+//        Button stopButton = findViewById(R.id.button7);
+//        Button infoButton = findViewById(R.id.button8);
+//        final Button pauseButton = findViewById(R.id.button9);
+
+        ImageView stopButton = findViewById(R.id.stop);
+        final ImageView pauseButton = findViewById(R.id.pause);
+        ImageView infoButton = findViewById(R.id.info);
 
         mapView = findViewById(R.id.mapView2);
         mapView.onCreate(savedInstanceState);
@@ -94,6 +99,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         NavigationView navigationView = findViewById(R.id.nav_view);
 
 //        navigationView.bringToFront();
+
 
         // Stop tracking.
         stopButton.setOnClickListener(new View.OnClickListener() {
@@ -151,9 +157,9 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
                 boolean pause = sharedPreferences.getBoolean(PAUSE, false);
                 pause = !pause;
                 if (pause)
-                    pauseButton.setText("START");
+                    pauseButton.setImageResource(R.drawable.ic_record);
                 else
-                    pauseButton.setText("PAUSE");
+                    pauseButton.setImageResource(R.drawable.ic_pause);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean(PAUSE, pause);
                 editor.apply();
@@ -175,10 +181,10 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         editor.apply();
 
         boolean pause = sharedPreferences.getBoolean(PAUSE, false);
-        if (pause)
-            pauseButton.setText("START");
-        else
-            pauseButton.setText("PAUSE");
+//        if (pause)
+//            pauseButton.setText("START");
+//        else
+//            pauseButton.setText("PAUSE");
 
         Log.d("RECORD_LC", "onCreate");
     }
