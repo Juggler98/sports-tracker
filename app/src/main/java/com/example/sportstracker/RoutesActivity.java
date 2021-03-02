@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -134,18 +135,21 @@ public class RoutesActivity extends AppCompatActivity {
             activities = database.getActivities();
             if (activities.size() < oldSize) {
                 adapter.notifyItemRemoved(activityOpen);
+            } else if (activities.size() > oldSize){
+//                Activity activity = activities.get(activities.size()-1);
+//                routeItemsList.add(new RouteItem(getIcon(activity.getIdType()), routesMethods.getDate(activity.getTimeStart()), activity.getTitle()));
+//                adapter.notifyItemInserted(routeItemsList.size() - 1 - 5);
             } else {
                 routeItemsList.get(activityOpen).setTitle(activities.get(activityOpen).getTitle());
                 routeItemsList.get(activityOpen).setIcon(getIcon(activities.get(activityOpen).getIdType()));
                 adapter.notifyItemChanged(activityOpen);
+//                Log.d("Routes_LC", "onResume Routes " + activityOpen);
             }
-
-//            activities = database.getActivities();
 //            loadListView();
 //            listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
-//            SharedPreferences.Editor editor = sharedPreferences.edit();
-//            editor.putBoolean(IS_RELOAD_NEEDED, false);
-//            editor.apply();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(IS_RELOAD_NEEDED, false);
+            editor.apply();
         }
 
     }

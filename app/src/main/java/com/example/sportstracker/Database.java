@@ -220,10 +220,10 @@ public class Database extends SQLiteOpenHelper {
                     activity.setTitle(cursor.getString(4));
 //                    Log.d("DB_LC", "Title is: " + cursor.getString(4));
                 }
-//                if (activity.getTimeEnd() != 0.0) {
-//                    activities.add(activity);
-//                }
-                activities.add(activity);
+                if (activity.getTimeEnd() != 0.0 || activity.getId() != this.getLastActivityID()) {
+                    activities.add(activity);
+                }
+//                activities.add(activity);
             } while (cursor.moveToNext());
         }
         cursor.close();
@@ -262,19 +262,20 @@ public class Database extends SQLiteOpenHelper {
 
         SQLiteDatabase db = getWritableDatabase();
         int update = 0;
-        if (type != 0) {
-            db.execSQL(changeType);
-        }
+
         if (endTime != 0.0) {
             db.execSQL(setEndTime);
-        }
-        if (!name.equals("")) {
+        } else if (type != 0) {
+            db.execSQL(changeType);
+        } else {
             ContentValues cv = new ContentValues();
             cv.put("title", name);
             String[] whereArgs = {activityID + ""};
             update = db.update(TABLE_ACTIVITY, cv, "id_activity=?", whereArgs);
-//            db.execSQL(setTitle);
         }
+//        if (!name.equals(" ")) {
+//            db.execSQL(setTitle);
+//        }
         db.close();
         Log.d("DB_LC", "Change Activity: " + activityID + ", " + type + ", " + endTime + ", " + name);
         return update > 0;

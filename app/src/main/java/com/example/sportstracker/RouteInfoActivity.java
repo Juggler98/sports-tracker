@@ -295,7 +295,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 if (routeType != route.getIdType()) {
-                    database.updateActivity(routeID, routeType, 0, "");
+                    database.updateActivity(routeID, routeType, 0.0, "");
                     route = database.getActivity(routeID);
                     setIcon();
                     SharedPreferences.Editor editor = sharedPreferences.edit();
