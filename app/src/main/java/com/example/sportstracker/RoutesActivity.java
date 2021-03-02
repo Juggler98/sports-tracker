@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -52,10 +53,8 @@ public class RoutesActivity extends AppCompatActivity {
         database = new Database(RoutesActivity.this);
         activities = database.getActivities();
 
-//        listView = findViewById(R.id.listView);
-
         for (Activity activity : activities) {
-            routeItemsList.add(new RouteItem(R.drawable.ic_hike,routesMethods.getDate(activity.getTimeStart()), activity.getTitle()));
+            routeItemsList.add(new RouteItem(getIcon(activity.getIdType()), routesMethods.getDate(activity.getTimeStart()), activity.getTitle()));
         }
 
         recyclerView = findViewById(R.id.recyclerView);
@@ -73,8 +72,15 @@ public class RoutesActivity extends AppCompatActivity {
             }
         });
 
-        loadListView();
-//        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, arrayListListView));
+//        listView = findViewById(R.id.listView);
+//        loadListView();
+//        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activities));
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                openStats(activities.get(position).getId());
+//            }
+//        });
 
 //        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 //            @Override
@@ -99,25 +105,6 @@ public class RoutesActivity extends AppCompatActivity {
 //                alertDialog.show();
 //
 //                return true;
-//            }
-//        });
-
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                openStats(activities.get(position).getId());
-//            }
-//        });
-
-//        listView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//
 //            }
 //        });
 
@@ -149,8 +136,10 @@ public class RoutesActivity extends AppCompatActivity {
                 adapter.notifyItemRemoved(activityOpen);
             } else {
                 routeItemsList.get(activityOpen).setTitle(activities.get(activityOpen).getTitle());
+                routeItemsList.get(activityOpen).setIcon(getIcon(activities.get(activityOpen).getIdType()));
                 adapter.notifyItemChanged(activityOpen);
             }
+
 //            activities = database.getActivities();
 //            loadListView();
 //            listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
@@ -174,20 +163,41 @@ public class RoutesActivity extends AppCompatActivity {
     }
 
     private void loadListView() {
-//        arrayListListView.clear();
-//        for (int i = 0; i < activities.size(); ++i) {
-//            Activity activity = activities.get(i);
-//            if (activity.getTitle().equals("")) {
-//                arrayListListView.add((i + 1) + ". " + routesMethods.getDate(activity.getTimeStart()));
-//            } else {
-//                arrayListListView.add((i + 1) + ". " + activity.getTitle());
-//            }
-//        }
+        arrayListListView.clear();
+        for (int i = 0; i < activities.size(); ++i) {
+            Activity activity = activities.get(i);
+            if (activity.getTitle().equals("")) {
+                arrayListListView.add((i + 1) + ". " + routesMethods.getDate(activity.getTimeStart()));
+            } else {
+                arrayListListView.add((i + 1) + ". " + activity.getTitle());
+            }
+        }
     }
 
     private void openStats(int activityID) {
         Intent intent = new Intent(this, RouteInfoActivity.class);
         intent.putExtra(EXTRA, activityID);
         startActivity(intent);
+    }
+
+    private int getIcon(int type) {
+        switch (type) {
+            case 1:
+                return R.drawable.ic_hike;
+            case 2:
+                return R.drawable.ic_bike;
+            case 3:
+                return R.drawable.ic_run;
+            case 4:
+                return R.drawable.ic_swim;
+            case 5:
+                return R.drawable.ic_ski;
+            case 6:
+                return R.drawable.ic_walk;
+            case 7:
+                return R.drawable.ic_skate;
+            default:
+                return R.drawable.ic_hike;
+        }
     }
 }

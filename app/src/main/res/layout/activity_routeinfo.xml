@@ -32,6 +32,7 @@
                 android:textSize="16sp" />
 
             <ImageView
+                android:id="@+id/icon"
                 android:layout_weight="1"
                 android:src="@drawable/ic_hike"
                 android:tint="@color/colorIcon"

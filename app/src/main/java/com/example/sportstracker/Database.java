@@ -150,8 +150,10 @@ public class Database extends SQLiteOpenHelper {
             this.addTypes("Hike");
             this.addTypes("Bike");
             this.addTypes("Run");
-            this.addTypes("Swim");
+            this.addTypes("Walk");
             this.addTypes("Ski");
+            this.addTypes("Skate");
+            this.addTypes("Swim");
         }
         cursor.close();
         db.close();

@@ -14,6 +14,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -60,6 +61,10 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
     private Database database;
 
+    private Activity route;
+
+    private int routeType;
+
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -87,25 +92,30 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         Log.d("RouteInfo_LC", "onCreate Route: " + routeID);
 
+        route = database.getActivity(routeID);
+        ArrayList<Point> points = database.getPoints(routeID);
+
+        setIcon();
+
         String name = "";
-        if (database.getActivity(routeID) != null)
-            name = database.getActivity(routeID).getTitle();
+        if (route != null)
+            name = route.getTitle();
         if (name.equals(""))
             name = "Details";
 
         getSupportActionBar().setTitle(name);
 
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-        Date date = new Date((long)database.getActivity(routeID).getTimeStart());
+        Date date = new Date((long)route.getTimeStart());
         String timeStr = format.format(date);
 
         dateView.setText(timeStr);
 
-        double distanceD = routesMethods.getDistance(database.getPoints(routeID));
+        double distanceD = routesMethods.getDistance(points);
         distance.setText(distanceD + " " + getString(R.string.km));
 
         // calculate hours minutes and seconds from hours
-        double hoursD = routesMethods.getHours(database.getPoints(routeID));
+        double hoursD = routesMethods.getHours(points);
         int hours = (int) hoursD;
         double minutesD = (hoursD - hours) * 60.0;
         int minutes = (int) minutesD;
@@ -116,7 +126,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
 
         time.setText(getString(R.string.time_data, hours, minutesStr, secondsStr));
-        elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGainLoss(database.getPoints(routeID))[0]));
+        elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[0]));
 
         if (hoursD == 0) {
             this.avg = 0.0;
@@ -166,10 +176,16 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item1:
+
+                return true;
+            case R.id.item2:
+                createActivityTypeDialog();
+                return true;
+            case R.id.item3:
                 // rename activity
                 openDialog();
                 return true;
-            case R.id.item2:
+            case R.id.item4:
                 AlertDialog.Builder builder = new AlertDialog.Builder(RouteInfoActivity.this);
                 builder.setMessage("Delete this activity?").setCancelable(true).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                     @Override
@@ -253,5 +269,75 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     @Override
     public void applyText(String name) {
         rename(name);
+    }
+
+    private void createActivityTypeDialog() {
+        int type = 1;
+        String typeStr;
+        ArrayList<String> arrayList = new ArrayList<>();
+        do {
+            typeStr = database.getType(type++);
+            if (!typeStr.equals("")) {
+                arrayList.add(typeStr);
+            }
+        } while (!typeStr.equals(""));
+
+        String[] types = new String[arrayList.size()];
+        types = arrayList.toArray(types);
+        routeType = route.getIdType();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Select Activity Type").setSingleChoiceItems(types, routeType - 1, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                routeType = which + 1;
+            }
+        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (routeType != route.getIdType()) {
+                    database.updateActivity(routeID, routeType, 0, "");
+                    route = database.getActivity(routeID);
+                    setIcon();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean(IS_RELOAD_NEEDED, true);
+                    editor.apply();
+                }
+            }
+        }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void setIcon() {
+        int icon = R.drawable.ic_hike;
+        ImageView imageView = findViewById(R.id.icon);
+        switch (route.getIdType()) {
+            case 1:
+                icon = R.drawable.ic_hike;
+                break;
+            case 2:
+                icon = R.drawable.ic_bike;
+                break;
+            case 3:
+                icon = R.drawable.ic_run;
+                break;
+            case 4:
+                icon = R.drawable.ic_swim;
+                break;
+            case 5:
+                icon = R.drawable.ic_ski;
+                break;
+            case 6:
+                icon = R.drawable.ic_walk;
+                break;
+            case 7:
+                icon = R.drawable.ic_skate;
+                break;
+        }
+        imageView.setImageResource(icon);
     }
 }

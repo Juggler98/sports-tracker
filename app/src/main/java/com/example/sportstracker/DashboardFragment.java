@@ -92,7 +92,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
     }
 
     // boolean new activity permit start GPS service only one time, until stop
-    private void record(View view, int activityType) {
+    private void record(View view) {
         newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
         if (newActivity) {
 
@@ -131,8 +131,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         String[] types = new String[arrayList.size()];
         types = arrayList.toArray(types);
 
+//        activityType = 1;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Select Activity Type").setSingleChoiceItems(types, 0, new DialogInterface.OnClickListener() {
+        builder.setTitle("Select Activity Type").setSingleChoiceItems(types, activityType - 1, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 activityType = which + 1;
@@ -140,7 +141,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         }).setPositiveButton("START", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                record(getView(), activityType);
+                record(getView());
             }
         }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
             @Override
