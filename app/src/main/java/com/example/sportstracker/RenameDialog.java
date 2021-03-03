@@ -3,6 +3,7 @@ package com.example.sportstracker;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
+import static com.example.sportstracker.RouteInfoActivity.IS_RELOAD_NEEDED;
+import static com.example.sportstracker.RouteInfoActivity.ROUTE_NAME;
 
 /**
  * Dialog for rename Activity name.
@@ -48,6 +53,9 @@ public class RenameDialog extends AppCompatDialogFragment {
         });
 
         editTextRename = view.findViewById(R.id.rename);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(SHARED_PREFERENCES, getActivity().MODE_PRIVATE);
+        String routeName = sharedPreferences.getString(ROUTE_NAME, "");
+        editTextRename.setText(routeName);
 
         return builder.create();
     }

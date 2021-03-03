@@ -53,6 +53,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
      */
     public static final String IS_RELOAD_NEEDED = "isReloadNeeded";
 
+    public static final String ROUTE_NAME = "routeName";
+
     private SharedPreferences sharedPreferences;
 
     private int routeID;
@@ -183,6 +185,9 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                 return true;
             case R.id.item3:
                 // rename activity
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(ROUTE_NAME, route.getTitle());
+                editor.apply();
                 openDialog();
                 return true;
             case R.id.item4:
@@ -192,9 +197,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                     public void onClick(DialogInterface dialog, int which) {
                         //delete activity
                         database.deleteActivity(routeID);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean(IS_RELOAD_NEEDED, true);
-                        editor.apply();
+                        setReloadIsNeeded();
                         finish();
                     }
                 }).setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -236,12 +239,11 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void rename(String name) {
         database.updateActivity(routeID, 0, 0.0, name);
+        route = database.getActivity(routeID);
         name = name.equals("") ? "Details" : name;
         getSupportActionBar().setTitle(name);
         Log.d("RouteInfo_LC", "Renaming: " + routeID + " " + name);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(IS_RELOAD_NEEDED, true);
-        editor.apply();
+        setReloadIsNeeded();
     }
 
     // if click on avg speed it changed to avg pace and opposite
@@ -298,9 +300,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                     database.updateActivity(routeID, routeType, 0.0, "");
                     route = database.getActivity(routeID);
                     setIcon();
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean(IS_RELOAD_NEEDED, true);
-                    editor.apply();
+                    setReloadIsNeeded();
                 }
             }
         }).setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
@@ -340,4 +340,11 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         }
         imageView.setImageResource(icon);
     }
+
+    private void setReloadIsNeeded() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(IS_RELOAD_NEEDED, true);
+        editor.apply();
+    }
+
 }
