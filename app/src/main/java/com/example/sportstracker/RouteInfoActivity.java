@@ -219,7 +219,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     public void onMapReady(GoogleMap googleMap) {
         if (!latLngArrayList.isEmpty()) {
             // show map of recorded route
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngArrayList.get(latLngArrayList.size() / 2), 14f));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngArrayList.get(latLngArrayList.size() / 4), 13));
             googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(latLngArrayList.size() - 1)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             googleMap.addPolyline(new PolylineOptions().addAll(latLngArrayList).color(Color.RED));
