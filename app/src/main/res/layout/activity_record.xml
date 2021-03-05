@@ -79,13 +79,14 @@
 
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="64dp"
             android:layout_gravity="start">
 
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="140dp"
+                android:layout_marginTop="200dp"
                 android:layout_marginBottom="24dp" >
 
                 <TableRow>
@@ -258,6 +259,32 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="-120 m"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+                <View style="@style/divider" />
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Speed" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="25 km/h"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 

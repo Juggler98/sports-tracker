@@ -34,6 +34,7 @@ import java.util.Locale;
 
 import static com.example.sportstracker.MainActivity.EXTRA;
 import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
+import static java.lang.Math.max;
 import static java.lang.Math.round;
 
 /**
@@ -77,12 +78,19 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         database = new Database(RouteInfoActivity.this);
 
         avgInfo = findViewById(R.id.avgInfo);
+        avgSpeed = findViewById(R.id.avgSpeed);
+
+        TextView dateView = findViewById(R.id.date);
         TextView distance = findViewById(R.id.distance);
         TextView time = findViewById(R.id.time);
-        avgSpeed = findViewById(R.id.avgSpeed);
+
         TextView elevationGain = findViewById(R.id.elevationGain);
+        TextView elevationLoss = findViewById(R.id.elevationLoss);
+        TextView maxAltitude = findViewById(R.id.maxAltitude);
+        TextView minAltitude = findViewById(R.id.minAltitude);
+        TextView maxSpeed = findViewById(R.id.maxSpeed);
+
         mapView = findViewById(R.id.mapView);
-        TextView dateView = findViewById(R.id.date);
 
         sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
 
@@ -129,6 +137,13 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         time.setText(getString(R.string.time_data, hours, minutesStr, secondsStr));
         elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[0]));
+        elevationLoss.setText("-" + getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[1]));
+
+        maxAltitude.setText(routesMethods.getAltitudeMaxMin(points)[0] + " m");
+        minAltitude.setText(routesMethods.getAltitudeMaxMin(points)[1] + " m");
+
+        double maxSpeedDouble = round(routesMethods.getMaxSpeed(points) * 3.6 * 10)/10.0;
+        maxSpeed.setText(maxSpeedDouble + " km/h");
 
         if (hoursD == 0) {
             this.avg = 0.0;

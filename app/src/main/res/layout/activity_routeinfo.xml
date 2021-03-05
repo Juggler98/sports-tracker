@@ -112,6 +112,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/timeMoving"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -157,6 +158,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/avgSpeedMoving"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -200,6 +202,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/elevationLoss"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -233,6 +236,7 @@
         <TableRow>
 
             <TextView
+                android:id="@+id/maxAltitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -242,6 +246,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/minAltitude"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -269,6 +274,7 @@
         <TableRow>
 
             <TextView
+                android:id="@+id/maxSpeed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

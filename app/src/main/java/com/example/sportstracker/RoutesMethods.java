@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static java.lang.Math.min;
 import static java.lang.Math.round;
 
 /**
@@ -29,7 +30,6 @@ public class RoutesMethods {
     }
 
     /**
-     *
      * @param points
      * @return distance of route
      */
@@ -57,7 +57,6 @@ public class RoutesMethods {
     }
 
     /**
-     *
      * @param points
      * @return elevation gain of route
      */
@@ -88,8 +87,37 @@ public class RoutesMethods {
         return elevationGainLoss;
     }
 
-        /**
-     *
+    /**
+     * @param points
+     * @return min max altitue
+     */
+    public double[] getAltitudeMaxMin(ArrayList<Point> points) {
+        double[] altitudeMaxMin = new double[2];
+        double maxAltitude = Integer.MIN_VALUE;
+        double minAltitude = Integer.MAX_VALUE;
+        for (Point point : points) {
+            if (point.getVdop() < 8) {
+                if (point.getEle() > maxAltitude)
+                    maxAltitude = point.getEle();
+                if (point.getEle() < minAltitude)
+                    minAltitude = point.getEle();
+            }
+        }
+        altitudeMaxMin[0] = maxAltitude == Integer.MIN_VALUE ? 0 : maxAltitude;
+        altitudeMaxMin[1] = minAltitude == Integer.MAX_VALUE ? 0 : minAltitude;
+        return altitudeMaxMin;
+    }
+
+    public double getMaxSpeed(ArrayList<Point> points) {
+        double maxSpeed = Integer.MIN_VALUE;
+        for (Point point : points) {
+            if (point.getSpeed() > maxSpeed)
+                maxSpeed = point.getSpeed();
+        }
+        return maxSpeed == Integer.MIN_VALUE ? 0 : maxSpeed;
+    }
+
+    /**
      * @param points
      * @return time of doing activity
      */
@@ -102,7 +130,6 @@ public class RoutesMethods {
     }
 
     /**
-     *
      * @param points
      * @return arrayList with all coordinates
      */
@@ -117,7 +144,7 @@ public class RoutesMethods {
         return latLng;
     }
 
-     //this is haversine Formula for calculating distance between two coordinates
+    //this is haversine Formula for calculating distance between two coordinates
     private double haversineFormula(double lat1, double lat2, double lon1, double lon2) {
         double r = 6371000;
         double fi1 = lat1 * Math.PI / 180;
@@ -132,7 +159,7 @@ public class RoutesMethods {
 
     public String getDate(double time) {
         DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-        Date date = new Date((long)time);
+        Date date = new Date((long) time);
         return format.format(date);
     }
 
