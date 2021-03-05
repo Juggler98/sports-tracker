@@ -158,9 +158,18 @@ public class RoutesMethods {
     }
 
     public String getDate(double time) {
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
         Date date = new Date((long) time);
         return format.format(date);
+    }
+
+    public int[] getHoursMinutesSeconds(double time) {
+        int hours = (int) time;
+        double minutesD = (time - hours) * 60.0;
+        int minutes = (int) minutesD;
+        double secondsD = (minutesD - minutes) * 60.0;
+        int seconds = (int) secondsD;
+        return new int[]{hours, minutes, seconds};
     }
 
 }

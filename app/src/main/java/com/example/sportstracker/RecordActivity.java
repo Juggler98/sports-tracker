@@ -17,11 +17,14 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -73,6 +76,17 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private Database database;
 
+    private Handler handler;
+    private Runnable runnable;
+
+    private TextView timeView;
+    private TextView distanceView;
+    private TextView altitudeView;
+    private TextView eleGainView;
+    private TextView eleLossView;
+    private TextView speedView;
+    private TextView avgSpeedView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,10 +96,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
         sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
         routeID = sharedPreferences.getInt(NAME_OF_ACTIVITY, 0);
-
-//        Button stopButton = findViewById(R.id.button7);
-//        Button infoButton = findViewById(R.id.button8);
-//        final Button pauseButton = findViewById(R.id.button9);
 
         ImageView stopButton = findViewById(R.id.stop);
         final ImageView pauseButton = findViewById(R.id.pause);
@@ -99,6 +109,14 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         NavigationView navigationView = findViewById(R.id.nav_view);
 
 //        navigationView.bringToFront();
+
+        timeView = findViewById(R.id.time);
+        distanceView = findViewById(R.id.distance);
+        altitudeView = findViewById(R.id.altitude);
+        eleGainView = findViewById(R.id.elevationGain);
+        eleLossView = findViewById(R.id.elevationLoss);
+        speedView = findViewById(R.id.speed);
+        avgSpeedView = findViewById(R.id.avgSpeed);
 
 
         // Stop tracking.
@@ -115,9 +133,11 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
                             Intent intent = new Intent(getApplicationContext(), ServiceGPS.class);
                             stopService(intent);
                             newActivity = true;
+                            database.updateActivity(routeID, 0, System.currentTimeMillis(), "");
                             routeID = 0;
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean(PAUSE, false);
                             editor.putBoolean(RECORDING_PREF, newActivity);
                             editor.remove(NAME_OF_ACTIVITY);
                             editor.apply();
@@ -139,9 +159,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         infoButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent(getApplicationContext(), RouteInfoActivity.class);
-//                intent.putExtra(EXTRA, routeID);
-//                startActivity(intent);
                 if (drawer.isDrawerOpen(GravityCompat.START)) {
                     drawer.closeDrawer(GravityCompat.START);
                 } else {
@@ -181,10 +198,12 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         editor.apply();
 
         boolean pause = sharedPreferences.getBoolean(PAUSE, false);
-//        if (pause)
-//            pauseButton.setText("START");
-//        else
-//            pauseButton.setText("PAUSE");
+        if (pause)
+           pauseButton.setImageResource(R.drawable.ic_record);
+        else
+            pauseButton.setImageResource(R.drawable.ic_pause);
+
+        this.changeContent();
 
         Log.d("RECORD_LC", "onCreate");
     }
@@ -194,6 +213,11 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onStart();
         mapView.onStart();
         Log.d("RECORD_LC", "onStart");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
 
     public void openFragment(View v) {
@@ -225,6 +249,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         gMap.setMyLocationEnabled(false);
         gMap = null;
         mapView.onDestroy();
+        handler.removeCallbacks(this.runnable);
     }
 
     // return last camera position if map was rotated
@@ -306,4 +331,37 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             Log.d("MAP_LC", "Writing lines from: " + routeID);
         }
     }
+
+    private void refresh() {
+        this.handler = new Handler();
+        this.runnable = new Runnable() {
+            @Override
+            public void run() {
+                changeContent();
+            }
+        };
+        this.handler.postDelayed(this.runnable, 1000);
+    }
+
+    private void changeContent() {
+        ArrayList<Point> points = database.getPoints(routeID);
+        double distance = routesMethods.getDistance(points);
+        double hours = routesMethods.getHours(points);
+        int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours);
+        String minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
+        String secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
+        distanceView.setText(distance + " km");
+        if (points.size() > 0) {
+            altitudeView.setText(points.get(points.size() - 1).getEle() + " m");
+            speedView.setText(points.get(points.size() - 1).getSpeed() + " km/h");
+        }
+        double avgSpeed = Math.round(distance / hours * 10) / 10.0;
+        avgSpeedView.setText(avgSpeed + " km/h");
+        eleGainView.setText(routesMethods.getElevationGainLoss(points)[0] + " m");
+        eleLossView.setText("-" + routesMethods.getElevationGainLoss(points)[1] + " m");
+        timeView.setText(hoursMinutesSeconds[0] + ":" + minutesStr + ":" + secondsStr);
+        refresh();
+    }
+
+
 }

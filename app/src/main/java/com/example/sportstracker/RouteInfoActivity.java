@@ -124,18 +124,13 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         double distanceD = routesMethods.getDistance(points);
         distance.setText(distanceD + " " + getString(R.string.km));
 
-        // calculate hours minutes and seconds from hours
-        double hoursD = routesMethods.getHours(points);
-        int hours = (int) hoursD;
-        double minutesD = (hoursD - hours) * 60.0;
-        int minutes = (int) minutesD;
-        double secondsD = (minutesD - minutes) * 60.0;
-        int seconds = (int) secondsD;
+        double hours = routesMethods.getHours(points);
+        int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours);
 
-        String minutesStr = minutes < 10 ? "0" + minutes : "" + minutes;
-        String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
+        String minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
+        String secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
 
-        time.setText(getString(R.string.time_data, hours, minutesStr, secondsStr));
+        time.setText(getString(R.string.time_data, hoursMinutesSeconds[0], minutesStr, secondsStr));
         elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[0]));
         elevationLoss.setText("-" + getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[1]));
 
@@ -145,10 +140,10 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         double maxSpeedDouble = round(routesMethods.getMaxSpeed(points) * 3.6 * 10)/10.0;
         maxSpeed.setText(maxSpeedDouble + " km/h");
 
-        if (hoursD == 0) {
+        if (hours == 0) {
             this.avg = 0.0;
         } else {
-            this.avg = round(distanceD / hoursD * 100.0) / 100.0;
+            this.avg = round(distanceD / hours * 100.0) / 100.0;
         }
 
 
