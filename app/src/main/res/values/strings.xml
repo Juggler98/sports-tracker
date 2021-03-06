@@ -22,10 +22,10 @@
     <string name="about_app">About App</string>
 <!--    <string name="date">Date:</string>-->
     <string name="distance">Distance</string>
-    <string name="elevation_gain">Elevation Gain:</string>
+    <string name="elevation_gain">Elevation Gain</string>
     <string name="avg_speed">Avg Speed</string>
     <string name="time">Time:</string>
-    <string name="activitiesStats">Activities:</string>
+    <string name="activitiesStats">Activities</string>
     <string name="avg_pace">Avg Pace</string>
     <string name="avg_pace_null">NaN /km</string>
     <string name="avgPace_data">%1$d:%2$s /km</string>
