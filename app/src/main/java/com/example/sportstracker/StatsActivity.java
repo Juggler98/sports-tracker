@@ -1,18 +1,37 @@
 package com.example.sportstracker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.arch.core.util.Function;
+import androidx.constraintlayout.widget.Placeholder;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
+import androidx.lifecycle.ViewModel;
+import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.widget.TextView;
+
+import com.google.android.material.tabs.TabItem;
+import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
@@ -26,15 +45,16 @@ public class StatsActivity extends AppCompatActivity {
     private RoutesMethods routesMethods = new RoutesMethods();
     private Database database;
 
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
-
-
 
         TextView distance = findViewById(R.id.distance);
         TextView time = findViewById(R.id.time);
@@ -43,6 +63,21 @@ public class StatsActivity extends AppCompatActivity {
 
         database = new Database(StatsActivity.this);
         ArrayList<Activity> activities = database.getActivities();
+
+        viewPager = findViewById(R.id.viewPager);
+        tabLayout = findViewById(R.id.tabLayout);
+
+        tabLayout.setupWithViewPager(viewPager);
+
+
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 0, this);
+        sectionsPagerAdapter.addPage("Hey");
+        sectionsPagerAdapter.addPage("Hey");
+
+        viewPager.setAdapter(sectionsPagerAdapter);
+
+
+
 
         double distanceD = 0;
         double timeD = 0;
