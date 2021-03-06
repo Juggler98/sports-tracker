@@ -130,7 +130,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="164 m"
+                            android:text="0 m"
                             android:textSize="24sp"
                             android:textStyle="bold" />
 
@@ -295,7 +295,7 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="25 km/h"
+                            android:text="0 km/h"
                             android:textSize="24sp"
                             android:textStyle="bold" />
 

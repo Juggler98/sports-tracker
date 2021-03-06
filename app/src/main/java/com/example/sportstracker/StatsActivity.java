@@ -51,58 +51,41 @@ public class StatsActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
 
-        TextView distance = findViewById(R.id.distance);
-        TextView time = findViewById(R.id.time);
-        TextView activityCount = findViewById(R.id.activities);
-        TextView elevationGain = findViewById(R.id.elevationGain);
-
-        database = new Database(StatsActivity.this);
-        ArrayList<Activity> activities = database.getActivities();
+        //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
 
         tabLayout.setupWithViewPager(viewPager);
 
-
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 0, this);
-        sectionsPagerAdapter.addPage("Hey");
-        sectionsPagerAdapter.addPage("Hey");
+
+        for (int i = 0; i < 8; i++) {
+            sectionsPagerAdapter.addPage("");
+        }
+
+//        sectionsPagerAdapter.addPage("Hike");
+//        sectionsPagerAdapter.addPage("Bike");
+//        sectionsPagerAdapter.addPage("Run");
+//        sectionsPagerAdapter.addPage("Swim");
+//        sectionsPagerAdapter.addPage("Ski");
+//        sectionsPagerAdapter.addPage("Walk");
+//        sectionsPagerAdapter.addPage("Skate");
+//        sectionsPagerAdapter.addPage("All");
 
         viewPager.setAdapter(sectionsPagerAdapter);
 
-
-
-
-        double distanceD = 0;
-        double timeD = 0;
-        double elevationGainD = 0;
-
-        for (int i = 0; i < activities.size(); ++i) {
-            int activityID = activities.get(i).getId();
-            ArrayList<Point> points = database.getPoints(activityID);
-            double distancePartial = routesMethods.getDistance(points);
-            double timePartial = routesMethods.getHours(points);
-            double elevationGainPartial = routesMethods.getElevationGainLoss(points)[0];
-            distanceD += distancePartial;
-            timeD += timePartial;
-            elevationGainD += elevationGainPartial;
+        for (int i = 0; i < 8; i++) {
+            TabLayout.Tab tab = tabLayout.getTabAt(i);
+            if (i < 7)
+                tab.setIcon(routesMethods.getIcon(i + 1));
+            else
+                tab.setIcon(R.drawable.ic_list);
+            tab.getIcon().setTint(getColor(R.color.colorIcon));
         }
-
-        int hours = (int) timeD;
-        double minutesD = (timeD - hours) * 60.0;
-        int minutes = (int) minutesD;
-
-        distance.setText(round(distanceD) + " " + getString(R.string.km));
-        time.setText(getString(R.string.time_data_stats, hours, minutes));
-        elevationGain.setText(getString(R.string.metres, round(elevationGainD)));
-        activityCount.setText(getString(R.string.activitiesCount, activities.size()));
-
 
     }
 
@@ -120,8 +103,24 @@ public class StatsActivity extends AppCompatActivity {
             builder.setMessage("Delete all activities?").setCancelable(true).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    database.deleteAll();
-                    finish();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(StatsActivity.this);
+                    builder.setTitle("Are You Sure?");
+                    builder.setMessage("All activities of each type will be deleted.\nThis cannot be undone.").setCancelable(true).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            //database.deleteAll();
+                            finish();
+                        }
+                    }).setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
                 }
             }).setNegativeButton("No", new DialogInterface.OnClickListener() {
                 @Override

@@ -30,11 +30,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return PlaceholderFragment.newInstance(position + 1);
     }
 
-    @Nullable
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return pageTitles.get(position);
-    }
+//    @Nullable
+//    @Override
+//    public CharSequence getPageTitle(int position) {
+//        return pageTitles.get(position);
+//    }
 
     @Override
     public int getCount() {

@@ -5,34 +5,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".StatsActivity" >
+    tools:context=".StatsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.NoActionBar">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tabMode="scrollable"
             >
-
-            <com.google.android.material.tabs.TabItem
-                android:id="@+id/item1"
-                android:icon="@drawable/ic_run"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <com.google.android.material.tabs.TabItem
-                android:icon="@drawable/ic_hike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-            <com.google.android.material.tabs.TabItem
-                android:icon="@drawable/ic_bike"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
 
         </com.google.android.material.tabs.TabLayout>
 
@@ -45,225 +30,6 @@
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-
-
-
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
-            >
-
-        <TableLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-
-
-
-
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Year-to-date"
-                    android:background="#e0e0e0"
-                    />
-
-            </TableRow>
-
-            <TableRow>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Activities" />
-
-                <TextView
-                    android:id="@+id/activities"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Distance" />
-
-                <TextView
-                    android:id="@+id/distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Time" />
-
-                <TextView
-                    android:id="@+id/time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Elevation Gain" />
-
-                <TextView
-                    android:id="@+id/elevationGain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="" />
-
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="All time"
-                    android:background="#e0e0e0"
-                    />
-
-            </TableRow>
-
-            <TableRow>
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_marginTop="4dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Activities" />
-
-                <TextView
-                    android:id="@+id/activitiesAllTime"
-                    android:layout_width="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Distance" />
-
-                <TextView
-                    android:id="@+id/distanceAllTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Time" />
-
-                <TextView
-                    android:id="@+id/timeAllTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Elevation Gain" />
-
-                <TextView
-                    android:id="@+id/elevationGainAllTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="44dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-
-            </TableLayout>
-        </LinearLayout>
 
     </androidx.viewpager.widget.ViewPager>
 

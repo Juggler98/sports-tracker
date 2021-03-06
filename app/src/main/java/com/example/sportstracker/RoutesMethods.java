@@ -172,4 +172,25 @@ public class RoutesMethods {
         return new int[]{hours, minutes, seconds};
     }
 
+    public int getIcon(int type) {
+        switch (type) {
+            case 1:
+                return R.drawable.ic_hike;
+            case 2:
+                return R.drawable.ic_bike;
+            case 3:
+                return R.drawable.ic_run;
+            case 4:
+                return R.drawable.ic_swim;
+            case 5:
+                return R.drawable.ic_ski;
+            case 6:
+                return R.drawable.ic_walk;
+            case 7:
+                return R.drawable.ic_skate;
+            default:
+                return R.drawable.ic_hike;
+        }
+    }
+
 }

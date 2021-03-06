@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TableRow>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@color/statsInfo"
+                android:gravity="center"
+                android:text="Year-to-date" />
+
+        </TableRow>
+
+        <TableRow>
+
+
+            <TextView
+                android:id="@+id/activitiesName"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Activities" />
+
+            <TextView
+                android:id="@+id/activitiesCount"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="" />
+
+        </TableRow>
+
+        <View style="@style/divider" />
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Distance" />
+
+            <TextView
+                android:id="@+id/distance"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="" />
+
+        </TableRow>
+
+        <View style="@style/divider" />
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Time" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="" />
+
+        </TableRow>
+
+        <View style="@style/divider" />
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Elevation Gain" />
+
+            <TextView
+                android:id="@+id/elevationGain"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="" />
+
+        </TableRow>
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:background="@color/statsInfo"
+                android:gravity="center"
+                android:text="All time" />
+
+        </TableRow>
+
+        <TableRow>
+
+
+            <TextView
+                android:id="@+id/activitiesAllTimeName"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Activities" />
+
+            <TextView
+                android:id="@+id/activitiesAllTimeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="" />
+
+        </TableRow>
+
+        <View style="@style/divider" />
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Distance" />
+
+            <TextView
+                android:id="@+id/distanceAllTime"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="" />
+
+        </TableRow>
+
+        <View style="@style/divider" />
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Time" />
+
+            <TextView
+                android:id="@+id/timeAllTime"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="" />
+
+        </TableRow>
+
+        <View style="@style/divider" />
+
+        <TableRow>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Elevation Gain" />
+
+            <TextView
+                android:id="@+id/elevationGainAllTime"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="" />
+
+        </TableRow>
+
+        <View style="@style/divider" />
+
+
+    </TableLayout>
+
+</LinearLayout>
