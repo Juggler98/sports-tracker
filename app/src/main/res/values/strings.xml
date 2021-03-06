@@ -32,6 +32,7 @@
     <string name="time_data">%1$d:%2$s:%3$s</string>
     <string name="time_data_stats">%1$dh %2$dm</string>
     <string name="activitiesCount">%1$d</string>
+    <string name="distance_stats">%1$d km</string>
     <string name="km">km</string>
     <string name="kmh">km/h</string>
     <string name="metres">%1$d m</string>

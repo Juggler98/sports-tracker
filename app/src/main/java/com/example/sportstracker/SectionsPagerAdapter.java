@@ -13,14 +13,10 @@ import java.util.ArrayList;
 
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.app_name, R.string.app_name, R.string.app_name, R.string.app_name};
     private ArrayList<String> pageTitles = new ArrayList<>();
-    private final Context mContext;
 
-    public SectionsPagerAdapter(@NonNull FragmentManager fm, int behavior, Context mContext) {
+    public SectionsPagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
-        this.mContext = mContext;
     }
 
     @Override
@@ -30,11 +26,11 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         return PlaceholderFragment.newInstance(position + 1);
     }
 
-//    @Nullable
-//    @Override
-//    public CharSequence getPageTitle(int position) {
-//        return pageTitles.get(position);
-//    }
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return pageTitles.get(position);
+    }
 
     @Override
     public int getCount() {

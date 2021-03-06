@@ -6,13 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
-import com.example.sportstracker.R;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,8 +22,6 @@ public class PlaceholderFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-//    private PageViewModel pageViewModel;
-
     public static PlaceholderFragment newInstance(int index) {
         PlaceholderFragment fragment = new PlaceholderFragment();
         Bundle bundle = new Bundle();
@@ -40,12 +33,6 @@ public class PlaceholderFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        pageViewModel = ViewModelProviders.of(this).get(PageViewModel.class);
-        int index = 1;
-        if (getArguments() != null) {
-            index = getArguments().getInt(ARG_SECTION_NUMBER);
-        }
-//        pageViewModel.setIndex(index);
     }
 
     @Override
@@ -151,17 +138,8 @@ public class PlaceholderFragment extends Fragment {
             default:
                 activityType = activityType + "s";
         }
-//        activityType = activityType.equals("") ? "All Activities" : activityType;
-//        activityType = activityType.equals("Bike") ? "Rides" : activityType + "s";
         activitiesName1.setText(activityType);
         activitiesName2.setText(activityType);
-
-//        pageViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-//            @Override
-//            public void onChanged(@Nullable String s) {
-//
-//            }
-//        });
 
         return root;
     }

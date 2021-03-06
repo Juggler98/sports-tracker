@@ -56,25 +56,21 @@ public class StatsActivity extends AppCompatActivity {
 
         //AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
+        database = new Database(this);
+
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
 
         tabLayout.setupWithViewPager(viewPager);
 
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 0, this);
+        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 0);
 
-        for (int i = 0; i < 8; i++) {
-            sectionsPagerAdapter.addPage("");
+        for (int i = 1; i <= 8; i++) {
+            if (i < 8)
+                sectionsPagerAdapter.addPage(database.getType(i));
+            else
+                sectionsPagerAdapter.addPage("All");
         }
-
-//        sectionsPagerAdapter.addPage("Hike");
-//        sectionsPagerAdapter.addPage("Bike");
-//        sectionsPagerAdapter.addPage("Run");
-//        sectionsPagerAdapter.addPage("Swim");
-//        sectionsPagerAdapter.addPage("Ski");
-//        sectionsPagerAdapter.addPage("Walk");
-//        sectionsPagerAdapter.addPage("Skate");
-//        sectionsPagerAdapter.addPage("All");
 
         viewPager.setAdapter(sectionsPagerAdapter);
 
@@ -84,6 +80,7 @@ public class StatsActivity extends AppCompatActivity {
                 tab.setIcon(routesMethods.getIcon(i + 1));
             else
                 tab.setIcon(R.drawable.ic_list);
+//            tab.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
             tab.getIcon().setTint(getColor(R.color.colorIcon));
         }
 
