@@ -74,7 +74,7 @@ public class PlaceholderFragment extends Fragment {
                 int activityID = activity.getId();
                 ArrayList<Point> points = database.getPoints(activityID);
                 double distancePartial = routesMethods.getDistance(points);
-                double timePartial = routesMethods.getHours(points)[1];
+                double timePartial = routesMethods.getHours(points, activity.getAutoPause())[1];
                 double elevationGainPartial = routesMethods.getElevationGainLoss(points)[0];
                 distanceD += distancePartial;
                 timeD += timePartial;
@@ -92,7 +92,7 @@ public class PlaceholderFragment extends Fragment {
 
                 if (activityYear == actualYear) {
                     double distancePartialYear = routesMethods.getDistance(points);
-                    double timePartialYear = routesMethods.getHours(points)[1];
+                    double timePartialYear = routesMethods.getHours(points, activity.getAutoPause())[1];
                     double elevationGainPartialYear = routesMethods.getElevationGainLoss(points)[0];
                     distanceDYear += distancePartialYear;
                     timeDYear += timePartialYear;

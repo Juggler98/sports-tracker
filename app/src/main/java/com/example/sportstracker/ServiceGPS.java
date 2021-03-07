@@ -82,6 +82,8 @@ public class ServiceGPS extends Service {
                     latitude, longitude, elevation, time, speed, course, hdop, vdop);
 
             if (sharedPreferences.getBoolean(PAUSE, false)) {
+                Log.d("GPS_LC_TIME", "Trueeeeeeeee");
+
                 point.setPaused(true);
                 database.setPause(routeID, database.getLastPointID(routeID));
             } else {

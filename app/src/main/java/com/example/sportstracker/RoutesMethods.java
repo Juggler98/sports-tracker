@@ -124,7 +124,7 @@ public class RoutesMethods {
      * @param points
      * @return time of doing activity
      */
-    public double[] getHours(ArrayList<Point> points) {
+    public double[] getHours(ArrayList<Point> points, boolean autoPause) {
         double[] hours = new double[2];
         //normal time
         hours[0] = 0.0;
@@ -146,15 +146,19 @@ public class RoutesMethods {
                 double timeDifference = time - timePast;
                 if (pastPoint.getPaused())
                     hours[0] -= timeDifference;
-                if (timeDifference > 30*1000)
+                if (timeDifference > 30 * 1000 || pastPoint.getPaused())
                     hours[1] -= timeDifference;
             } else {
                 point = points.get(i);
             }
         }
 
-        hours[0] =  hours[0] / 1000 / 3600;
-        hours[1] =  hours[1] / 1000 / 3600;
+        hours[0] = hours[0] / 1000 / 3600;
+        if (!autoPause)
+            hours[1] = hours[0];
+        else
+            hours[1] = hours[1] / 1000 / 3600;
+
 
         return hours;
     }

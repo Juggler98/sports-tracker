@@ -99,6 +99,8 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private boolean avgVsPace;
 
+    private Activity route;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,9 +138,9 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         avgSpeedMovingInfoView = findViewById(R.id.avgMovingInfo);
         speedInfoView = findViewById(R.id.speedInfo);
 
-        Activity activity = database.getActivity(routeID);
+        route = database.getActivity(routeID);
 
-        avgVsPace = activity.getIdType() == 3;
+        avgVsPace = route.getIdType() == 3;
 
         avgSpeedView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -393,7 +395,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         ArrayList<Point> points = database.getPoints(routeID);
         double distance = routesMethods.getDistance(points);
 
-        double[] hours = routesMethods.getHours(points);
+        double[] hours = routesMethods.getHours(points, route.getAutoPause());
         int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[0]);
         String minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
         String secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];

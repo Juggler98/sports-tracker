@@ -85,38 +85,34 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.activity_routeinfo);
 
         database = new Database(RouteInfoActivity.this);
+        routeID = getIntent().getIntExtra(EXTRA, 0);
+        Log.d("RouteInfo_LC", "onCreate Route: " + routeID);
 
+        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(IS_RELOAD_NEEDED);
+        editor.apply();
+
+        mapView = findViewById(R.id.mapView);
         avgInfo = findViewById(R.id.avgInfo);
         avgMovingInfo = findViewById(R.id.avgMovingInfo);
         maxSpeedInfo = findViewById(R.id.maxSpeedInfo);
         avgSpeed = findViewById(R.id.avgSpeed);
         avgSpeedMoving = findViewById(R.id.avgSpeedMoving);
+        maxSpeed = findViewById(R.id.maxSpeed);
 
         TextView dateView = findViewById(R.id.date);
         TextView distance = findViewById(R.id.distance);
         TextView time = findViewById(R.id.time);
         TextView timeMoving = findViewById(R.id.timeMoving);
-
         TextView elevationGain = findViewById(R.id.elevationGain);
         TextView elevationLoss = findViewById(R.id.elevationLoss);
         TextView maxAltitude = findViewById(R.id.maxAltitude);
         TextView minAltitude = findViewById(R.id.minAltitude);
-        maxSpeed = findViewById(R.id.maxSpeed);
-
-        mapView = findViewById(R.id.mapView);
-
-        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(IS_RELOAD_NEEDED);
-        editor.apply();
-
-        routeID = getIntent().getIntExtra(EXTRA, 0);
-
-        Log.d("RouteInfo_LC", "onCreate Route: " + routeID);
 
         route = database.getActivity(routeID);
         ArrayList<Point> points = database.getPoints(routeID);
+        latLngArrayList = routesMethods.getLatLng(points);
 
         setIcon();
 
@@ -128,8 +124,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         getSupportActionBar().setTitle(name);
 
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-        Date date = new Date((long)route.getTimeStart());
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault());
+        Date date = new Date((long) route.getTimeStart());
         String timeStr = format.format(date);
 
         dateView.setText(timeStr);
@@ -137,7 +133,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         double distanceD = routesMethods.getDistance(points);
         distance.setText(distanceD + " " + getString(R.string.km));
 
-        double[] hours = routesMethods.getHours(points);
+        double[] hours = routesMethods.getHours(points, route.getAutoPause());
 
         int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[0]);
         String minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
@@ -155,24 +151,18 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         maxAltitude.setText(routesMethods.getAltitudeMaxMin(points)[0] + " m");
         minAltitude.setText(routesMethods.getAltitudeMaxMin(points)[1] + " m");
 
-        maximumSpeed = round(routesMethods.getMaxSpeed(points) * 3.6 * 10)/10.0;
-//        maxSpeed.setText(maximumSpeed + " km/h");
+        maximumSpeed = round(routesMethods.getMaxSpeed(points) * 3.6 * 10) / 10.0;
 
-        if (hours[0] == 0) {
+        if (hours[0] == 0)
             this.avg = 0.0;
-        } else {
+        else
             this.avg = round(distanceD / hours[0] * 100.0) / 100.0;
-        }
 
-        if (hours[1] == 0) {
+
+        if (hours[1] == 0)
             this.avgMov = 0.0;
-        } else {
+        else
             this.avgMov = round(distanceD / hours[1] * 100.0) / 100.0;
-        }
-
-//        avgSpeed.setText(avg + " " + getString(R.string.kmh));
-
-//        avgSpeedMoving.setText(avgMov + " " + getString(R.string.kmh));
 
         avgVsPace = route.getIdType() == 3;
 
@@ -201,15 +191,6 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                 setAvgSpeedPace();
             }
         });
-
-        avgInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //changeAvgPace();
-            }
-        });
-
-        latLngArrayList = routesMethods.getLatLng(database.getPoints(routeID));
 
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -304,25 +285,26 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     @SuppressLint("SetTextI18n")
     private void setAvgSpeedPace() {
         if (avgVsPace) {
+            String[] pace;
             avgInfo.setText(getString(R.string.avg_pace));
             avgMovingInfo.setText("Avg Pace (mov)");
             maxSpeedInfo.setText("Max Pace");
             if (avg == 0) {
                 avgSpeed.setText(getString(R.string.avg_pace_null));
             } else {
-                String[] pace = this.getPace(avg);
+                pace = this.getPace(avg);
                 avgSpeed.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
             }
             if (avgMov == 0) {
                 avgSpeedMoving.setText(getString(R.string.avg_pace_null));
             } else {
-                String[] pace = this.getPace(avgMov);
+                pace = this.getPace(avgMov);
                 avgSpeedMoving.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
             }
             if (maximumSpeed == 0) {
                 maxSpeed.setText(getString(R.string.avg_pace_null));
             } else {
-                String[] pace = this.getPace(maximumSpeed);
+                pace = this.getPace(maximumSpeed);
                 maxSpeed.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
             }
         } else {
@@ -378,6 +360,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                 if (routeType != route.getIdType()) {
                     database.updateActivity(routeID, routeType, 0.0, "");
                     route = database.getActivity(routeID);
+                    avgVsPace = route.getIdType() == 3;
+                    setAvgSpeedPace();
                     setIcon();
                     setReloadIsNeeded();
                 }
