@@ -220,6 +220,12 @@ public class Database extends SQLiteOpenHelper {
                     activity.setTitle(cursor.getString(4));
 //                    Log.d("DB_LC", "Title is: " + cursor.getString(4));
                 }
+                if (cursor.getType(5) != 0) {
+                    if (cursor.getInt(5) == 1)
+                        activity.setAutoPause(true);
+                    else
+                        activity.setAutoPause(false);
+                }
                 if (activity.getTimeEnd() != 0.0 || activity.getId() != this.getLastActivityID()) {
                     activities.add(activity);
                 }
@@ -256,6 +262,12 @@ public class Database extends SQLiteOpenHelper {
             }
             if (cursor.getType(4) != 0) {
                 activity.setTitle(cursor.getString(4));
+            }
+            if (cursor.getType(5) != 0) {
+                if (cursor.getInt(5) == 1)
+                    activity.setAutoPause(true);
+                else
+                    activity.setAutoPause(false);
             }
         }
         cursor.close();
@@ -328,8 +340,13 @@ public class Database extends SQLiteOpenHelper {
                 //TODO v novej databaze treba preusporiadat
 
                 Point point = new Point(idActivity, idPoint, lat, lon, ele, time, speed, course, hdop, vdop);
-                if (cursor.getType(10) != 0)
-                    point.setPaused(true);
+                if (cursor.getType(10) != 0) {
+                    if (cursor.getInt(10) == 1) {
+                        point.setPaused(true);
+                    } else {
+                        point.setPaused(false);
+                    }
+                }
                 points.add(point);
             } while (cursor.moveToNext());
         }
