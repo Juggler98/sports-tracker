@@ -346,7 +346,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
     private void changeContent() {
         ArrayList<Point> points = database.getPoints(routeID);
         double distance = routesMethods.getDistance(points);
-        double hours = routesMethods.getHours(points);
+        double hours = routesMethods.getHours(points)[0];
         int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours);
         String minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
         String secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];

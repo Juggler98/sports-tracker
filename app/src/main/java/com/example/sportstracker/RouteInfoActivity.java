@@ -46,6 +46,13 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
     private TextView avgSpeed;
     private TextView avgInfo;
+    private TextView avgMovingInfo;
+    private TextView maxSpeedInfo;
+
+
+    private TextView avgSpeedMoving;
+    private TextView maxSpeed;
+
     private MapView mapView;
 
     private ArrayList<LatLng> latLngArrayList = new ArrayList<>();
@@ -61,6 +68,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private int routeID;
     private boolean avgVsPace;
     private double avg;
+    private double avgMov;
+    private double maximumSpeed;
 
     private Database database;
 
@@ -78,17 +87,21 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         database = new Database(RouteInfoActivity.this);
 
         avgInfo = findViewById(R.id.avgInfo);
+        avgMovingInfo = findViewById(R.id.avgMovingInfo);
+        maxSpeedInfo = findViewById(R.id.maxSpeedInfo);
         avgSpeed = findViewById(R.id.avgSpeed);
+        avgSpeedMoving = findViewById(R.id.avgSpeedMoving);
 
         TextView dateView = findViewById(R.id.date);
         TextView distance = findViewById(R.id.distance);
         TextView time = findViewById(R.id.time);
+        TextView timeMoving = findViewById(R.id.timeMoving);
 
         TextView elevationGain = findViewById(R.id.elevationGain);
         TextView elevationLoss = findViewById(R.id.elevationLoss);
         TextView maxAltitude = findViewById(R.id.maxAltitude);
         TextView minAltitude = findViewById(R.id.minAltitude);
-        TextView maxSpeed = findViewById(R.id.maxSpeed);
+        maxSpeed = findViewById(R.id.maxSpeed);
 
         mapView = findViewById(R.id.mapView);
 
@@ -124,30 +137,42 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         double distanceD = routesMethods.getDistance(points);
         distance.setText(distanceD + " " + getString(R.string.km));
 
-        double hours = routesMethods.getHours(points);
-        int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours);
+        double[] hours = routesMethods.getHours(points);
 
+        int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[0]);
         String minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
         String secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
-
         time.setText(getString(R.string.time_data, hoursMinutesSeconds[0], minutesStr, secondsStr));
+
+        hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[1]);
+        minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
+        secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
+        timeMoving.setText(getString(R.string.time_data, hoursMinutesSeconds[0], minutesStr, secondsStr));
+
         elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[0]));
         elevationLoss.setText("-" + getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[1]));
 
         maxAltitude.setText(routesMethods.getAltitudeMaxMin(points)[0] + " m");
         minAltitude.setText(routesMethods.getAltitudeMaxMin(points)[1] + " m");
 
-        double maxSpeedDouble = round(routesMethods.getMaxSpeed(points) * 3.6 * 10)/10.0;
-        maxSpeed.setText(maxSpeedDouble + " km/h");
+        maximumSpeed = round(routesMethods.getMaxSpeed(points) * 3.6 * 10)/10.0;
+        maxSpeed.setText(maximumSpeed + " km/h");
 
-        if (hours == 0) {
+        if (hours[0] == 0) {
             this.avg = 0.0;
         } else {
-            this.avg = round(distanceD / hours * 100.0) / 100.0;
+            this.avg = round(distanceD / hours[0] * 100.0) / 100.0;
         }
 
+        if (hours[1] == 0) {
+            this.avgMov = 0.0;
+        } else {
+            this.avgMov = round(distanceD / hours[1] * 100.0) / 100.0;
+        }
 
         avgSpeed.setText(avg + " " + getString(R.string.kmh));
+
+        avgSpeedMoving.setText(avgMov + " " + getString(R.string.kmh));
 
         avgVsPace = true;
 
@@ -161,7 +186,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         avgInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeAvgPace();
+                //changeAvgPace();
             }
         });
 
@@ -261,6 +286,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private void changeAvgPace() {
         if (avgVsPace) {
             avgInfo.setText(getString(R.string.avg_pace));
+            avgMovingInfo.setText("Avg Pace (moving)");
+            maxSpeedInfo.setText("Max Pace");
             if (avg == 0) {
                 avgSpeed.setText(getString(R.string.avg_pace_null));
             } else {
@@ -271,9 +298,33 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                 String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
                 avgSpeed.setText(getString(R.string.avgPace_data, minutes, secondsStr));
             }
+            if (avgMov == 0) {
+                avgSpeedMoving.setText(getString(R.string.avg_pace_null));
+            } else {
+                double minutesD = 60 / avgMov;
+                int minutes = (int) minutesD;
+                double secondsD = (minutesD - minutes) * 60.0;
+                int seconds = (int) secondsD;
+                String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
+                avgSpeedMoving.setText(getString(R.string.avgPace_data, minutes, secondsStr));
+            }
+            if (maximumSpeed == 0) {
+                maxSpeed.setText(getString(R.string.avg_pace_null));
+            } else {
+                double minutesD = 60 / maximumSpeed;
+                int minutes = (int) minutesD;
+                double secondsD = (minutesD - minutes) * 60.0;
+                int seconds = (int) secondsD;
+                String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
+                maxSpeed.setText(getString(R.string.avgPace_data, minutes, secondsStr));
+            }
         } else {
             avgInfo.setText(getString(R.string.avg_speed));
             avgSpeed.setText(avg + " " + getString(R.string.kmh));
+            avgMovingInfo.setText("Avg speed (moving)");
+            avgSpeedMoving.setText(avgMov + " " + getString(R.string.kmh));
+            maxSpeedInfo.setText("Max Speed");
+            maxSpeed.setText(maximumSpeed + " " + getString(R.string.kmh));
         }
         avgVsPace = !avgVsPace;
     }

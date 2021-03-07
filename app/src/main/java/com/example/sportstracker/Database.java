@@ -304,6 +304,8 @@ public class Database extends SQLiteOpenHelper {
                 //TODO v novej databaze treba preusporiadat
 
                 Point point = new Point(idActivity, idPoint, lat, lon, ele, time, speed, course, hdop, vdop);
+                if (cursor.getType(10) != 0)
+                    point.setPaused(true);
                 points.add(point);
             } while (cursor.moveToNext());
         }

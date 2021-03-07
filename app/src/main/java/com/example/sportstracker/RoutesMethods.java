@@ -40,17 +40,20 @@ public class RoutesMethods {
         double lon1 = 0;
         double lon2 = 0;
         double distance = 0;
+        Point point = null;
+        Point pastPoint;
         for (int i = 0; i < points.size(); i++) {
-            Point point = points.get(i);
             if (i != 0) {
+                pastPoint = point;
+                lat1 = pastPoint.getLat();
+                lon1 = pastPoint.getLon();
+                point = points.get(i);
                 lat2 = point.getLat();
                 lon2 = point.getLon();
-                distance += haversineFormula(lat1, lat2, lon1, lon2);
-                lat1 = lat2;
-                lon1 = lon2;
+                if (!pastPoint.getPaused())
+                    distance += haversineFormula(lat1, lat2, lon1, lon2);
             } else {
-                lat1 = point.getLat();
-                lon1 = point.getLon();
+                point = points.get(i);
             }
         }
         return round(distance / 10) / 100.0;
@@ -121,12 +124,39 @@ public class RoutesMethods {
      * @param points
      * @return time of doing activity
      */
-    public double getHours(ArrayList<Point> points) {
-        double ms = 0.0;
+    public double[] getHours(ArrayList<Point> points) {
+        double[] hours = new double[2];
+        //normal time
+        hours[0] = 0.0;
         if (points.size() > 0) {
-            ms = points.get(points.size() - 1).getTime() - points.get(0).getTime();
+            hours[0] = points.get(points.size() - 1).getTime() - points.get(0).getTime();
         }
-        return ms / 1000 / 3600;
+
+        //moving time
+        hours[1] = hours[0];
+
+        Point point = null;
+        Point pastPoint;
+        for (int i = 0; i < points.size(); i++) {
+            if (i != 0) {
+                pastPoint = point;
+                double timePast = pastPoint.getTime();
+                point = points.get(i);
+                double time = point.getTime();
+                double timeDifference = time - timePast;
+                if (pastPoint.getPaused())
+                    hours[0] -= timeDifference;
+                if (timeDifference > 10*1000)
+                    hours[1] -= timeDifference;
+            } else {
+                point = points.get(i);
+            }
+        }
+
+        hours[0] =  hours[0] / 1000 / 3600;
+        hours[1] =  hours[1] / 1000 / 3600;
+
+        return hours;
     }
 
     /**
