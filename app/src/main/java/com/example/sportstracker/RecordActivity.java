@@ -86,9 +86,18 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
     private TextView eleGainView;
     private TextView eleLossView;
     private TextView speedView;
-    private TextView paceView;
     private TextView avgSpeedView;
     private TextView avgSpeedMovingView;
+
+    private TextView avgSpeedInfoView;
+    private TextView avgSpeedMovingInfoView;
+    private TextView speedInfoView;
+
+    private double avgSpeed;
+    private double avgSpeedMoving;
+    private double speed;
+
+    private boolean avgVsPace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,6 +131,36 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         speedView = findViewById(R.id.speed);
         avgSpeedView = findViewById(R.id.avgSpeed);
         avgSpeedMovingView = findViewById(R.id.avgSpeedMoving);
+
+        avgSpeedInfoView = findViewById(R.id.avgInfo);
+        avgSpeedMovingInfoView = findViewById(R.id.avgMovingInfo);
+        speedInfoView = findViewById(R.id.speedInfo);
+
+        avgVsPace = true;
+
+        avgSpeedView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                avgVsPace = !avgVsPace;
+                setAvgSpeedPace();
+            }
+        });
+
+        avgSpeedMovingView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                avgVsPace = !avgVsPace;
+                setAvgSpeedPace();
+            }
+        });
+
+        speedView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                avgVsPace = !avgVsPace;
+                setAvgSpeedPace();
+            }
+        });
 
 
         // Stop tracking.
@@ -366,21 +405,66 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         distanceView.setText(distance + " km");
         if (points.size() > 0) {
             altitudeView.setText(points.get(points.size() - 1).getEle() + " m");
-            speedView.setText(points.get(points.size() - 1).getSpeed() + " km/h");
+            speed = points.get(points.size() - 1).getSpeed();
+        } else {
+            speed = 0;
         }
 
         eleGainView.setText(routesMethods.getElevationGainLoss(points)[0] + " m");
         eleLossView.setText("-" + routesMethods.getElevationGainLoss(points)[1] + " m");
 
-        double avgSpeed = Math.round(distance / hours[0] * 10) / 10.0;
-        avgSpeedView.setText(avgSpeed + " km/h");
-        avgSpeed = Math.round(distance / hours[1] * 10) / 10.0;
-        avgSpeedMovingView.setText(avgSpeed + " km/h");
+        avgSpeed = Math.round(distance / hours[0] * 10) / 10.0;
+        avgSpeedMoving = Math.round(distance / hours[1] * 10) / 10.0;
+
+        setAvgSpeedPace();
 
         refresh();
     }
 
+    private void setAvgSpeedPace() {
+        if (avgVsPace) {
+            avgSpeedInfoView.setText(getString(R.string.avg_pace));
+            avgSpeedMovingInfoView.setText("Avg Pace (mov)");
+            speedInfoView.setText("Pace");
+            if (avgSpeed == 0) {
+                avgSpeedView.setText(getString(R.string.avg_pace_null));
+            } else {
+                String[] pace = this.getPace(avgSpeed);
+                avgSpeedView.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
+            }
+            if (avgSpeedMoving == 0) {
+                avgSpeedMovingView.setText(getString(R.string.avg_pace_null));
+            } else {
+                String[] pace = this.getPace(avgSpeedMoving);
+                avgSpeedMovingView.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
+            }
+            if (speed == 0) {
+                speedView.setText(getString(R.string.avg_pace_null));
+            } else {
+                String[] pace = this.getPace(speed);
+                speedView.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
+            }
+        } else {
+            avgSpeedInfoView.setText(getString(R.string.avg_speed));
+            avgSpeedView.setText(avgSpeed + " " + getString(R.string.kmh));
+            avgSpeedMovingInfoView.setText("Avg speed (mov)");
+            avgSpeedMovingView.setText(avgSpeedMoving + " " + getString(R.string.kmh));
+            speedInfoView.setText("Speed");
+            speedView.setText(speed + " " + getString(R.string.kmh));
+        }
+    }
 
+    private String[] getPace(double speed) {
+        String[] pace = new String[2];
+        double minutesD = 60 / speed;
+        int minutes = (int) minutesD;
+        double secondsD = (minutesD - minutes) * 60.0;
+        int seconds = (int) secondsD;
+        String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
+        pace[0] = minutes + "";
+        pace[1] = secondsStr;
+        return pace;
+    }
 
 
 }
