@@ -80,12 +80,15 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
     private Runnable runnable;
 
     private TextView timeView;
+    private TextView timeMovingView;
     private TextView distanceView;
     private TextView altitudeView;
     private TextView eleGainView;
     private TextView eleLossView;
     private TextView speedView;
+    private TextView paceView;
     private TextView avgSpeedView;
+    private TextView avgSpeedMovingView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,12 +114,14 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 //        navigationView.bringToFront();
 
         timeView = findViewById(R.id.time);
+        timeMovingView = findViewById(R.id.timeMoving);
         distanceView = findViewById(R.id.distance);
         altitudeView = findViewById(R.id.altitude);
         eleGainView = findViewById(R.id.elevationGain);
         eleLossView = findViewById(R.id.elevationLoss);
         speedView = findViewById(R.id.speed);
         avgSpeedView = findViewById(R.id.avgSpeed);
+        avgSpeedMovingView = findViewById(R.id.avgSpeedMoving);
 
 
         // Stop tracking.
@@ -346,20 +351,29 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
     private void changeContent() {
         ArrayList<Point> points = database.getPoints(routeID);
         double distance = routesMethods.getDistance(points);
-        double hours = routesMethods.getHours(points)[0];
-        int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours);
+
+        double[] hours = routesMethods.getHours(points);
+        int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[0]);
         String minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
         String secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
+        timeView.setText(hoursMinutesSeconds[0] + ":" + minutesStr + ":" + secondsStr);
+
+        hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[1]);
+        minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
+        secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
+        timeMovingView.setText(hoursMinutesSeconds[0] + ":" + minutesStr + ":" + secondsStr);
+
         distanceView.setText(distance + " km");
         if (points.size() > 0) {
             altitudeView.setText(points.get(points.size() - 1).getEle() + " m");
             speedView.setText(points.get(points.size() - 1).getSpeed() + " km/h");
         }
-        double avgSpeed = Math.round(distance / hours * 10) / 10.0;
+        double avgSpeed = Math.round(distance / hours[0] * 10) / 10.0;
         avgSpeedView.setText(avgSpeed + " km/h");
+        avgSpeed = Math.round(distance / hours[1] * 10) / 10.0;
+        avgSpeedMovingView.setText(avgSpeed + " km/h");
         eleGainView.setText(routesMethods.getElevationGainLoss(points)[0] + " m");
         eleLossView.setText("-" + routesMethods.getElevationGainLoss(points)[1] + " m");
-        timeView.setText(hoursMinutesSeconds[0] + ":" + minutesStr + ":" + secondsStr);
         refresh();
     }
 
