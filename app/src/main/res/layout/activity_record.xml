@@ -190,6 +190,7 @@
                     <TableRow>
 
                         <TextView
+                            android:id="@+id/avgInfo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -198,6 +199,7 @@
                             android:textStyle="italic" />
 
                         <TextView
+                            android:id="@+id/avgMovingInfo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -281,6 +283,7 @@
                     <TableRow>
 
                         <TextView
+                            android:id="@+id/maxSpeedInfo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"

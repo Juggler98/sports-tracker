@@ -368,14 +368,19 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             altitudeView.setText(points.get(points.size() - 1).getEle() + " m");
             speedView.setText(points.get(points.size() - 1).getSpeed() + " km/h");
         }
+
+        eleGainView.setText(routesMethods.getElevationGainLoss(points)[0] + " m");
+        eleLossView.setText("-" + routesMethods.getElevationGainLoss(points)[1] + " m");
+
         double avgSpeed = Math.round(distance / hours[0] * 10) / 10.0;
         avgSpeedView.setText(avgSpeed + " km/h");
         avgSpeed = Math.round(distance / hours[1] * 10) / 10.0;
         avgSpeedMovingView.setText(avgSpeed + " km/h");
-        eleGainView.setText(routesMethods.getElevationGainLoss(points)[0] + " m");
-        eleLossView.setText("-" + routesMethods.getElevationGainLoss(points)[1] + " m");
+
         refresh();
     }
+
+
 
 
 }

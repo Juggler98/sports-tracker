@@ -156,7 +156,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         minAltitude.setText(routesMethods.getAltitudeMaxMin(points)[1] + " m");
 
         maximumSpeed = round(routesMethods.getMaxSpeed(points) * 3.6 * 10)/10.0;
-        maxSpeed.setText(maximumSpeed + " km/h");
+//        maxSpeed.setText(maximumSpeed + " km/h");
 
         if (hours[0] == 0) {
             this.avg = 0.0;
@@ -170,30 +170,35 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             this.avgMov = round(distanceD / hours[1] * 100.0) / 100.0;
         }
 
-        avgSpeed.setText(avg + " " + getString(R.string.kmh));
+//        avgSpeed.setText(avg + " " + getString(R.string.kmh));
 
-        avgSpeedMoving.setText(avgMov + " " + getString(R.string.kmh));
+//        avgSpeedMoving.setText(avgMov + " " + getString(R.string.kmh));
 
-        avgVsPace = true;
+        avgVsPace = route.getIdType() == 3;
+
+        setAvgSpeedPace();
 
         avgSpeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeAvgPace();
+                avgVsPace = !avgVsPace;
+                setAvgSpeedPace();
             }
         });
 
         avgSpeedMoving.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeAvgPace();
+                avgVsPace = !avgVsPace;
+                setAvgSpeedPace();
             }
         });
 
         maxSpeed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                changeAvgPace();
+                avgVsPace = !avgVsPace;
+                setAvgSpeedPace();
             }
         });
 
@@ -297,7 +302,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
     // if click on avg speed it changed to avg pace and opposite
     @SuppressLint("SetTextI18n")
-    private void changeAvgPace() {
+    private void setAvgSpeedPace() {
         if (avgVsPace) {
             avgInfo.setText(getString(R.string.avg_pace));
             avgMovingInfo.setText("Avg Pace (mov)");
@@ -305,32 +310,20 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             if (avg == 0) {
                 avgSpeed.setText(getString(R.string.avg_pace_null));
             } else {
-                double minutesD = 60 / avg;
-                int minutes = (int) minutesD;
-                double secondsD = (minutesD - minutes) * 60.0;
-                int seconds = (int) secondsD;
-                String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
-                avgSpeed.setText(getString(R.string.avgPace_data, minutes, secondsStr));
+                String[] pace = this.getPace(avg);
+                avgSpeed.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
             }
             if (avgMov == 0) {
                 avgSpeedMoving.setText(getString(R.string.avg_pace_null));
             } else {
-                double minutesD = 60 / avgMov;
-                int minutes = (int) minutesD;
-                double secondsD = (minutesD - minutes) * 60.0;
-                int seconds = (int) secondsD;
-                String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
-                avgSpeedMoving.setText(getString(R.string.avgPace_data, minutes, secondsStr));
+                String[] pace = this.getPace(avgMov);
+                avgSpeedMoving.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
             }
             if (maximumSpeed == 0) {
                 maxSpeed.setText(getString(R.string.avg_pace_null));
             } else {
-                double minutesD = 60 / maximumSpeed;
-                int minutes = (int) minutesD;
-                double secondsD = (minutesD - minutes) * 60.0;
-                int seconds = (int) secondsD;
-                String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
-                maxSpeed.setText(getString(R.string.avgPace_data, minutes, secondsStr));
+                String[] pace = this.getPace(maximumSpeed);
+                maxSpeed.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
             }
         } else {
             avgInfo.setText(getString(R.string.avg_speed));
@@ -340,7 +333,18 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             maxSpeedInfo.setText("Max Speed");
             maxSpeed.setText(maximumSpeed + " " + getString(R.string.kmh));
         }
-        avgVsPace = !avgVsPace;
+    }
+
+    private String[] getPace(double speed) {
+        String[] pace = new String[2];
+        double minutesD = 60 / speed;
+        int minutes = (int) minutesD;
+        double secondsD = (minutesD - minutes) * 60.0;
+        int seconds = (int) secondsD;
+        String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
+        pace[0] = minutes + "";
+        pace[1] = secondsStr;
+        return pace;
     }
 
     @Override
