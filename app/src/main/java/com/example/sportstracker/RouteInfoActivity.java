@@ -183,6 +183,20 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
+        avgSpeedMoving.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeAvgPace();
+            }
+        });
+
+        maxSpeed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeAvgPace();
+            }
+        });
+
         avgInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,7 +300,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private void changeAvgPace() {
         if (avgVsPace) {
             avgInfo.setText(getString(R.string.avg_pace));
-            avgMovingInfo.setText("Avg Pace (moving)");
+            avgMovingInfo.setText("Avg Pace (mov)");
             maxSpeedInfo.setText("Max Pace");
             if (avg == 0) {
                 avgSpeed.setText(getString(R.string.avg_pace_null));
@@ -321,7 +335,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         } else {
             avgInfo.setText(getString(R.string.avg_speed));
             avgSpeed.setText(avg + " " + getString(R.string.kmh));
-            avgMovingInfo.setText("Avg speed (moving)");
+            avgMovingInfo.setText("Avg speed (mov)");
             avgSpeedMoving.setText(avgMov + " " + getString(R.string.kmh));
             maxSpeedInfo.setText("Max Speed");
             maxSpeed.setText(maximumSpeed + " " + getString(R.string.kmh));
