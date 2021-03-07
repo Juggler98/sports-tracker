@@ -136,7 +136,9 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         avgSpeedMovingInfoView = findViewById(R.id.avgMovingInfo);
         speedInfoView = findViewById(R.id.speedInfo);
 
-        avgVsPace = true;
+        Activity activity = database.getActivity(routeID);
+
+        avgVsPace = activity.getIdType() == 3;
 
         avgSpeedView.setOnClickListener(new View.OnClickListener() {
             @Override

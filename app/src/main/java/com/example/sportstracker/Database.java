@@ -231,17 +231,41 @@ public class Database extends SQLiteOpenHelper {
         return activities;
     }
 
+//    public Activity getActivity(int activityID) {
+//        ArrayList<Activity> activities = this.getActivities();
+//        for (int i = 0; i < activities.size(); i++) {
+//            if (activities.get(i).getId() == activityID)
+//                return activities.get(i);
+//        }
+//        return null;
+//    }
+
     public Activity getActivity(int activityID) {
-        ArrayList<Activity> activities = this.getActivities();
-        for (int i = 0; i < activities.size(); i++) {
-            if (activities.get(i).getId() == activityID)
-                return activities.get(i);
+        Activity activity = null;
+        String queryString = "SELECT * FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + activityID;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+        if (cursor.moveToFirst()) {
+            int id = cursor.getInt(0);
+            int type = cursor.getInt(1);
+            double timeStart = cursor.getDouble(2);
+            activity = new Activity(type, timeStart);
+            activity.setId(id);
+            if (cursor.getType(3) != 0) {
+                activity.setTimeEnd(cursor.getDouble(3));
+            }
+            if (cursor.getType(4) != 0) {
+                activity.setTitle(cursor.getString(4));
+            }
         }
-        return null;
+        cursor.close();
+        db.close();
+        return activity;
     }
 
     /**
      * delete specific route
+     *
      * @param activityID id of route to delete
      */
     public void deleteActivity(int activityID) {
