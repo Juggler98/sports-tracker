@@ -36,14 +36,9 @@
 
     <string name="text">Light Mode</string>
 
-    <string name="mapTypePref">mapTypePref</string>
-    <string name="distanceIntervalPref">distanceIntervalPref</string>
-    <string name="timeIntervalPref">timeIntervalPref</string>
-    <string name="nightModePref">nightModePref</string>
-    <string name="autoPausePref">autoPausePref</string>
-
     <string name="intentExtra">intentExtra</string>
     <string name="chanelID">chanelID</string>
+
     <string name="sharedPreferences">sharedPreferences</string>
     <string name="recordingPref">recordingPref</string>
     <string name="routeNamePref">routeNamePref</string>
@@ -51,6 +46,11 @@
     <string name="reloadPref">reloadPref</string>
     <string name="renamePref">renamePref</string>
 
+    <string name="mapTypePref">mapTypePref</string>
+    <string name="distanceIntervalPref">distanceIntervalPref</string>
+    <string name="timeIntervalPref">timeIntervalPref</string>
+    <string name="nightModePref">nightModePref</string>
+    <string name="autoPausePref">autoPausePref</string>
 
 
 

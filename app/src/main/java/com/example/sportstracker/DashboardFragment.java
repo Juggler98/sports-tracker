@@ -56,10 +56,6 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         newActivity = sharedPreferences.getBoolean(getString(R.string.recordingPref), true);
         routeID = sharedPreferences.getInt(getString(R.string.routeNamePref), 0);
 
-        SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String interval = sh.getString(getString(R.string.distanceIntervalPref),"");
-        Toast.makeText(getContext(), "" + interval, Toast.LENGTH_SHORT).show();
-
         database = new Database(getContext());
 
         return view;
