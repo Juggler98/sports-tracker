@@ -9,6 +9,7 @@
 <!--    <color name="background">#FFFFFF</color>-->
 <!--    <color name="backgroundBlack">#1B1B1B</color>-->
     <color name="dashboardCard">#474747</color>
+    <color name="statsTab">#424242</color>
     <color name="colorIcon">#CCCCCC</color>
     <color name="statsInfo">#606060</color>
 

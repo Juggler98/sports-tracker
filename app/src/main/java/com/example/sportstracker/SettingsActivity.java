@@ -3,6 +3,7 @@ package com.example.sportstracker;
 import android.os.Bundle;
 import android.text.InputType;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
+import androidx.preference.SwitchPreferenceCompat;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -53,6 +55,10 @@ public class SettingsActivity extends AppCompatActivity {
             if (preferredType != null) {
                 changeIcon(preferredType, preferredType.getValue());
                 preferredType.setOnPreferenceChangeListener(this);
+            }
+            SwitchPreferenceCompat autoPause = findPreference(getString(R.string.autoPausePref));
+            if (autoPause != null) {
+
             }
         }
 
