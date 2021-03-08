@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -320,6 +321,25 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         gMap = googleMap;
         gMap.setMyLocationEnabled(true);
         gMap.getUiSettings().setZoomControlsEnabled(true);
+
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int mapType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.mapTypePref),"0"));
+        switch (mapType) {
+            case 0:
+                gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            case 1:
+                gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            case 2:
+                gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                break;
+            case 3:
+                gMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                break;
+            default:
+                gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
 
         // move camera to restored position
         if (cameraPosition != null) {

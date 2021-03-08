@@ -46,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 2:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
+            default:
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
 
         setContentView(R.layout.activity_main);

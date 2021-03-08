@@ -22,12 +22,15 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 import static java.lang.Math.round;
 
 
@@ -169,8 +172,19 @@ public class ServiceGPS extends Service {
 
         Log.d("GPS_LC", "Creating new Route: " + routeID);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int minDistance = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.distanceIntervalPref),"10"));
+        int minTime = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.timeIntervalPref),"4")) * 1000;
+
+        minDistance = min(minDistance, 50);
+        minTime = min(minTime, 30*1000);
+
+        minDistance = max(minDistance, 5);
+        minTime = max(minTime, 1000);
+
         //missing permission check, it is not needed, because app cannot run without getting permission in main
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 4000, 10, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, locationListener);
 
         return START_NOT_STICKY;
     }

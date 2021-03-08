@@ -2,6 +2,7 @@ package com.example.sportstracker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -251,6 +252,26 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(latLngArrayList.size() - 1)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             googleMap.addPolyline(new PolylineOptions().addAll(latLngArrayList).color(Color.RED));
         }
+
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int mapType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.mapTypePref),"0"));
+        switch (mapType) {
+            case 0:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            case 1:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            case 2:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                break;
+            case 3:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                break;
+            default:
+                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
+
     }
 
     @Override

@@ -146,7 +146,7 @@ public class RoutesMethods {
                 double timeDifference = time - timePast;
                 if (pastPoint.getPaused())
                     hours[0] -= timeDifference;
-                if (timeDifference > 30 * 1000 || pastPoint.getPaused())
+                if (timeDifference > 8 * 1000 || pastPoint.getPaused())
                     hours[1] -= timeDifference;
             } else {
                 point = points.get(i);

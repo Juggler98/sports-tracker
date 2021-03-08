@@ -101,6 +101,9 @@ public class Database extends SQLiteOpenHelper {
 
         cv.put("type_id", activity.getIdType());
         cv.put("time_start", activity.getTimeStart());
+        if (!activity.getAutoPause()) {
+            cv.put("auto_pause", activity.getAutoPause());
+        }
 //        cv.put("title", "Hello");
         long insert = db.insert(TABLE_ACTIVITY, null, cv);
         db.close();

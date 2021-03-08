@@ -1,6 +1,7 @@
 package com.example.sportstracker;
 
 import android.Manifest;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -44,6 +46,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         gMap = googleMap;
         gMap.setMyLocationEnabled(true);
         gMap.getUiSettings().setZoomControlsEnabled(true);
+
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        int mapType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.mapTypePref),"0"));
+        switch (mapType) {
+            case 0:
+                gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                break;
+            case 1:
+                gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                break;
+            case 2:
+                gMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                break;
+            case 3:
+                gMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                break;
+            default:
+                gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        }
 
         mapView.onStart();
     }

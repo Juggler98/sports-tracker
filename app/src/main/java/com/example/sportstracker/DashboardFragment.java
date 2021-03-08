@@ -95,6 +95,11 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
 
             double time = System.currentTimeMillis();
             Activity activity = new Activity(activityType, time);
+
+            SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+            boolean autoPause = defaultSharedPreferences.getBoolean(getString(R.string.autoPausePref),true);
+            activity.setAutoPause(autoPause);
+
             database.createActivity(activity);
 
             newActivity = false;
