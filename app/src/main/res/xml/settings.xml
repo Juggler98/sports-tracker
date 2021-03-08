@@ -10,7 +10,11 @@
             android:entryValues="@array/map_value"
             android:key="@string/mapTypePref"
             android:title="Map type"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+            android:tint="@color/colorIcon"
+            android:icon="@drawable/ic_map"
+            app:itemIconTint="@color/textColor"
+            />
 
     </PreferenceCategory>
 
@@ -22,7 +26,9 @@
             android:key="@string/autoPausePref"
             android:summaryOff="Auto pause is deactivated. It is recommended to turn on."
             android:summaryOn="Auto pause is activated."
-            android:title="Auto pause" />
+            android:title="Auto pause"
+            android:icon="@drawable/ic_pause_settings"
+            />
 
         <ListPreference
             android:defaultValue="1"
@@ -30,7 +36,9 @@
             android:entryValues="@array/route_value"
             android:key="@string/routeTypePref"
             android:title="Preferred Activity Type"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+            android:icon="@drawable/ic_all"
+            />
 
         <EditTextPreference
             android:defaultValue="10"
@@ -54,7 +62,9 @@
             android:entryValues="@array/night_value"
             android:key="@string/nightModePref"
             android:title="Night mode"
-            app:useSimpleSummaryProvider="true" />
+            app:useSimpleSummaryProvider="true"
+            android:icon="@drawable/ic_night"
+            />
 
     </PreferenceCategory>
 

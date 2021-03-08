@@ -78,7 +78,7 @@ public class StatsActivity extends AppCompatActivity {
             if (i < 7)
                 tab.setIcon(routesMethods.getIcon(i + 1));
             else
-                tab.setIcon(R.drawable.ic_list);
+                tab.setIcon(R.drawable.ic_all);
 //            tab.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
             tab.getIcon().setTint(getColor(R.color.colorIcon));
         }
