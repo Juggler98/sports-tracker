@@ -59,6 +59,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
         routeID = sharedPreferences.getInt(NAME_OF_ACTIVITY, 0);
 
+        int interval = sharedPreferences.getInt("distanceInterval", 0);
+        Toast.makeText(getContext(), "" + interval, Toast.LENGTH_SHORT).show();
+
         database = new Database(getContext());
 
         return view;

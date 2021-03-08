@@ -35,10 +35,10 @@ public class RoutesMethods {
      */
     public double getDistance(ArrayList<Point> points) {
         Log.d("DB_LC", "DB_getDistance");
-        double lat1 = 0;
-        double lat2 = 0;
-        double lon1 = 0;
-        double lon2 = 0;
+        double lat1;
+        double lat2;
+        double lon1;
+        double lon2;
         double distance = 0;
         Point point = null;
         Point pastPoint;
@@ -66,10 +66,10 @@ public class RoutesMethods {
     public double[] getElevationGainLoss(ArrayList<Point> points) {
         double[] elevationGainLoss = new double[2];
         double ele1 = 0.0;
-        double ele2 = 0.0;
+        double ele2;
         double elevationGain = 0.0;
         double elevationLoss = 0.0;
-        double elevationDifference = 0.0;
+        double elevationDifference;
         for (int i = 0; i < points.size(); i = i + 3) {
             Point point = points.get(i);
             if (i != 0 && point.getVdop() < 8) {
@@ -158,7 +158,6 @@ public class RoutesMethods {
             hours[1] = hours[0];
         else
             hours[1] = hours[1] / 1000 / 3600;
-
 
         return hours;
     }
