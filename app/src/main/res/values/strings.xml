@@ -43,10 +43,13 @@
     <string name="autoPausePref">autoPausePref</string>
 
     <string name="intentExtra">intentExtra</string>
+    <string name="chanelID">chanelID</string>
     <string name="sharedPreferences">sharedPreferences</string>
     <string name="recordingPref">recordingPref</string>
     <string name="routeNamePref">routeNamePref</string>
     <string name="pausePref">pausePref</string>
+    <string name="reloadPref">reloadPref</string>
+    <string name="renamePref">renamePref</string>
 
 
 

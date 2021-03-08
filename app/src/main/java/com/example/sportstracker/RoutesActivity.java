@@ -20,8 +20,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
-import static com.example.sportstracker.RouteInfoActivity.IS_RELOAD_NEEDED;
 
 /**
  * This activity show all recorder routes. Click for more detail and long click for delete activity.
@@ -127,8 +125,8 @@ public class RoutesActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d("Routes_LC", "onResume Routes");
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
-        boolean isReloadNeeded = sharedPreferences.getBoolean(IS_RELOAD_NEEDED, false);
+        SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
+        boolean isReloadNeeded = sharedPreferences.getBoolean(getString(R.string.reloadPref), false);
         int oldSize = activities.size();
         if (isReloadNeeded) {
             activities = database.getActivities();
@@ -147,7 +145,7 @@ public class RoutesActivity extends AppCompatActivity {
 //            loadListView();
 //            listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(IS_RELOAD_NEEDED, false);
+            editor.putBoolean(getString(R.string.reloadPref), false);
             editor.apply();
         }
 

@@ -25,28 +25,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
 
-    private int i = 0;
-
-    /**
-     * EXTRA - key for intent over whole app
-     */
-    //public static final String EXTRA = "extra";
-    /**
-     * SHARED_PREFERENCES - key for Shared Preferences over whole app
-     */
-    public static final String SHARED_PREFERENCES = "sharedPreferences";
-    /**
-     * RECORDING_PREF - value data for SharedPreferences to indicate if recording can be execute
-     */
-    public static final String RECORDING_PREF = "boolean";
-    /**
-     * NAME_OF_ACTIVITY = value data for SharedPreferences to locate id of actual recording route
-     */
-    public static final String NAME_OF_ACTIVITY = "name";
-
-    public static final String PAUSE = "pause";
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

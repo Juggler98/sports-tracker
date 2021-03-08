@@ -12,7 +12,7 @@ import android.util.Log;
 public class App extends Application {
 
     /** Channel ID which using foreground service */
-    public static final String CHANNEL_ID = "ChannelID";
+    //public static final String CHANNEL_ID = "ChannelID";
 
     @Override
     public void onCreate() {
@@ -23,7 +23,7 @@ public class App extends Application {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= 26) {
-            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Notification Channel", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel notificationChannel = new NotificationChannel(getString(R.string.chanelID), "Notification Channel", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(notificationChannel);
             Log.d("GPS_LC", "New Channel");

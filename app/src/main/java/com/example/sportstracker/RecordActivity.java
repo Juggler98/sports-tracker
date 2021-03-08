@@ -41,10 +41,6 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 
 
-import static com.example.sportstracker.MainActivity.NAME_OF_ACTIVITY;
-import static com.example.sportstracker.MainActivity.PAUSE;
-import static com.example.sportstracker.MainActivity.RECORDING_PREF;
-import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
 
 /**
  * Show mapView with actual tracking progress.
@@ -107,8 +103,8 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
         database = new Database(RecordActivity.this);
 
-        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
-        routeID = sharedPreferences.getInt(NAME_OF_ACTIVITY, 0);
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
+        routeID = sharedPreferences.getInt(getString(R.string.routeNamePref), 0);
 
         ImageView stopButton = findViewById(R.id.stop);
         final ImageView pauseButton = findViewById(R.id.pause);
@@ -170,7 +166,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
+                newActivity = sharedPreferences.getBoolean(getString(R.string.recordingPref), true);
 
                 if (!newActivity) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(RecordActivity.this);
@@ -184,9 +180,9 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
                             routeID = 0;
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putBoolean(PAUSE, false);
-                            editor.putBoolean(RECORDING_PREF, newActivity);
-                            editor.remove(NAME_OF_ACTIVITY);
+                            editor.putBoolean(getString(R.string.pausePref), false);
+                            editor.putBoolean(getString(R.string.recordingPref), newActivity);
+                            editor.remove(getString(R.string.routeNamePref));
                             editor.apply();
                             finish();
                         }
@@ -218,14 +214,14 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         pauseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean pause = sharedPreferences.getBoolean(PAUSE, false);
+                boolean pause = sharedPreferences.getBoolean(getString(R.string.pausePref), false);
                 pause = !pause;
                 if (pause)
                     pauseButton.setImageResource(R.drawable.ic_record);
                 else
                     pauseButton.setImageResource(R.drawable.ic_pause);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(PAUSE, pause);
+                editor.putBoolean(getString(R.string.pausePref), pause);
                 editor.apply();
             }
         });
@@ -244,7 +240,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         editor.remove(FIRST_START);
         editor.apply();
 
-        boolean pause = sharedPreferences.getBoolean(PAUSE, false);
+        boolean pause = sharedPreferences.getBoolean(getString(R.string.pausePref), false);
         if (pause)
            pauseButton.setImageResource(R.drawable.ic_record);
         else

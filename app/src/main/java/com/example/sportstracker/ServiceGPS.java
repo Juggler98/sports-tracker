@@ -28,9 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.example.sportstracker.App.CHANNEL_ID;
-import static com.example.sportstracker.MainActivity.PAUSE;
-import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
 import static java.lang.Math.round;
 
 
@@ -80,7 +77,7 @@ public class ServiceGPS extends Service {
             Point point = new Point(routeID, database.getLastPointID(routeID) + 1,
                     latitude, longitude, elevation, time, speed, course, hdop, vdop);
 
-            if (sharedPreferences.getBoolean(PAUSE, false)) {
+            if (sharedPreferences.getBoolean(getString(R.string.pausePref), false)) {
                 Log.d("GPS_LC_TIME", "Trueeeeeeeee");
 
                 point.setPaused(true);
@@ -134,7 +131,7 @@ public class ServiceGPS extends Service {
         database.updateActivity(routeID, 0, System.currentTimeMillis(), "");
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(PAUSE, false);
+        editor.putBoolean(getString(R.string.pausePref), false);
         editor.apply();
         stopSelf();
     }
@@ -146,7 +143,7 @@ public class ServiceGPS extends Service {
         Log.d("GPS_LC", "onStartCommand");
 
         routeID = intent.getIntExtra(getString(R.string.intentExtra), 1);
-        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
 
         // pending intent for click on notification
         Intent notificationIntent = new Intent(this, RecordActivity.class);
@@ -164,7 +161,7 @@ public class ServiceGPS extends Service {
         Log.d("GPS_LC", routeID + " ");
 
         // creates notification
-        notification = new NotificationCompat.Builder(this, CHANNEL_ID).setContentTitle("GPS Tracking is running").setContentText("0.0 km").setSmallIcon(R.drawable.ic_notification)
+        notification = new NotificationCompat.Builder(this, getString(R.string.chanelID)).setContentTitle("GPS Tracking is running").setContentText("0.0 km").setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(pendingIntent).setOnlyAlertOnce(true).setColor(Color.RED).addAction(R.mipmap.ic_launcher, "Stop", actionIntent).setUsesChronometer(true);
 
         startForeground(1, notification.build());

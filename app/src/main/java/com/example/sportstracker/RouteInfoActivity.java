@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
 import static java.lang.Math.max;
 import static java.lang.Math.round;
 
@@ -55,12 +54,6 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private MapView mapView;
 
     private ArrayList<LatLng> latLngArrayList = new ArrayList<>();
-    /**
-     * IS_RELOAD_NEEDED - value data for shared preferences to indicate if listView in Route activity is needed
-     */
-    public static final String IS_RELOAD_NEEDED = "isReloadNeeded";
-
-    public static final String ROUTE_NAME = "routeName";
 
     private SharedPreferences sharedPreferences;
 
@@ -87,9 +80,9 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         routeID = getIntent().getIntExtra(getString(R.string.intentExtra), 0);
         Log.d("RouteInfo_LC", "onCreate Route: " + routeID);
 
-        sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(IS_RELOAD_NEEDED);
+        editor.remove(getString(R.string.reloadPref));
         editor.apply();
 
         mapView = findViewById(R.id.mapView);
@@ -220,7 +213,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             case R.id.item3:
                 // rename activity
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(ROUTE_NAME, route.getTitle());
+                editor.putString(getString(R.string.renamePref), route.getTitle());
                 editor.apply();
                 openDialog();
                 return true;
@@ -405,7 +398,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void setReloadIsNeeded() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(IS_RELOAD_NEEDED, true);
+        editor.putBoolean(getString(R.string.reloadPref), true);
         editor.apply();
     }
 

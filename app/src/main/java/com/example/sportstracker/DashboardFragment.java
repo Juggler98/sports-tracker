@@ -25,9 +25,6 @@ import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 
-import static com.example.sportstracker.MainActivity.NAME_OF_ACTIVITY;
-import static com.example.sportstracker.MainActivity.RECORDING_PREF;
-import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
 
 public class DashboardFragment extends Fragment implements View.OnClickListener {
 
@@ -55,9 +52,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         activitiesCard.setOnClickListener(this);
         statsCard.setOnClickListener(this);
 
-        sharedPreferences = this.getActivity().getSharedPreferences(SHARED_PREFERENCES, getContext().MODE_PRIVATE);
-        newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
-        routeID = sharedPreferences.getInt(NAME_OF_ACTIVITY, 0);
+        sharedPreferences = this.getActivity().getSharedPreferences(getString(R.string.sharedPreferences), getContext().MODE_PRIVATE);
+        newActivity = sharedPreferences.getBoolean(getString(R.string.recordingPref), true);
+        routeID = sharedPreferences.getInt(getString(R.string.routeNamePref), 0);
 
         SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(getContext());
         String interval = sh.getString(getString(R.string.distanceIntervalPref),"");
@@ -75,7 +72,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.record_card:
                 if (ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(v.getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
+                    newActivity = sharedPreferences.getBoolean(getString(R.string.recordingPref), true);
                     if (newActivity) {
                         createActivityTypeDialog();
                     } else {
@@ -97,7 +94,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
 
     // boolean new activity permit start GPS service only one time, until stop
     private void record(View view) {
-        newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
+        newActivity = sharedPreferences.getBoolean(getString(R.string.recordingPref), true);
         if (newActivity) {
 
             double time = System.currentTimeMillis();
@@ -108,8 +105,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
             routeID = database.getLastActivityID();
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putBoolean(RECORDING_PREF, newActivity);
-            editor.putInt(NAME_OF_ACTIVITY, routeID);
+            editor.putBoolean(getString(R.string.recordingPref), newActivity);
+            editor.putInt(getString(R.string.routeNamePref), routeID);
             editor.apply();
 
             Intent intent = new Intent(view.getContext(), ServiceGPS.class);
