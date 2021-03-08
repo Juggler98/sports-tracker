@@ -2,60 +2,59 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-   <PreferenceCategory
-       android:title="Map">
-
-       <ListPreference
-           android:defaultValue="0"
-           android:key="@string/mapTypePref"
-           android:title="Map type"
-           android:entries="@array/map_type"
-           android:entryValues="@array/map_value"
-           app:useSimpleSummaryProvider="true"
-           />
-
-   </PreferenceCategory>
-
-
-
-    <PreferenceCategory
-        android:title="Routes">
-
-        <SwitchPreferenceCompat
-            android:defaultValue="true"
-            android:title="Auto pause"
-            android:key="@string/autoPausePref"
-            android:summaryOff="Auto pause is deactivated. It is recommended to turn on."
-            android:summaryOn="Auto pause is activated."
-            />
-
-    <EditTextPreference
-        android:title="Distance interval"
-        android:key="@string/distanceIntervalPref"
-        android:defaultValue="10"
-        android:summary="Minimum distance to save route point."
-        />
-
-        <EditTextPreference
-            android:title="Time interval"
-            android:key="@string/timeIntervalPref"
-            android:defaultValue="4"
-            android:summary="Minimum time to save route point."
-            />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="System">
+    <PreferenceCategory android:title="Map">
 
         <ListPreference
             android:defaultValue="0"
-            android:key="@string/nightModePref"
-            android:title="Night mode"
+            android:entries="@array/map_type"
+            android:entryValues="@array/map_value"
+            android:key="@string/mapTypePref"
+            android:title="Map type"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="Routes">
+
+        <SwitchPreferenceCompat
+            android:defaultValue="true"
+            android:key="@string/autoPausePref"
+            android:summaryOff="Auto pause is deactivated. It is recommended to turn on."
+            android:summaryOn="Auto pause is activated."
+            android:title="Auto pause" />
+
+        <ListPreference
+            android:defaultValue="1"
+            android:entries="@array/route_type"
+            android:entryValues="@array/route_value"
+            android:key="@string/routeTypePref"
+            android:title="Preferred Activity Type"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:defaultValue="10"
+            android:key="@string/distanceIntervalPref"
+            android:summary="Minimum distance to save route point."
+            android:title="Distance interval" />
+
+        <EditTextPreference
+            android:defaultValue="4"
+            android:key="@string/timeIntervalPref"
+            android:summary="Minimum time to save route point."
+            android:title="Time interval" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="System">
+
+        <ListPreference
+            android:defaultValue="0"
             android:entries="@array/night_mode"
             android:entryValues="@array/night_value"
-            app:useSimpleSummaryProvider="true"
-            />
+            android:key="@string/nightModePref"
+            android:title="Night mode"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
 

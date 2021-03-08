@@ -51,6 +51,7 @@
     <string name="timeIntervalPref">timeIntervalPref</string>
     <string name="nightModePref">nightModePref</string>
     <string name="autoPausePref">autoPausePref</string>
+    <string name="routeTypePref">routeTypePref</string>
 
 
 

@@ -33,6 +33,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
     private int routeID = 0;
     private boolean newActivity = true;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences defaultSharedPreferences;
 
     private Database database;
 
@@ -56,9 +57,17 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         newActivity = sharedPreferences.getBoolean(getString(R.string.recordingPref), true);
         routeID = sharedPreferences.getInt(getString(R.string.routeNamePref), 0);
 
+        defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+
         database = new Database(getContext());
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        activityType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.routeTypePref),"1"));
     }
 
     @Override
@@ -96,7 +105,6 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
             double time = System.currentTimeMillis();
             Activity activity = new Activity(activityType, time);
 
-            SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
             boolean autoPause = defaultSharedPreferences.getBoolean(getString(R.string.autoPausePref),true);
             activity.setAutoPause(autoPause);
 
