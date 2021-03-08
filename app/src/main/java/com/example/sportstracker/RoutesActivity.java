@@ -20,7 +20,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 
-import static com.example.sportstracker.MainActivity.EXTRA;
 import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
 import static com.example.sportstracker.RouteInfoActivity.IS_RELOAD_NEEDED;
 
@@ -180,7 +179,7 @@ public class RoutesActivity extends AppCompatActivity {
 
     private void openStats(int activityID) {
         Intent intent = new Intent(this, RouteInfoActivity.class);
-        intent.putExtra(EXTRA, activityID);
+        intent.putExtra(getString(R.string.intentExtra), activityID);
         startActivity(intent);
     }
 

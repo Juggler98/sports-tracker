@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import static com.example.sportstracker.App.CHANNEL_ID;
-import static com.example.sportstracker.MainActivity.EXTRA;
 import static com.example.sportstracker.MainActivity.PAUSE;
 import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
 import static java.lang.Math.round;
@@ -90,8 +89,8 @@ public class ServiceGPS extends Service {
 //            if (point.getHdop() < 20 && point.getVdop() < 10) {
                 database.addPoint(point);
                 // send coordinates to record activity to write lines on map
-                Intent intent = new Intent(EXTRA);
-                intent.putExtra(EXTRA, latitude + "," + longitude);
+                Intent intent = new Intent(getString(R.string.intentExtra));
+                intent.putExtra(getString(R.string.intentExtra), latitude + "," + longitude);
                 sendBroadcast(intent);
 //            }
             }
@@ -146,7 +145,7 @@ public class ServiceGPS extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("GPS_LC", "onStartCommand");
 
-        routeID = intent.getIntExtra(EXTRA, 1);
+        routeID = intent.getIntExtra(getString(R.string.intentExtra), 1);
         sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
 
         // pending intent for click on notification
@@ -155,7 +154,7 @@ public class ServiceGPS extends Service {
 
         // creates broadcast for notification button
         Intent broadCastIntent = new Intent(this, NotificationReceiver.class);
-        broadCastIntent.putExtra(EXTRA, "stop this");
+        broadCastIntent.putExtra(getString(R.string.intentExtra), "stop this");
         PendingIntent actionIntent = PendingIntent.getBroadcast(this, 0, broadCastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 //        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());

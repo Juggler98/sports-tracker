@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     /**
      * EXTRA - key for intent over whole app
      */
-    public static final String EXTRA = "extra";
+    //public static final String EXTRA = "extra";
     /**
      * SHARED_PREFERENCES - key for Shared Preferences over whole app
      */

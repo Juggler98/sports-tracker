@@ -21,10 +21,10 @@ import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.preference.PreferenceManager;
 
 import java.util.ArrayList;
 
-import static com.example.sportstracker.MainActivity.EXTRA;
 import static com.example.sportstracker.MainActivity.NAME_OF_ACTIVITY;
 import static com.example.sportstracker.MainActivity.RECORDING_PREF;
 import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
@@ -59,7 +59,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         newActivity = sharedPreferences.getBoolean(RECORDING_PREF, true);
         routeID = sharedPreferences.getInt(NAME_OF_ACTIVITY, 0);
 
-        int interval = sharedPreferences.getInt("distanceInterval", 0);
+        SharedPreferences sh = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String interval = sh.getString(getString(R.string.distanceIntervalPref),"");
         Toast.makeText(getContext(), "" + interval, Toast.LENGTH_SHORT).show();
 
         database = new Database(getContext());
@@ -112,7 +113,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
             editor.apply();
 
             Intent intent = new Intent(view.getContext(), ServiceGPS.class);
-            intent.putExtra(EXTRA, routeID);
+            intent.putExtra(getString(R.string.intentExtra), routeID);
             getContext().startService(intent);
 
             Log.d("RECORD_LC", "Starting new Service GPS");

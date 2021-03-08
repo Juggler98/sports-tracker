@@ -4,8 +4,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_main">Dashboard</string>
     <string name="title_activity_routes">Activities</string>
+    <string name="title_activity_settings">Settings</string>
     <string name="title_activity_stats">Details</string>
-    <string name="title_all_stats">All Time Stats</string>
+    <string name="title_all_stats">Stats</string>
 
     <string name="activities">Activities</string>
     <string name="record">Record</string>
@@ -15,16 +16,12 @@
     <string name="delete">Delete</string>
     <string name="clear_stats">Clear Stats</string>
     <string name="gps_icon">GPS_icon</string>
-<!--    <string name="stop">Stop</string>-->
-<!--    <string name="info">Info</string>-->
-<!--    <string name="pause">""</string>-->
     <string name="new_name">New Name</string>
     <string name="about_app">About App</string>
-<!--    <string name="date">Date:</string>-->
     <string name="distance">Distance</string>
     <string name="elevation_gain">Elevation Gain</string>
     <string name="avg_speed">Avg Speed</string>
-    <string name="time">Time:</string>
+    <string name="time">Time</string>
     <string name="activitiesStats">Activities</string>
     <string name="avg_pace">Avg Pace</string>
     <string name="avg_pace_null">NaN /km</string>
@@ -38,4 +35,20 @@
     <string name="metres">%1$d m</string>
 
     <string name="text">Light Mode</string>
+
+    <string name="mapTypePref">mapTypePref</string>
+    <string name="distanceIntervalPref">distanceIntervalPref</string>
+    <string name="timeIntervalPref">timeIntervalPref</string>
+    <string name="nightModePref">nightModePref</string>
+    <string name="autoPausePref">autoPausePref</string>
+
+    <string name="intentExtra">intentExtra</string>
+    <string name="sharedPreferences">sharedPreferences</string>
+    <string name="recordingPref">recordingPref</string>
+    <string name="routeNamePref">routeNamePref</string>
+    <string name="pausePref">pausePref</string>
+
+
+
+
 </resources>

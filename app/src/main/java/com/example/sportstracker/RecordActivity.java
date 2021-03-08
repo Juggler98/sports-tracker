@@ -41,7 +41,6 @@ import com.google.android.material.navigation.NavigationView;
 import java.util.ArrayList;
 
 
-import static com.example.sportstracker.MainActivity.EXTRA;
 import static com.example.sportstracker.MainActivity.NAME_OF_ACTIVITY;
 import static com.example.sportstracker.MainActivity.PAUSE;
 import static com.example.sportstracker.MainActivity.RECORDING_PREF;
@@ -63,8 +62,8 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private BroadcastReceiver broadcastReceiver;
     private SharedPreferences sharedPreferences;
-    public static final String FIRST_START = "start";
 
+    private final String FIRST_START = "start";
     private final String LAT = "lat";
     private final String LON = "lon";
     private final String BEAR = "bear";
@@ -342,7 +341,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             broadcastReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    String latLon = intent.getStringExtra(EXTRA);
+                    String latLon = intent.getStringExtra(getString(R.string.intentExtra));
                     String[] tokens = latLon.split(",");
                     double lat = Double.parseDouble(tokens[0]);
                     double lon = Double.parseDouble(tokens[1]);
@@ -364,7 +363,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             };
 
         }
-        registerReceiver(broadcastReceiver, new IntentFilter(EXTRA));
+        registerReceiver(broadcastReceiver, new IntentFilter(getString(R.string.intentExtra)));
 
         // if there is some data write it to map
         if (!latLngArrayList.isEmpty()) {

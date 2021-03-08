@@ -32,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.example.sportstracker.MainActivity.EXTRA;
 import static com.example.sportstracker.MainActivity.SHARED_PREFERENCES;
 import static java.lang.Math.max;
 import static java.lang.Math.round;
@@ -85,7 +84,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         setContentView(R.layout.activity_routeinfo);
 
         database = new Database(RouteInfoActivity.this);
-        routeID = getIntent().getIntExtra(EXTRA, 0);
+        routeID = getIntent().getIntExtra(getString(R.string.intentExtra), 0);
         Log.d("RouteInfo_LC", "onCreate Route: " + routeID);
 
         sharedPreferences = getSharedPreferences(SHARED_PREFERENCES, MODE_PRIVATE);
