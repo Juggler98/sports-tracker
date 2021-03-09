@@ -248,8 +248,10 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         if (!latLngArrayList.isEmpty()) {
             // show map of recorded route
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngArrayList.get(latLngArrayList.size() / 4), 13));
-            googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-            googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(latLngArrayList.size() - 1)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+//            var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
+            googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
+//            googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(latLngArrayList.size() - 1)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+            googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(latLngArrayList.size() - 1)).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_finish)));
             googleMap.addPolyline(new PolylineOptions().addAll(latLngArrayList).color(Color.RED));
         }
 
