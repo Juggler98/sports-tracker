@@ -15,6 +15,7 @@
             android:tint="@color/colorIcon"
             android:icon="@drawable/ic_map"
             app:itemIconTint="@color/textColor"
+            android:negativeButtonText="Cancel"
             />
 
     </PreferenceCategory>
@@ -40,6 +41,7 @@
             android:title="Preferred Activity Type"
             app:useSimpleSummaryProvider="true"
             android:icon="@drawable/ic_all"
+            android:negativeButtonText="Cancel"
             />
 
         <EditTextPreference
@@ -74,6 +76,7 @@
             android:title="Night mode"
             app:useSimpleSummaryProvider="true"
             android:icon="@drawable/ic_night"
+            android:negativeButtonText="Cancel"
             />
 
     </PreferenceCategory>
