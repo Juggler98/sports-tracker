@@ -131,6 +131,7 @@ public class RoutesActivity extends AppCompatActivity {
         if (isReloadNeeded) {
             activities = database.getActivities();
             if (activities.size() < oldSize) {
+                routeItemsList.remove(activityOpen);
                 adapter.notifyItemRemoved(activityOpen);
             } else if (activities.size() > oldSize){
 //                Activity activity = activities.get(activities.size()-1);
