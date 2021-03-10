@@ -1,15 +1,22 @@
 package com.example.sportstracker;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.provider.DocumentsContract;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +35,11 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,6 +68,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private MapView mapView;
 
     private ArrayList<LatLng> latLngArrayList = new ArrayList<>();
+    private ArrayList<Point> points = new ArrayList<>();
+
 
     private SharedPreferences sharedPreferences;
 
@@ -69,6 +84,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private Activity route;
 
     private int routeType;
+
+    private static final int EXPORT_GPX = 2;
 
 
     @SuppressLint("SetTextI18n")
@@ -104,7 +121,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         TextView minAltitude = findViewById(R.id.minAltitude);
 
         route = database.getActivity(routeID);
-        ArrayList<Point> points = database.getPoints(routeID);
+        points = database.getPoints(routeID);
         latLngArrayList = routesMethods.getLatLng(points);
 
         setIcon();
@@ -119,9 +136,9 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault());
         Date date = new Date((long) route.getTimeStart());
-        String timeStr = format.format(date);
+        String routeDate = format.format(date);
 
-        dateView.setText(timeStr);
+        dateView.setText(routeDate);
 
         double distanceD = routesMethods.getDistance(points);
         distance.setText(distanceD + " " + getString(R.string.km));
@@ -206,7 +223,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item1:
-
+                createGpx();
                 return true;
             case R.id.item2:
                 createActivityTypeDialog();
@@ -256,7 +273,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         }
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int mapType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.mapTypePref),"0"));
+        int mapType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.mapTypePref), "0"));
         switch (mapType) {
             case 0:
                 googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -425,4 +442,54 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         editor.apply();
     }
 
+    public void createGpx() {
+        String fileName;
+        if (route.getTitle().equals("")) {
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault());
+            Date date = new Date((long) route.getTimeStart());
+            fileName = format.format(date);
+        } else {
+            fileName = route.getTitle();
+        }
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("application/gpx");
+        intent.putExtra(Intent.EXTRA_TITLE, fileName + ".txt");
+        startActivityForResult(intent, EXPORT_GPX);
+    }
+
+
+
+    private void writeToGpx(Uri exportTo) {
+        String header = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n" +
+                "<gpx version=\"1.1\" creator=\"SportsTrackerGPX\" author=\"Adam Beliansky\"\n" +
+                " xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
+                " xmlns=\"http://www.topografix.com/GPX/1/1\"\n" +
+                " xsi:schemaLocation=\"http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd\"\n" +
+                " xmlns:gpxtrkx=\"http://www.garmin.com/xmlschemas/TrackStatsExtension/v1\"\n" +
+                " xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v2\"\n" +
+                " xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\">\n";
+        try {
+            ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(exportTo, "w");
+            FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+            fileOutputStream.write(header.getBytes());
+            for (Point point : points) {
+                fileOutputStream.write((point.getEle() + "\n").getBytes());
+            }
+            fileOutputStream.close();
+            pfd.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == EXPORT_GPX && resultCode == RESULT_OK) {
+            if (data != null) {
+                writeToGpx(data.getData());
+            }
+        }
+    }
 }

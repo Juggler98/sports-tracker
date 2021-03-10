@@ -16,12 +16,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * Entry activity for application.
@@ -34,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
         setContentView(R.layout.activity_main);
@@ -76,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int nightMode = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.nightModePref),"0"));
+        int nightMode = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.nightModePref), "0"));
 
         switch (nightMode) {
             case 0:
@@ -193,8 +198,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_GPX_FILE && resultCode == RESULT_OK) {
             if (data != null) {
-                Toast.makeText(this, "" + data.getData(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "" + readTextFromUri(data.getData()), Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+    private String readTextFromUri(Uri uri) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+            if (inputStream != null) {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+
+
 }
