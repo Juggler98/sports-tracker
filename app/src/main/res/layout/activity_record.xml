@@ -7,309 +7,371 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".RecordActivity"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    >
 
-    <ScrollView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:elevation="4dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+
+
+
+
+    <!--    <ScrollView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent">-->
+
+
+    <!--            <LinearLayout-->
+    <!--                android:layout_width="match_parent"-->
+    <!--                android:layout_height="wrap_content"-->
+    <!--                android:orientation="vertical">-->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/mapView2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@id/tableLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
-                <com.google.android.gms.maps.MapView
-                    android:id="@+id/mapView2"
+        <!--        <FrameLayout-->
+        <!--            android:id="@+id/fragment_container"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent" />-->
+
+
+        <TableLayout
+            android:id="@+id/tableLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/mapView2">
+
+            <TableRow>
+
+                <ImageView
+                    android:id="@+id/info"
                     android:layout_width="match_parent"
-                    android:layout_height="670dp" />
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_info"
+                    android:tint="@color/colorIcon">
 
-                <!--        <FrameLayout-->
-                <!--            android:id="@+id/fragment_container"-->
-                <!--            android:layout_width="match_parent"-->
-                <!--            android:layout_height="match_parent" />-->
+                </ImageView>
 
-
-                <TableLayout
+                <ImageView
+                    android:id="@+id/pause"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_pause"
+                    android:tint="@color/colorIcon">
 
-                    <TableRow>
+                </ImageView>
 
-                        <ImageView
-                            android:id="@+id/info"
-                            android:layout_width="match_parent"
-                            android:layout_height="56dp"
-                            android:layout_weight="1"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:src="@drawable/ic_info"
-                            android:tint="@color/colorIcon">
+                <ImageView
+                    android:id="@+id/stop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_stop"
+                    android:tint="@color/colorIcon">
 
-                        </ImageView>
-
-                        <ImageView
-                            android:id="@+id/pause"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:src="@drawable/ic_pause"
-                            android:tint="@color/colorIcon">
-
-                        </ImageView>
-
-                        <ImageView
-                            android:id="@+id/stop"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:foreground="?android:attr/selectableItemBackground"
-                            android:src="@drawable/ic_stop"
-                            android:tint="@color/colorIcon">
-
-                        </ImageView>
+                </ImageView>
 
 
-                    </TableRow>
+            </TableRow>
 
-                </TableLayout>
+        </TableLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 
 
-            </LinearLayout>
 
-    </ScrollView>
+    <!--            </LinearLayout>-->
+
+    <!--    </ScrollView>-->
+
 
 
     <com.google.android.material.navigation.NavigationView
 
-                android:id="@+id/nav_view"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:layout_marginBottom="64dp">
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start">
 
-                <TableLayout
+
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="200dp"
-                    android:layout_marginBottom="24dp">
+                    android:layout_height="match_parent">
 
-                    <TableRow>
+<!--                    <ScrollView-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="match_parent"-->
+<!--                        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent">-->
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Distance" />
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Altitude" />
+                        <TableRow>
 
-                    </TableRow>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Distance" />
 
-                    <TableRow>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Altitude" />
 
-                        <TextView
-                            android:id="@+id/distance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="12.5 km"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
+                        </TableRow>
 
-                        <TextView
-                            android:id="@+id/altitude"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="0 m"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
+                        <TableRow>
 
+                            <TextView
+                                android:id="@+id/distance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="12.5 km"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
 
-                    </TableRow>
-
-                    <View style="@style/divider" />
-
-                    <TableRow>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Time"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Time (mov)"
-                            android:textStyle="italic" />
-
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            android:id="@+id/time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="0:00:45"
-                            android:textSize="24sp"
-
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/timeMoving"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="0:00:25"
-                            android:textSize="24sp"
-
-                            android:textStyle="bold" />
-
-                    </TableRow>
-
-                    <View style="@style/divider" />
-
-                    <TableRow>
-
-                        <TextView
-                            android:id="@+id/avgInfo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Avg speed"
-                            android:textStyle="italic" />
-
-                        <TextView
-                            android:id="@+id/avgMovingInfo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Avg speed (mov)"
-                            android:textStyle="italic" />
-
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            android:id="@+id/avgSpeed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="12.5 km/h"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/avgSpeedMoving"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="10 km/h"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                    </TableRow>
-
-                    <View style="@style/divider" />
-
-                    <TableRow>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Ele gain" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Ele loss"
-                            android:textStyle="bold" />
-
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            android:id="@+id/elevationGain"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="250 m"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/elevationLoss"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="-120 m"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                    </TableRow>
-
-                    <View style="@style/divider" />
-
-                    <TableRow>
-
-                        <TextView
-                            android:id="@+id/speedInfo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Speed" />
-
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView
-                            android:id="@+id/speed"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="0 km/h"
-                            android:textSize="24sp"
-                            android:textStyle="bold" />
-
-                    </TableRow>
+                            <TextView
+                                android:id="@+id/altitude"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="0 m"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
 
 
-                </TableLayout>
+                        </TableRow>
 
-            </com.google.android.material.navigation.NavigationView>
+                        <View style="@style/divider" />
+
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Time"
+                                android:textStyle="italic" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Time (mov)"
+                                android:textStyle="italic" />
+
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:id="@+id/time"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="0:00:45"
+                                android:textSize="24sp"
+
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/timeMoving"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="0:00:25"
+                                android:textSize="24sp"
+
+                                android:textStyle="bold" />
+
+                        </TableRow>
+
+                        <View style="@style/divider" />
+
+                        <TableRow>
+
+                            <TextView
+                                android:id="@+id/avgInfo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Avg speed"
+                                android:textStyle="italic" />
+
+                            <TextView
+                                android:id="@+id/avgMovingInfo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Avg speed (mov)"
+                                android:textStyle="italic" />
+
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:id="@+id/avgSpeed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="12.5 km/h"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/avgSpeedMoving"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="10 km/h"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                        </TableRow>
+
+                        <View style="@style/divider" />
+
+                        <TableRow>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Ele gain" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Ele loss"
+                                android:textStyle="bold" />
+
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:id="@+id/elevationGain"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="250 m"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/elevationLoss"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="-120 m"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                        </TableRow>
+
+                        <View style="@style/divider" />
+
+                        <TableRow>
+
+                            <TextView
+                                android:id="@+id/speedInfo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="Speed" />
+
+                        </TableRow>
+
+                        <TableRow>
+
+                            <TextView
+                                android:id="@+id/speed"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="center"
+                                android:text="0 km/h"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                        </TableRow>
+
+
+                    </TableLayout>
+
+<!--                    </ScrollView>-->
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+    </com.google.android.material.navigation.NavigationView>
+
+
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

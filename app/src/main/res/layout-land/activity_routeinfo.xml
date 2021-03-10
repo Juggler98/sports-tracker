@@ -9,25 +9,27 @@
     android:isScrollContainer="true"
     >
 
+
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
 
+
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@id/tableLayout2"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/scrollView"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
 
             />
 
-<!--    <ScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent" >-->
+
 
 <!--        <LinearLayout-->
 <!--            android:layout_width="match_parent"-->
@@ -35,14 +37,23 @@
 <!--            android:orientation="vertical"-->
 <!--            >-->
 
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/mapView"
+            app:layout_constraintTop_toTopOf="parent"
+            >
+
         <TableLayout
             android:id="@+id/tableLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mapView">
+
+
+            >
 
             <TableRow
                 android:layout_marginTop="8dp"
@@ -318,9 +329,10 @@
 
 <!--        </LinearLayout>-->
 
-<!--    </ScrollView>-->
+        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 
 

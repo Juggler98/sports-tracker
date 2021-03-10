@@ -22,6 +22,7 @@
 
         <activity android:name=".RecordActivity"
             android:parentActivityName=".MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
             android:name=".RouteInfoActivity"

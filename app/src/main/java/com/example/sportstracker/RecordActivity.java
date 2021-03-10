@@ -102,6 +102,14 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
 
+        androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
         database = new Database(RecordActivity.this);
 
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
@@ -117,8 +125,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
         final DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-
-//        navigationView.bringToFront();
+        navigationView.bringToFront();
 
         timeView = findViewById(R.id.time);
         timeMovingView = findViewById(R.id.timeMoving);
