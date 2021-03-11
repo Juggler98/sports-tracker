@@ -84,6 +84,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private Activity route;
 
     private int routeType;
+    private String routeName;
 
     private static final int EXPORT_GPX = 2;
 
@@ -423,14 +424,14 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         if (route.getTitle().equals("")) {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault());
             Date date = new Date((long) route.getTimeStart());
-            fileName = format.format(date);
+            routeName = format.format(date);
         } else {
-            fileName = route.getTitle();
+            routeName = route.getTitle();
         }
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("application/gpx");
-        intent.putExtra(Intent.EXTRA_TITLE, fileName + ".txt");
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TITLE, routeName + "");
         startActivityForResult(intent, EXPORT_GPX);
     }
 
@@ -445,13 +446,41 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                 " xmlns:gpxtrkx=\"http://www.garmin.com/xmlschemas/TrackStatsExtension/v1\"\n" +
                 " xmlns:gpxtpx=\"http://www.garmin.com/xmlschemas/TrackPointExtension/v2\"\n" +
                 " xmlns:gpxx=\"http://www.garmin.com/xmlschemas/GpxExtensions/v3\">\n";
+        String metadata = "\t<metadata>\n" +
+                "\t\t<desc>File with points from Sports Tracker</desc>\n" +
+                "\t</metadata>\n";
+        String trk = "<trk>\n" +
+                "<name>" + routeName + "</name>\n" +
+                "<trkseg>\n";
+        String fileEnd = "</trkseg>\n" +
+                "</trk>\n" +
+                "</gpx>";
         try {
             ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(exportTo, "w");
             FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
             fileOutputStream.write(header.getBytes());
+            fileOutputStream.write(metadata.getBytes());
+            fileOutputStream.write(trk.getBytes());
             for (Point point : points) {
-                fileOutputStream.write((point.getEle() + "\n").getBytes());
+                String trkpt = "<trkpt lat=\"" + point.getLat() + "\" lon=\"" + point.getLon() +"\">\n";
+                String ele = "\t<ele>" + point.getEle() +"</ele>\n";
+                String time = "\t<time>" + this.getUTC(point.getTime()) +"</time>\n";
+                String speed = "\t<speed>" + round(point.getSpeed() * 100) / 100.0 +"</speed>\n";
+                String course = "\t<course>" + round(point.getCourse() * 10) / 10.0 +"</course>\n";
+                fileOutputStream.write(trkpt.getBytes());
+                fileOutputStream.write(ele.getBytes());
+                fileOutputStream.write(time.getBytes());
+                if (point.getSpeed() > 0)
+                    fileOutputStream.write(speed.getBytes());
+                if (point.getCourse() >= 0) {
+                    fileOutputStream.write(course.getBytes());
+                }
+                fileOutputStream.write("</trkpt>\n".getBytes());
+                if (point.getPaused()) {
+                    fileOutputStream.write("</trkseg>\n<trkseg>\n".getBytes());
+                }
             }
+            fileOutputStream.write(fileEnd.getBytes());
             fileOutputStream.close();
             pfd.close();
         } catch (IOException e) {
@@ -468,4 +497,11 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             }
         }
     }
+
+    private String getUTC(double time) {
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        Date date = new Date((long) time);
+        return format.format(date);
+    }
+
 }
