@@ -111,7 +111,7 @@ public class PlaceholderFragment extends Fragment {
         int minutesYear = (int) minutesDYear;
 
         activityCount.setText(getString(R.string.activitiesCount, activitiesCountYear));
-        distance.setText(getString(R.string.distance_stats,Math.round(distanceDYear)));
+        distance.setText(getString(R.string.distance_stats,Math.round(distanceDYear/1000.0)));
         time.setText(getString(R.string.time_data_stats, hoursYear, minutesYear));
 
         if (sectionNumber != 4) {
@@ -123,7 +123,7 @@ public class PlaceholderFragment extends Fragment {
         }
 
         activityCountAll.setText(getString(R.string.activitiesCount, activitiesCount));
-        distanceAll.setText(getString(R.string.distance_stats,Math.round(distanceD)));
+        distanceAll.setText(getString(R.string.distance_stats,Math.round(distanceD/1000.0)));
         timeAll.setText(getString(R.string.time_data_stats, hours, minutes));
 
 

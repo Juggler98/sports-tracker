@@ -41,6 +41,8 @@ import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 
 /**
@@ -59,6 +61,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private BroadcastReceiver broadcastReceiver;
     private SharedPreferences sharedPreferences;
+    private SharedPreferences defaultSharedPreferences;
 
     private final String FIRST_START = "start";
     private final String LAT = "lat";
@@ -69,7 +72,8 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private CameraPosition cameraPosition;
     private ArrayList<LatLng> latLngArrayList = new ArrayList<>();
-
+    private ArrayList<Point> twoPoints = new ArrayList<>();
+    private double oldSpeed = 0;
     private Database database;
 
     private Handler handler;
@@ -94,6 +98,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
     private double speed;
 
     private boolean avgVsPace;
+    private int delayMillis;
 
     private Activity route;
 
@@ -113,7 +118,12 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         database = new Database(RecordActivity.this);
 
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
+        defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         routeID = sharedPreferences.getInt(getString(R.string.routeNamePref), 0);
+
+        delayMillis = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.timeIntervalPref),"4")) * 1000;
+        delayMillis = min(delayMillis, 30*1000);
+        delayMillis = max(delayMillis, 1000);
 
         ImageView stopButton = findViewById(R.id.stop);
         final ImageView pauseButton = findViewById(R.id.pause);
@@ -412,12 +422,15 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
                 changeContent();
             }
         };
-        this.handler.postDelayed(this.runnable, 1000);
+        this.handler.postDelayed(this.runnable, delayMillis);
     }
 
     private void changeContent() {
         ArrayList<Point> points = database.getPoints(routeID);
-        double distance = routesMethods.getDistance(points);
+        if (points.size() > 0) {
+            twoPoints.add(points.get(points.size() - 1));
+        }
+        double distance = routesMethods.getDistance(points)/1000.0;
 
         double[] hours = routesMethods.getHours(points, route.getAutoPause());
         int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[0]);
@@ -430,21 +443,35 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
         timeMovingView.setText(hoursMinutesSeconds[0] + ":" + minutesStr + ":" + secondsStr);
 
-        distanceView.setText(distance + " km");
+        distanceView.setText(Math.round(distance * 100.0) / 100.0 + " km");
         if (points.size() > 0) {
-            altitudeView.setText(points.get(points.size() - 1).getEle() + " m");
+            altitudeView.setText((int) points.get(points.size() - 1).getEle() + " m");
             speed = points.get(points.size() - 1).getSpeed();
+            if (speed <= 0 && twoPoints.size() == 2) {
+                speed = routesMethods.getSpeed(twoPoints);
+            }
+            if (speed == oldSpeed) {
+                speed = 0;
+            }
+            oldSpeed = speed;
         } else {
             speed = 0;
         }
 
-        eleGainView.setText(routesMethods.getElevationGainLoss(points)[0] + " m");
-        eleLossView.setText("-" + routesMethods.getElevationGainLoss(points)[1] + " m");
+
+
+        eleGainView.setText(Math.round(routesMethods.getElevationGainLoss(points)[0]) + " m");
+        eleLossView.setText("-" + Math.round(routesMethods.getElevationGainLoss(points)[1]) + " m");
 
         avgSpeed = Math.round(distance / hours[0] * 10) / 10.0;
         avgSpeedMoving = Math.round(distance / hours[1] * 10) / 10.0;
+        speed = Math.round(speed * 3.6 * 10) / 10.0;
 
         setAvgSpeedPace();
+
+        if (twoPoints.size() == 2) {
+            twoPoints.remove(0);
+        }
 
         refresh();
     }

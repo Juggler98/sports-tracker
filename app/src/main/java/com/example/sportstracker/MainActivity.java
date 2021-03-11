@@ -77,8 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this, "Types was added", Toast.LENGTH_SHORT).show();
         }
 
-
-
         Log.d("MAIN_LC", "onCreate");
 
         // permit start app only with getting GPS permission

@@ -2,6 +2,7 @@ package com.example.sportstracker;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.round;
 
@@ -31,7 +33,7 @@ public class RoutesMethods {
 
     /**
      * @param points
-     * @return distance of route
+     * @return distance of route in metres
      */
     public double getDistance(ArrayList<Point> points) {
         Log.d("DB_LC", "DB_getDistance");
@@ -56,7 +58,8 @@ public class RoutesMethods {
                 point = points.get(i);
             }
         }
-        return round(distance / 10) / 100.0;
+//        return round(distance / 10) / 100.0;
+        return distance;
     }
 
     /**
@@ -77,7 +80,7 @@ public class RoutesMethods {
                 elevationDifference = ele2 - ele1;
                 if (elevationDifference > 5) {
                     elevationGain += elevationDifference;
-                } else if (elevationDifference < -5) {
+                } else if (elevationDifference < -8) {
                     elevationLoss += elevationDifference * -1;
                 }
                 ele1 = ele2;
@@ -106,8 +109,8 @@ public class RoutesMethods {
                     minAltitude = point.getEle();
             }
         }
-        altitudeMaxMin[0] = maxAltitude == Integer.MIN_VALUE ? 0 : maxAltitude;
-        altitudeMaxMin[1] = minAltitude == Integer.MAX_VALUE ? 0 : minAltitude;
+        altitudeMaxMin[0] = maxAltitude == Integer.MIN_VALUE ? 0 : (maxAltitude);
+        altitudeMaxMin[1] = minAltitude == Integer.MAX_VALUE ? 0 : (minAltitude);
         return altitudeMaxMin;
     }
 
@@ -117,7 +120,31 @@ public class RoutesMethods {
             if (point.getSpeed() > maxSpeed)
                 maxSpeed = point.getSpeed();
         }
+        if (maxSpeed <= 0) {
+            ArrayList<Point> twoPoints = new ArrayList<>();
+            for (int i = 0; i < points.size(); i++) {
+                //if/ (point.getSpeed() > maxSpeed)
+                    //maxSpeed = point.getSpeed();
+                if (i != 0) {
+                    twoPoints.add(points.get(i));
+                    double speed = this.getSpeed(twoPoints);
+                    if (speed > maxSpeed) {
+                        maxSpeed = speed;
+                    }
+                    twoPoints.remove(0);
+                } else {
+                    twoPoints.add(points.get(i));
+                }
+            }
+        }
         return maxSpeed == Integer.MIN_VALUE ? 0 : maxSpeed;
+    }
+
+    public double getSpeed(ArrayList<Point> points) {
+        double timePast = points.get(0).getTime();
+        double time = points.get(1).getTime();
+        double timeDifference = (time - timePast) / 1000.0;
+        return this.getDistance(points) / timeDifference;
     }
 
     /**
@@ -135,21 +162,29 @@ public class RoutesMethods {
         //moving time
         hours[1] = hours[0];
 
-        Point point = null;
-        Point pastPoint;
+//        Point point = null;
+//        Point pastPoint;
+        ArrayList<Point> twoPoints = new ArrayList<>();
         for (int i = 0; i < points.size(); i++) {
             if (i != 0) {
-                pastPoint = point;
-                double timePast = pastPoint.getTime();
-                point = points.get(i);
-                double time = point.getTime();
+//                pastPoint = point;
+//                double timePast = pastPoint.getTime();
+                double timePast = twoPoints.get(0).getTime();
+//                point = points.get(i);
+                twoPoints.add(points.get(i));
+//                double time = point.getTime();
+                double time = twoPoints.get(1).getTime();
                 double timeDifference = time - timePast;
-                if (pastPoint.getPaused())
+                if (twoPoints.get(0).getPaused())
                     hours[0] -= timeDifference;
-                if (timeDifference > 30 * 1000 || pastPoint.getPaused())
+                double speed = this.getDistance(twoPoints) / (timeDifference/1000.0);
+//                if (timeDifference > 30 * 1000 || pastPoint.getPaused())
+                if (speed < 0.15 || twoPoints.get(0).getPaused())
                     hours[1] -= timeDifference;
+                twoPoints.remove(0);
             } else {
-                point = points.get(i);
+//                point = points.get(i);
+                twoPoints.add(points.get(i));
             }
         }
 

@@ -47,7 +47,7 @@ public class ServiceGPS extends Service {
     private Database database = new Database(ServiceGPS.this);
 
     private SharedPreferences sharedPreferences;
-    SharedPreferences defaultSharedPreferences;
+    private SharedPreferences defaultSharedPreferences;
 
 
 
@@ -105,7 +105,7 @@ public class ServiceGPS extends Service {
 
             // when location is changed notification is updated
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notification.setContentText(routesMethods.getDistance(database.getPoints(routeID)) + " km ");
+            notification.setContentText(Math.round(routesMethods.getDistance(database.getPoints(routeID)) / 10) / 100.0 + " km ");
             notificationManager.notify(1, notification.build());
 
             Log.d("GPS_LC", "Write Location to: " + routeID);

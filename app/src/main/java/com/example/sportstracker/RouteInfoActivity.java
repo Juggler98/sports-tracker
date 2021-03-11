@@ -140,8 +140,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         dateView.setText(routeDate);
 
-        double distanceD = routesMethods.getDistance(points);
-        distance.setText(distanceD + " " + getString(R.string.km));
+        double distanceD = routesMethods.getDistance(points) / 1000.0;
+        distance.setText(Math.round(distanceD * 100) / 100.0 + " " + getString(R.string.km));
 
         double[] hours = routesMethods.getHours(points, route.getAutoPause());
 
@@ -158,21 +158,21 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[0]));
         elevationLoss.setText("-" + getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[1]));
 
-        maxAltitude.setText(routesMethods.getAltitudeMaxMin(points)[0] + " m");
-        minAltitude.setText(routesMethods.getAltitudeMaxMin(points)[1] + " m");
+        maxAltitude.setText((int) routesMethods.getAltitudeMaxMin(points)[0] + " m");
+        minAltitude.setText((int) routesMethods.getAltitudeMaxMin(points)[1] + " m");
 
         maximumSpeed = round(routesMethods.getMaxSpeed(points) * 3.6 * 10) / 10.0;
 
         if (hours[0] == 0)
             this.avg = 0.0;
         else
-            this.avg = round(distanceD / hours[0] * 100.0) / 100.0;
+            this.avg = round(distanceD / hours[0] * 10.0) / 10.0;
 
 
         if (hours[1] == 0)
             this.avgMov = 0.0;
         else
-            this.avgMov = round(distanceD / hours[1] * 100.0) / 100.0;
+            this.avgMov = round(distanceD / hours[1] * 10.0) / 10.0;
 
         avgVsPace = route.getIdType() == 3;
 
