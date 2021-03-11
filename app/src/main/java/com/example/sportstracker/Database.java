@@ -299,6 +299,14 @@ public class Database extends SQLiteOpenHelper {
         Log.d("DB_LC", "Delete Activity: " + activityID);
     }
 
+    private void deleteType(int typeID) {
+        String deleteType = "DELETE FROM " + TABLE_TYPE + " WHERE id_type_activity = " + typeID;
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL(deleteType);
+        db.close();
+        Log.d("DB_LC", "Delete Type: " + typeID);
+    }
+
     public boolean updateActivity(int activityID, int type, double endTime, String name) {
         String changeType = "UPDATE " + TABLE_ACTIVITY + " SET type_id = " + type + " WHERE id_activity = " + activityID;
         String setEndTime = "UPDATE " + TABLE_ACTIVITY + " SET time_end = " + endTime + " WHERE id_activity = " + activityID;

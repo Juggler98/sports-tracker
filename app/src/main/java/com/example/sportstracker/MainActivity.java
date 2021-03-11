@@ -16,6 +16,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,10 +25,25 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Entry activity for application.
@@ -70,12 +86,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         Database database = new Database(MainActivity.this);
         database.checkTypes();
-        if (database.getType(7).equals("")) {
-            database.addTypes("Ski");
-            database.addTypes("Walk");
-            database.addTypes("Skate");
-            Toast.makeText(this, "Types was added", Toast.LENGTH_SHORT).show();
-        }
 
         Log.d("MAIN_LC", "onCreate");
 
@@ -205,7 +215,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_GPX_FILE && resultCode == RESULT_OK) {
             if (data != null) {
-                Toast.makeText(this, "" + readTextFromUri(data.getData()), Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "" + readTextFromUri(data.getData()), Toast.LENGTH_SHORT).show();
+                readTextFromUri(data.getData());
             }
         }
     }
@@ -214,6 +225,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         StringBuilder stringBuilder = new StringBuilder();
         try {
             InputStream inputStream = getContentResolver().openInputStream(uri);
+//            File gpxFile = new File(uri.getPath());
+            ArrayList<Location> locations = decodeGPX(new File(uri.getPath()));
+            Toast.makeText(this, "" + locations.get(0).getLatitude(), Toast.LENGTH_SHORT).show();
             if (inputStream != null) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
                 String line;
@@ -225,6 +239,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             e.printStackTrace();
         }
         return stringBuilder.toString();
+    }
+
+    private ArrayList<Location> decodeGPX(File file) {
+        ArrayList<Location> list = new ArrayList<Location>();
+
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        try {
+            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+            FileInputStream fileInputStream = new FileInputStream(file);
+            Document document = documentBuilder.parse(fileInputStream);
+            Element elementRoot = document.getDocumentElement();
+
+            NodeList nodelist_trkpt = elementRoot.getElementsByTagName("trkpt");
+
+            for (int i = 0; i < nodelist_trkpt.getLength(); i++) {
+
+                Node node = nodelist_trkpt.item(i);
+                NamedNodeMap attributes = node.getAttributes();
+
+                String newLatitude = attributes.getNamedItem("lat").getTextContent();
+                Double newLatitude_double = Double.parseDouble(newLatitude);
+
+                String newLongitude = attributes.getNamedItem("lon").getTextContent();
+                Double newLongitude_double = Double.parseDouble(newLongitude);
+
+                String newLocationName = newLatitude + ":" + newLongitude;
+                Location newLocation = new Location(newLocationName);
+                newLocation.setLatitude(newLatitude_double);
+                newLocation.setLongitude(newLongitude_double);
+
+                list.add(newLocation);
+
+            }
+            fileInputStream.close();
+        } catch (ParserConfigurationException | FileNotFoundException | SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
 
