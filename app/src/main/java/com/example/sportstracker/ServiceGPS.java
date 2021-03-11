@@ -47,6 +47,8 @@ public class ServiceGPS extends Service {
     private Database database = new Database(ServiceGPS.this);
 
     private SharedPreferences sharedPreferences;
+    SharedPreferences defaultSharedPreferences;
+
 
 
     @Override
@@ -65,7 +67,7 @@ public class ServiceGPS extends Service {
             double time = location.getTime();
             double speed = location.getSpeed();
             double hdop = location.getAccuracy();
-            double vdop = 0.0;
+            double vdop = -1;
             if (Build.VERSION.SDK_INT >= 26) {
                 vdop = location.getVerticalAccuracyMeters();
             }
@@ -86,7 +88,13 @@ public class ServiceGPS extends Service {
                 point.setPaused(true);
                 database.setPause(routeID, database.getLastPointID(routeID));
             } else {
-//            if (point.getHdop() < 20 && point.getVdop() < 10) {
+                int minHorizontal = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.horizontalPref),"20"));
+                int minVertical = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.verticalPref),"15"));
+
+                minHorizontal = max(minHorizontal, 4);
+                minVertical = max(minVertical, 4);
+
+//            if (point.getHdop() <= minHorizontal && point.getVdop() <= minVertical) {
                 database.addPoint(point);
                 // send coordinates to record activity to write lines on map
                 Intent intent = new Intent(getString(R.string.intentExtra));
@@ -147,6 +155,7 @@ public class ServiceGPS extends Service {
 
         routeID = intent.getIntExtra(getString(R.string.intentExtra), 1);
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
+        defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         // pending intent for click on notification
         Intent notificationIntent = new Intent(this, RecordActivity.class);
@@ -173,7 +182,6 @@ public class ServiceGPS extends Service {
         Log.d("GPS_LC", "Creating new Route: " + routeID);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
-        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int minDistance = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.distanceIntervalPref),"10"));
         int minTime = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.timeIntervalPref),"4")) * 1000;
 

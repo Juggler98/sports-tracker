@@ -47,10 +47,10 @@ public class Database extends SQLiteOpenHelper {
                 "lon REAL NOT NULL," +
                 "ele REAL NOT NULL," +
                 "time REAL NOT NULL," +
-                "speed REAL NOT NULL," +
-                "course REAL NOT NULL," +
-                "hdop REAL NOT NULL," +
-                "vdop REAL NOT NULL," +
+                "speed REAL," +
+                "hdop REAL," +
+                "course REAL," +
+                "vdop REAL," +
                 "paused INTEGER," +
                 "FOREIGN KEY(id_activity) REFERENCES " + TABLE_ACTIVITY + "(id_activity)," +
                 "PRIMARY KEY (id_point, id_activity))";
@@ -73,8 +73,8 @@ public class Database extends SQLiteOpenHelper {
 //        db.execSQL("ALTER TABLE " + TABLE_POINT + " RENAME COLUMN hdop to hacc;");
 //        db.execSQL("ALTER TABLE " + TABLE_POINT + " CHANGE TO hacc;");
 
-        db.execSQL("ALTER TABLE " + TABLE_ACTIVITY + " ADD COLUMN auto_pause INTEGER;");
-        db.execSQL("ALTER TABLE " + TABLE_POINT + " ADD COLUMN paused INTEGER;");
+        //db.execSQL("ALTER TABLE " + TABLE_ACTIVITY + " ADD COLUMN auto_pause INTEGER;");
+       //db.execSQL("ALTER TABLE " + TABLE_POINT + " ADD COLUMN paused INTEGER;");
     }
 
     private boolean addTypes(String type) {
@@ -126,10 +126,15 @@ public class Database extends SQLiteOpenHelper {
         cv.put("lon", point.getLon());
         cv.put("ele", point.getEle());
         cv.put("time", point.getTime());
-        cv.put("speed", point.getSpeed());
-        cv.put("course", point.getCourse());
-        cv.put("hdop", point.getHdop());
-        cv.put("vdop", point.getVdop());
+        if (point.getSpeed() != -1) {
+            cv.put("speed", point.getSpeed());
+        }
+        if (point.getCourse() != -1)
+            cv.put("course", point.getCourse());
+        if (point.getHdop() != -1)
+            cv.put("hdop", point.getHdop());
+        if (point.getVdop() != -1)
+            cv.put("vdop", point.getVdop());
         if (point.getPaused()) {
             cv.put("paused", point.getPaused());
         }
@@ -153,10 +158,10 @@ public class Database extends SQLiteOpenHelper {
             this.addTypes("Hike");
             this.addTypes("Bike");
             this.addTypes("Run");
-            this.addTypes("Walk");
-            this.addTypes("Ski");
-            this.addTypes("Skate");
             this.addTypes("Swim");
+            this.addTypes("Ski");
+            this.addTypes("Walk");
+            this.addTypes("Skate");
         }
         cursor.close();
         db.close();
@@ -335,12 +340,11 @@ public class Database extends SQLiteOpenHelper {
                 double lon = cursor.getDouble(3);
                 double ele = cursor.getDouble(4);
                 double time = cursor.getDouble(5);
-                double speed = cursor.getDouble(6);
-                double course = cursor.getDouble(8);
-                double hdop = cursor.getDouble(7);
+                double speed = cursor.getType(6) == 0 ? -1 : cursor.getDouble(6);
+                double hdop = cursor.getType(7) == 0 ? -1 : cursor.getDouble(7);
+                double course = cursor.getType(8) == 0 ? -1 : cursor.getDouble(8);
+                double vdop = cursor.getType(9) == 0 ? -1 : cursor.getDouble(9);
 //                Log.d("DB_LC", "VDOP: " +  cursor.getDouble(8));
-                double vdop = cursor.getDouble(9);
-                //TODO v novej databaze treba preusporiadat
 
                 Point point = new Point(idActivity, idPoint, lat, lon, ele, time, speed, course, hdop, vdop);
                 if (cursor.getType(10) != 0) {

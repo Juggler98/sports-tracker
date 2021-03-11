@@ -57,9 +57,29 @@
         <EditTextPreference
             android:defaultValue="4"
             android:key="@string/timeIntervalPref"
-            android:summary="Minimum time to save route point in sec."
+            android:summary="Minimum time to save route point."
             android:title="Time interval"
             android:dialogMessage="\nMinimum time to save route point in seconds.\nShould be between 1 and 30."
+            android:positiveButtonText="OK"
+            android:negativeButtonText="Cancel"
+            />
+
+        <EditTextPreference
+            android:defaultValue="20"
+            android:key="@string/horizontalPref"
+            android:summary="Maximum horizontal deviation."
+            android:title="Horizontal accuracy"
+            android:dialogMessage="\nMaximum deviation to save route point in metres.\nShould be at least 15."
+            android:positiveButtonText="OK"
+            android:negativeButtonText="Cancel"
+            />
+
+        <EditTextPreference
+            android:defaultValue="16"
+            android:key="@string/verticalPref"
+            android:summary="Maximum vertical deviation."
+            android:title="Vertical accuracy"
+            android:dialogMessage="\nMaximum deviation to save route point in metres.\nShould be at least 10."
             android:positiveButtonText="OK"
             android:negativeButtonText="Cancel"
             />

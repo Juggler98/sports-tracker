@@ -52,6 +52,8 @@
     <string name="nightModePref">nightModePref</string>
     <string name="autoPausePref">autoPausePref</string>
     <string name="routeTypePref">routeTypePref</string>
+    <string name="horizontalPref">horizontalPref</string>
+    <string name="verticalPref">verticalPref</string>
 
 
 

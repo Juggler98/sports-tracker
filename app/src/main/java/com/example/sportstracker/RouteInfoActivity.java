@@ -408,32 +408,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private void setIcon() {
-        int icon = R.drawable.ic_hike;
         ImageView imageView = findViewById(R.id.icon);
-        switch (route.getIdType()) {
-            case 1:
-                icon = R.drawable.ic_hike;
-                break;
-            case 2:
-                icon = R.drawable.ic_bike;
-                break;
-            case 3:
-                icon = R.drawable.ic_run;
-                break;
-            case 4:
-                icon = R.drawable.ic_swim;
-                break;
-            case 5:
-                icon = R.drawable.ic_ski;
-                break;
-            case 6:
-                icon = R.drawable.ic_walk;
-                break;
-            case 7:
-                icon = R.drawable.ic_skate;
-                break;
-        }
-        imageView.setImageResource(icon);
+        imageView.setImageResource(routesMethods.getIcon(route.getIdType()));
     }
 
     private void setReloadIsNeeded() {
