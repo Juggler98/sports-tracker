@@ -77,7 +77,7 @@ public class Database extends SQLiteOpenHelper {
        //db.execSQL("ALTER TABLE " + TABLE_POINT + " ADD COLUMN paused INTEGER;");
     }
 
-    private boolean addTypes(String type) {
+    public boolean addTypes(String type) {
         Log.d("DB_LC", "DB_ADD_TYPES");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();

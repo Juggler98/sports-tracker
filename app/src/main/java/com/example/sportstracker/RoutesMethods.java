@@ -146,7 +146,7 @@ public class RoutesMethods {
                 double timeDifference = time - timePast;
                 if (pastPoint.getPaused())
                     hours[0] -= timeDifference;
-                if (timeDifference > 8 * 1000 || pastPoint.getPaused())
+                if (timeDifference > 30 * 1000 || pastPoint.getPaused())
                     hours[1] -= timeDifference;
             } else {
                 point = points.get(i);
@@ -178,6 +178,8 @@ public class RoutesMethods {
     }
 
     //this is haversine Formula for calculating distance between two coordinates
+    //https://en.wikipedia.org/wiki/Haversine_formula
+    //https://www.movable-type.co.uk/scripts/latlong.html
     private double haversineFormula(double lat1, double lat2, double lon1, double lon2) {
         double r = 6371000;
         double fi1 = lat1 * Math.PI / 180;

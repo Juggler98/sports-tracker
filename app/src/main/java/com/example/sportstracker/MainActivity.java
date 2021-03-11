@@ -68,7 +68,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_dashboard);
         }
 
-        new Database(MainActivity.this).checkTypes();
+        Database database = new Database(MainActivity.this);
+        database.checkTypes();
+        if (database.getType(7).equals("")) {
+            database.addTypes("Ski");
+            database.addTypes("Walk");
+            database.addTypes("Skate");
+            Toast.makeText(this, "Types was added", Toast.LENGTH_SHORT).show();
+        }
+
+
 
         Log.d("MAIN_LC", "onCreate");
 
