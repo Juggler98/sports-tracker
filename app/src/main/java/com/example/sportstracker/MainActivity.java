@@ -230,16 +230,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int activityType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.routeTypePref), "1"));
 
-        ArrayList<Point> points = getPointsFromFile(uri);
+        final ArrayList<Point> points = getPointsFromFile(uri);
 
         if (points.size() > 0) {
             Activity activity = new Activity(activityType, points.get(0).getTime());
             database.createActivity(activity);
             database.updateActivity(database.getLastActivityID(), 0, points.get(points.size() - 1).getTime(), "");
             database.updateActivity(database.getLastActivityID(), 0, 0, "From import");
+
+//            Runnable runnable = new Runnable() {
+//                @Override
+//                public void run() {
+//                    for (Point point : points) {
+//                        database.addPoint(point);
+//                    }
+//                }
+//            };
+
             for (Point point : points) {
                 database.addPoint(point);
             }
+
+//            Thread thread = new Thread(runnable);
+//            thread.start();
+
             Toast.makeText(this, "Import Successful", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Import Failed", Toast.LENGTH_LONG).show();
@@ -248,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private ArrayList<Point> getPointsFromFile(Uri uri) {
         ArrayList<Point> points = new ArrayList<>();
+        ArrayList<SimpleDateFormat> patterns = this.getDateFormats();
         int activityID = database.getLastActivityID() + 1;
         int pointID = database.getLastPointID(activityID) + 1;
 
@@ -279,39 +294,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             Node trkpt = trkptList.item(i);
                             if (trkpt.getNodeType() == Node.ELEMENT_NODE) {
                                 Element trkptElement = (Element) trkpt;
-                                String latStr = trkptElement.getAttribute("lat");
-                                String lonStr = trkptElement.getAttribute("lon");
-                                lat = Double.parseDouble(latStr);
-                                lon = Double.parseDouble(lonStr);
+                                lat = Double.parseDouble(trkptElement.getAttribute("lat"));
+                                lon = Double.parseDouble(trkptElement.getAttribute("lon"));
 
-                                String textContent;
-                                NodeList nodeList = trkptElement.getElementsByTagName("ele");
-                                if (nodeList.getLength() > 0) {
-                                    textContent = nodeList.item(0).getTextContent();
-                                    ele = Double.parseDouble(textContent);
-                                }
-                                nodeList = trkptElement.getElementsByTagName("time");
-                                if (nodeList.getLength() > 0) {
-                                    textContent = nodeList.item(0).getTextContent();
-                                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
-                                    Date date;
-                                    try {
-                                        date = dateFormat.parse(textContent);
-                                    } catch (ParseException e) {
-                                        dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-                                        date = dateFormat.parse(textContent);
+                                NodeList trkptChild = trkptElement.getElementsByTagName("ele");
+                                ele = this.getDataFromNode(trkptChild);
+
+                                trkptChild = trkptElement.getElementsByTagName("time");
+                                if (trkptChild.getLength() > 0) {
+                                    String content = trkptChild.item(0).getTextContent();
+                                    Date date = null;
+                                    for (SimpleDateFormat pattern : patterns) {
+                                        try {
+                                            date = pattern.parse(content);
+                                            break;
+                                        } catch (ParseException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                     if (date != null) {
                                         time = date.getTime();
                                     }
                                 }
-                                nodeList = trkptElement.getElementsByTagName("speed");
-                                nodeList = nodeList.getLength() == 0 ? trkptElement.getElementsByTagName("gpxtpx:speed") : nodeList;
-                                speed = nodeList.getLength() > 0 ? Double.parseDouble(nodeList.item(0).getTextContent()) : -1;
 
-                                nodeList = trkptElement.getElementsByTagName("course");
-                                nodeList = nodeList.getLength() == 0 ? trkptElement.getElementsByTagName("gpxtpx:course") : nodeList;
-                                course = nodeList.getLength() > 0 ? Double.parseDouble(nodeList.item(0).getTextContent()) : -1;
+                                trkptChild = trkptElement.getElementsByTagName("speed");
+                                trkptChild = trkptChild.getLength() == 0 ? trkptElement.getElementsByTagName("gpxtpx:speed") : trkptChild;
+                                speed = this.getDataFromNode(trkptChild);
+
+                                trkptChild = trkptElement.getElementsByTagName("course");
+                                trkptChild = trkptChild.getLength() == 0 ? trkptElement.getElementsByTagName("gpxtpx:course") : trkptChild;
+                                course = this.getDataFromNode(trkptChild);
                             }
                             Point point = new Point(activityID, pointID++, lat, lon, ele, time, speed, course, -1, -1);
                             points.add(point);
@@ -320,11 +332,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 inputStream.close();
             }
-        } catch (ParserConfigurationException | ParseException | SAXException | IOException e) {
+        } catch (ParserConfigurationException | SAXException | NumberFormatException | IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
         return points;
+    }
+
+    private double getDataFromNode(NodeList nodeList) {
+        if (nodeList.getLength() > 0) {
+            String content = nodeList.item(0).getTextContent();
+            return Double.parseDouble(content);
+        }
+        return -1;
+    }
+
+    //List of Date pattern commonly used in gpx files according ISO_8601
+    //https://en.wikipedia.org/wiki/ISO_8601
+    //https://developer.android.com/reference/kotlin/java/text/SimpleDateFormat
+    private ArrayList<SimpleDateFormat> getDateFormats() {
+        ArrayList<SimpleDateFormat> patterns = new ArrayList<>();
+        patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault()));
+        patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()));
+        patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault()));
+        patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.getDefault()));
+        patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault()));
+        patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault()));
+        patterns.add(new SimpleDateFormat("yyyyMMdd'T'HHmmss'Z'", Locale.getDefault()));
+        patterns.add(new SimpleDateFormat("yyyyMMdd'T'HHmmssZ", Locale.getDefault()));
+        patterns.add(new SimpleDateFormat("yyyyMMdd'T'HHmmssXXX", Locale.getDefault()));
+        return patterns;
     }
 
 
