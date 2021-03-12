@@ -430,8 +430,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         }
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TITLE, routeName + "");
+        intent.setType("application/gpx");
+        intent.putExtra(Intent.EXTRA_TITLE, routeName + ".gpx");
         startActivityForResult(intent, EXPORT_GPX);
     }
 

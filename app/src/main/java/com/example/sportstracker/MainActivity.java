@@ -236,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Activity activity = new Activity(activityType, points.get(0).getTime());
             database.createActivity(activity);
             database.updateActivity(database.getLastActivityID(), 0, points.get(points.size() - 1).getTime(), "");
-            database.updateActivity(database.getLastActivityID(), 0, 0, "From import");
+            database.updateActivity(database.getLastActivityID(), 0, 0, this.getNameFromFile(uri));
 
 //            Runnable runnable = new Runnable() {
 //                @Override
@@ -337,6 +337,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
         return points;
+    }
+
+    private String getNameFromFile(Uri uri) {
+        String routeName = "";
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputStream inputStream = getContentResolver().openInputStream(uri);
+
+            if (inputStream != null) {
+                Document document = builder.parse(inputStream);
+                Element element = document.getDocumentElement();
+                NodeList trkList = element.getElementsByTagName("trk");
+                if (trkList.getLength() > 0) {
+                    Node trkNode = trkList.item(0);
+                    if (trkNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element trkElement = (Element) trkNode;
+                        NodeList nameList = trkElement.getElementsByTagName("name");
+                        if (nameList.getLength() > 0) {
+                            routeName = nameList.item(0).getTextContent();
+                        }
+                    }
+                }
+                inputStream.close();
+            }
+        } catch (ParserConfigurationException | SAXException | NumberFormatException | IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        return routeName;
     }
 
     private double getDataFromNode(NodeList nodeList) {

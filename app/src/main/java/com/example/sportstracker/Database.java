@@ -290,8 +290,8 @@ public class Database extends SQLiteOpenHelper {
      */
     public void deleteActivity(int activityID) {
         String deletePoints = "DELETE FROM " + TABLE_POINT + " WHERE id_activity = " + activityID;
-        String deleteActivity = "DELETE FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + activityID +
-                " AND time_end IS NOT NULL";
+        String deleteActivity = "DELETE FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + activityID;
+               //+ " AND time_end IS NOT NULL";
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(deletePoints);
         db.execSQL(deleteActivity);
