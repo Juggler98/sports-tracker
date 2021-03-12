@@ -126,14 +126,14 @@ public class Database extends SQLiteOpenHelper {
         cv.put("lon", point.getLon());
         cv.put("ele", point.getEle());
         cv.put("time", point.getTime());
-        if (point.getSpeed() != -1) {
+        //if (point.getSpeed() != -1) {
             cv.put("speed", point.getSpeed());
-        }
-        if (point.getCourse() != -1)
+        //}
+        //if (point.getCourse() != -1)
             cv.put("course", point.getCourse());
-        if (point.getHdop() != -1)
+        //if (point.getHdop() != -1)
             cv.put("hdop", point.getHdop());
-        if (point.getVdop() != -1)
+        //if (point.getVdop() != -1)
             cv.put("vdop", point.getVdop());
         if (point.getPaused()) {
             cv.put("paused", point.getPaused());

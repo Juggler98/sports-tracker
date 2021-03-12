@@ -39,7 +39,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -52,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout drawer;
     private static int PICK_GPX_FILE = 1;
+    private Database database;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_dashboard);
         }
 
-        Database database = new Database(MainActivity.this);
+        database = new Database(MainActivity.this);
         database.checkTypes();
 
         Log.d("MAIN_LC", "onCreate");
@@ -216,69 +222,190 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (requestCode == PICK_GPX_FILE && resultCode == RESULT_OK) {
             if (data != null) {
 //                Toast.makeText(this, "" + readTextFromUri(data.getData()), Toast.LENGTH_SHORT).show();
-                readTextFromUri(data.getData());
+                createRoute(data.getData());
             }
         }
     }
 
-    private String readTextFromUri(Uri uri) {
+    private void createRoute(Uri uri) {
         StringBuilder stringBuilder = new StringBuilder();
-        try {
-            InputStream inputStream = getContentResolver().openInputStream(uri);
-//            File gpxFile = new File(uri.getPath());
-            ArrayList<Location> locations = decodeGPX(new File(uri.getPath()));
-            Toast.makeText(this, "" + locations.get(0).getLatitude(), Toast.LENGTH_SHORT).show();
-            if (inputStream != null) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        int activityType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.routeTypePref), "1"));
+
+
+        ArrayList<Point> points = getPointsFromFile(uri);
+        if (points.size() > 0) {
+            Activity activity = new Activity(activityType, points.get(0).getTime());
+            database.createActivity(activity);
+            database.updateActivity(database.getLastActivityID(), 0, points.get(points.size() - 1).getTime(), "");
+            database.updateActivity(database.getLastActivityID(), 0, 0, "From import");
+            for (Point point : points) {
+                database.addPoint(point);
+                //stringBuilder.append(point.getTime()).append("\n");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            Toast.makeText(this, "Import Successful", Toast.LENGTH_LONG).show();
         }
-        return stringBuilder.toString();
+        //Toast.makeText(this, "" + stringBuilder.toString(), Toast.LENGTH_LONG).show();
+        //        return stringBuilder.toString();
     }
 
-    private ArrayList<Location> decodeGPX(File file) {
-        ArrayList<Location> list = new ArrayList<Location>();
+    private ArrayList<Point> getPointsFromFile(Uri uri) {
+        ArrayList<Point> points = new ArrayList<>();
+        int activityID = database.getLastActivityID() + 1;
+        int pointID = database.getLastPointID(activityID) + 1;
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
-            DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-            FileInputStream fileInputStream = new FileInputStream(file);
-            Document document = documentBuilder.parse(fileInputStream);
-            Element elementRoot = document.getDocumentElement();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            InputStream inputStream = getContentResolver().openInputStream(uri);
 
-            NodeList nodelist_trkpt = elementRoot.getElementsByTagName("trkpt");
+            if (inputStream != null) {
+                Document document = builder.parse(inputStream);
+                Toast.makeText(this, "End", Toast.LENGTH_LONG).show();
 
-            for (int i = 0; i < nodelist_trkpt.getLength(); i++) {
+                Element element = document.getDocumentElement();
+                NodeList trksegList = element.getElementsByTagName("trkseg");
+                for (int trkseg = 0; trkseg < trksegList.getLength(); trkseg++) {
+                    if (trkseg > 0) {
+                        points.get((points.size() - 1)).setPaused(true);
+                    }
+                    Node trksegNode = trksegList.item(trkseg);
+                    if (trksegNode.getNodeType() == Node.ELEMENT_NODE) {
+                        Element trksegElement = (Element) trksegNode;
+                        NodeList trkptList = trksegElement.getElementsByTagName("trkpt");
 
-                Node node = nodelist_trkpt.item(i);
-                NamedNodeMap attributes = node.getAttributes();
+                        for (int i = 0; i < trkptList.getLength(); i++) {
+                            double lat = 0;
+                            double lon = 0;
+                            double ele = 0;
+                            double time = 0;
+                            double speed = -1;
+                            double course = -1;
+                            Node trkpt = trkptList.item(i);
+                            if (trkpt.getNodeType() == Node.ELEMENT_NODE) {
+                                Element trkptElement = (Element) trkpt;
+                                String latStr = trkptElement.getAttribute("lat");
+                                String lonStr = trkptElement.getAttribute("lon");
+                                lat = Double.parseDouble(latStr);
+                                lon = Double.parseDouble(lonStr);
 
-                String newLatitude = attributes.getNamedItem("lat").getTextContent();
-                Double newLatitude_double = Double.parseDouble(newLatitude);
+                                String textContent;
+                                NodeList nodeList = trkptElement.getElementsByTagName("ele");
+                                if (nodeList.getLength() > 0) {
+                                    textContent = nodeList.item(0).getTextContent();
+                                    ele = Double.parseDouble(textContent);
+                                }
+                                nodeList = trkptElement.getElementsByTagName("time");
+                                if (nodeList.getLength() > 0) {
+                                    textContent = nodeList.item(0).getTextContent();
+                                    DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+                                    Date date;
+                                    try {
+                                        date = dateFormat.parse(textContent);
+                                    } catch (ParseException e) {
+                                        dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
+                                        date = dateFormat.parse(textContent);
+                                    }
+                                    if (date != null) {
+                                        time = date.getTime();
+                                    }
+                                }
+                                nodeList = trkptElement.getElementsByTagName("speed");
+                                nodeList = nodeList.getLength() == 0 ? trkptElement.getElementsByTagName("gpxtpx:speed") : nodeList;
+                                speed = nodeList.getLength() > 0 ? Double.parseDouble(nodeList.item(0).getTextContent()) : -1;
 
-                String newLongitude = attributes.getNamedItem("lon").getTextContent();
-                Double newLongitude_double = Double.parseDouble(newLongitude);
+                                nodeList = trkptElement.getElementsByTagName("course");
+                                nodeList = nodeList.getLength() == 0 ? trkptElement.getElementsByTagName("gpxtpx:course") : nodeList;
+                                course = nodeList.getLength() > 0 ? Double.parseDouble(nodeList.item(0).getTextContent()) : -1;
 
-                String newLocationName = newLatitude + ":" + newLongitude;
-                Location newLocation = new Location(newLocationName);
-                newLocation.setLatitude(newLatitude_double);
-                newLocation.setLongitude(newLongitude_double);
+//                                if (nodeList.getLength() == 0) {
+//                                    nodeList = trkptElement.getElementsByTagName("gpxtpx:speed");
+//                                }
+//                                if (nodeList.getLength() > 0) {
+//                                    textContent = nodeList.item(0).getTextContent();
+//                                    speed = Double.parseDouble(textContent);
+//                                }
+//                                if (nodeList.getLength() > 0) {
+//                                    textContent = nodeList.item(0).getTextContent();
+//                                    course = Double.parseDouble(textContent);
+//                                }
+//                                nodeList = trkptElement.getElementsByTagName("gpxtpx:course");
+//                                if (nodeList.getLength() > 0) {
+//                                    textContent = nodeList.item(0).getTextContent();
+//                                    course = Double.parseDouble(textContent);
+//                                }
 
-                list.add(newLocation);
+//                        NodeList trkptChild = trkptElement.getChildNodes();
 
+//                        for (int j = 0; j < trkptChild.getLength(); j++) {
+//                            Node trkptNodeChild = trkptChild.item(j);
+//                            if (trkptNodeChild.getNodeType() == Node.ELEMENT_NODE) {
+//                                Element trkptElementChild = (Element) trkptNodeChild;
+//                                String textContent = trkptElementChild.getTextContent();
+//                                if (trkptElementChild.getTagName().equals("ele")) {
+//                                    ele = Double.parseDouble(textContent);
+//                                } else if (trkptElementChild.getTagName().equals("time")) {
+//                                    //time = Double.parseDouble(textContent);
+//                                }
+//                            }
+//                        }
+                            }
+
+
+//                for (int i = 0; i < trkptList.getLength(); i++) {
+//                    Node trkpt = trkptList.item(i);
+//                    if (trkpt.getNodeType() == Node.ELEMENT_NODE) {
+//                        Element trkptElement = (Element) trkpt;
+//                        String latStr = trkptElement.getAttribute("lat");
+//                        String lonStr = trkptElement.getAttribute("lon");
+//                        lat = Double.parseDouble(latStr);
+//                        lon = Double.parseDouble(lonStr);
+
+//                        NodeList trkptChild = trkptElement.getChildNodes();
+//                        for (int j = 0; j < trkptChild.getLength(); j++) {
+//                            Node trkptNodeChild = trkptChild.item(j);
+//                            if (trkptNodeChild.getNodeType() == Node.ELEMENT_NODE) {
+//                                Element trkptElementChild = (Element) trkptNodeChild;
+//                                String textContent = trkptElementChild.getTextContent();
+//                                if (trkptElementChild.getTagName().equals("ele")) {
+//                                    ele = Double.parseDouble(textContent);
+//                                } else if (trkptElementChild.getTagName().equals("time")) {
+//                                    //time = Double.parseDouble(textContent);
+//                                }
+//                            }
+//                        }
+//                    }
+
+
+//                    NamedNodeMap attributes = trkpt.getAttributes();
+
+//                    String newLatitude = attributes.getNamedItem("lat").getTextContent();
+//                    Double newLatitudeDouble = Double.parseDouble(newLatitude);
+
+//                    String newLongitude = attributes.getNamedItem("lon").getTextContent();
+//                    Double newLongitudeDouble = Double.parseDouble(newLongitude);
+
+//                    String newLocationName = newLatitude + ":" + newLongitude;
+//                    Location newLocation = new Location(newLocationName);
+//                    newLocation.setLatitude(newLatitudeDouble);
+//                    newLocation.setLongitude(newLongitudeDouble);
+                            Point point = new Point(activityID, pointID++, lat, lon, ele, time, speed, course, -1, -1);
+                            points.add(point);
+                        }
+                    }
+                }
+                inputStream.close();
             }
-            fileInputStream.close();
-        } catch (ParserConfigurationException | FileNotFoundException | SAXException e) {
+        } catch (ParserConfigurationException | ParseException | SAXException | IOException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "Import Failed", Toast.LENGTH_LONG).show();
         }
-        return list;
+        if (points.size() == 0) {
+            Toast.makeText(this, "Import Failed", Toast.LENGTH_LONG).show();
+        }
+        return points;
     }
 
 

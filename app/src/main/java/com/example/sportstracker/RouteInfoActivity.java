@@ -430,8 +430,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         }
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TITLE, routeName + "");
+        intent.setType("application/gpx");
+        intent.putExtra(Intent.EXTRA_TITLE, routeName + ".gpx");
         startActivityForResult(intent, EXPORT_GPX);
     }
 
@@ -483,8 +483,10 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             fileOutputStream.write(fileEnd.getBytes());
             fileOutputStream.close();
             pfd.close();
+            Toast.makeText(this, "Exported to: " + exportTo.getLastPathSegment(), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
+            Toast.makeText(this, "Export Failed", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -499,7 +501,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     private String getUTC(double time) {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault());
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.sss'Z'", Locale.getDefault());
         Date date = new Date((long) time);
         return format.format(date);
     }
