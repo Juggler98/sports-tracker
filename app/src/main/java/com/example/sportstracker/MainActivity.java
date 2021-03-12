@@ -221,19 +221,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_GPX_FILE && resultCode == RESULT_OK) {
             if (data != null) {
-//                Toast.makeText(this, "" + readTextFromUri(data.getData()), Toast.LENGTH_SHORT).show();
                 createRoute(data.getData());
             }
         }
     }
 
     private void createRoute(Uri uri) {
-        StringBuilder stringBuilder = new StringBuilder();
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int activityType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.routeTypePref), "1"));
 
-
         ArrayList<Point> points = getPointsFromFile(uri);
+
         if (points.size() > 0) {
             Activity activity = new Activity(activityType, points.get(0).getTime());
             database.createActivity(activity);
@@ -241,19 +239,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             database.updateActivity(database.getLastActivityID(), 0, 0, "From import");
             for (Point point : points) {
                 database.addPoint(point);
-                //stringBuilder.append(point.getTime()).append("\n");
             }
             Toast.makeText(this, "Import Successful", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Import Failed", Toast.LENGTH_LONG).show();
         }
-        //Toast.makeText(this, "" + stringBuilder.toString(), Toast.LENGTH_LONG).show();
-        //        return stringBuilder.toString();
     }
 
     private ArrayList<Point> getPointsFromFile(Uri uri) {
         ArrayList<Point> points = new ArrayList<>();
         int activityID = database.getLastActivityID() + 1;
         int pointID = database.getLastPointID(activityID) + 1;
-
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
@@ -262,8 +258,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             if (inputStream != null) {
                 Document document = builder.parse(inputStream);
-                Toast.makeText(this, "End", Toast.LENGTH_LONG).show();
-
                 Element element = document.getDocumentElement();
                 NodeList trksegList = element.getElementsByTagName("trkseg");
                 for (int trkseg = 0; trkseg < trksegList.getLength(); trkseg++) {
@@ -318,78 +312,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 nodeList = trkptElement.getElementsByTagName("course");
                                 nodeList = nodeList.getLength() == 0 ? trkptElement.getElementsByTagName("gpxtpx:course") : nodeList;
                                 course = nodeList.getLength() > 0 ? Double.parseDouble(nodeList.item(0).getTextContent()) : -1;
-
-//                                if (nodeList.getLength() == 0) {
-//                                    nodeList = trkptElement.getElementsByTagName("gpxtpx:speed");
-//                                }
-//                                if (nodeList.getLength() > 0) {
-//                                    textContent = nodeList.item(0).getTextContent();
-//                                    speed = Double.parseDouble(textContent);
-//                                }
-//                                if (nodeList.getLength() > 0) {
-//                                    textContent = nodeList.item(0).getTextContent();
-//                                    course = Double.parseDouble(textContent);
-//                                }
-//                                nodeList = trkptElement.getElementsByTagName("gpxtpx:course");
-//                                if (nodeList.getLength() > 0) {
-//                                    textContent = nodeList.item(0).getTextContent();
-//                                    course = Double.parseDouble(textContent);
-//                                }
-
-//                        NodeList trkptChild = trkptElement.getChildNodes();
-
-//                        for (int j = 0; j < trkptChild.getLength(); j++) {
-//                            Node trkptNodeChild = trkptChild.item(j);
-//                            if (trkptNodeChild.getNodeType() == Node.ELEMENT_NODE) {
-//                                Element trkptElementChild = (Element) trkptNodeChild;
-//                                String textContent = trkptElementChild.getTextContent();
-//                                if (trkptElementChild.getTagName().equals("ele")) {
-//                                    ele = Double.parseDouble(textContent);
-//                                } else if (trkptElementChild.getTagName().equals("time")) {
-//                                    //time = Double.parseDouble(textContent);
-//                                }
-//                            }
-//                        }
                             }
-
-
-//                for (int i = 0; i < trkptList.getLength(); i++) {
-//                    Node trkpt = trkptList.item(i);
-//                    if (trkpt.getNodeType() == Node.ELEMENT_NODE) {
-//                        Element trkptElement = (Element) trkpt;
-//                        String latStr = trkptElement.getAttribute("lat");
-//                        String lonStr = trkptElement.getAttribute("lon");
-//                        lat = Double.parseDouble(latStr);
-//                        lon = Double.parseDouble(lonStr);
-
-//                        NodeList trkptChild = trkptElement.getChildNodes();
-//                        for (int j = 0; j < trkptChild.getLength(); j++) {
-//                            Node trkptNodeChild = trkptChild.item(j);
-//                            if (trkptNodeChild.getNodeType() == Node.ELEMENT_NODE) {
-//                                Element trkptElementChild = (Element) trkptNodeChild;
-//                                String textContent = trkptElementChild.getTextContent();
-//                                if (trkptElementChild.getTagName().equals("ele")) {
-//                                    ele = Double.parseDouble(textContent);
-//                                } else if (trkptElementChild.getTagName().equals("time")) {
-//                                    //time = Double.parseDouble(textContent);
-//                                }
-//                            }
-//                        }
-//                    }
-
-
-//                    NamedNodeMap attributes = trkpt.getAttributes();
-
-//                    String newLatitude = attributes.getNamedItem("lat").getTextContent();
-//                    Double newLatitudeDouble = Double.parseDouble(newLatitude);
-
-//                    String newLongitude = attributes.getNamedItem("lon").getTextContent();
-//                    Double newLongitudeDouble = Double.parseDouble(newLongitude);
-
-//                    String newLocationName = newLatitude + ":" + newLongitude;
-//                    Location newLocation = new Location(newLocationName);
-//                    newLocation.setLatitude(newLatitudeDouble);
-//                    newLocation.setLongitude(newLongitudeDouble);
                             Point point = new Point(activityID, pointID++, lat, lon, ele, time, speed, course, -1, -1);
                             points.add(point);
                         }
@@ -400,10 +323,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } catch (ParserConfigurationException | ParseException | SAXException | IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
-            //Toast.makeText(this, "Import Failed", Toast.LENGTH_LONG).show();
-        }
-        if (points.size() == 0) {
-            Toast.makeText(this, "Import Failed", Toast.LENGTH_LONG).show();
         }
         return points;
     }
