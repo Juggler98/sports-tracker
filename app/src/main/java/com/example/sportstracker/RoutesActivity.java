@@ -1,5 +1,6 @@
 package com.example.sportstracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,7 +22,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-
 
 
 /**
@@ -42,18 +45,25 @@ public class RoutesActivity extends AppCompatActivity {
 
     private int activityOpen;
 
+    SharedPreferences sharedPreferences;
+    private final String SORT_BY = "sortByPref";
+    private final String REVERSE = "reversePref";
+
+    private int sortBy = 0;
+    private boolean reverse = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_routes);
         Log.d("Routes_LC", "onCreate Routes");
 
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
+
         database = new Database(RoutesActivity.this);
         activities = database.getActivities();
 
-        for (Activity activity : activities) {
-            routeItemsList.add(new RouteItem(getIcon(activity.getIdType()), routesMethods.getDate(activity.getTimeStart()), activity.getTitle()));
-        }
+        sortRoutes(activities);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -130,16 +140,17 @@ public class RoutesActivity extends AppCompatActivity {
         int oldSize = activities.size();
         if (isReloadNeeded) {
             activities = database.getActivities();
+            sortRoutes(activities);
             if (activities.size() < oldSize) {
                 routeItemsList.remove(activityOpen);
                 adapter.notifyItemRemoved(activityOpen);
-            } else if (activities.size() > oldSize){
+            } else if (activities.size() > oldSize) {
 //                Activity activity = activities.get(activities.size()-1);
 //                routeItemsList.add(new RouteItem(getIcon(activity.getIdType()), routesMethods.getDate(activity.getTimeStart()), activity.getTitle()));
 //                adapter.notifyItemInserted(routeItemsList.size() - 1 - 5);
             } else {
                 routeItemsList.get(activityOpen).setTitle(activities.get(activityOpen).getTitle());
-                routeItemsList.get(activityOpen).setIcon(getIcon(activities.get(activityOpen).getIdType()));
+                routeItemsList.get(activityOpen).setIcon(routesMethods.getIcon(activities.get(activityOpen).getIdType()));
                 adapter.notifyItemChanged(activityOpen);
 //                Log.d("Routes_LC", "onResume Routes " + activityOpen);
             }
@@ -164,15 +175,22 @@ public class RoutesActivity extends AppCompatActivity {
         Log.d("Routes_LC", "onStop Routes");
     }
 
-    private void loadListView() {
-        arrayListListView.clear();
-        for (int i = 0; i < activities.size(); ++i) {
-            Activity activity = activities.get(i);
-            if (activity.getTitle().equals("")) {
-                arrayListListView.add((i + 1) + ". " + routesMethods.getDate(activity.getTimeStart()));
-            } else {
-                arrayListListView.add((i + 1) + ". " + activity.getTitle());
-            }
+//    private void loadListView() {
+//        arrayListListView.clear();
+//        for (int i = 0; i < activities.size(); ++i) {
+//            Activity activity = activities.get(i);
+//            if (activity.getTitle().equals("")) {
+//                arrayListListView.add((i + 1) + ". " + routesMethods.getDate(activity.getTimeStart()));
+//            } else {
+//                arrayListListView.add((i + 1) + ". " + activity.getTitle());
+//            }
+//        }
+//    }
+
+    private void reloadRouteItemsList() {
+        routeItemsList.clear();
+        for (Activity activity : activities) {
+            routeItemsList.add(new RouteItem(routesMethods.getIcon(activity.getIdType()), routesMethods.getDate(activity.getTimeStart()), activity.getTitle()));
         }
     }
 
@@ -182,24 +200,90 @@ public class RoutesActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private int getIcon(int type) {
-        switch (type) {
-            case 1:
-                return R.drawable.ic_hike;
-            case 2:
-                return R.drawable.ic_bike;
-            case 3:
-                return R.drawable.ic_run;
-            case 4:
-                return R.drawable.ic_swim;
-            case 5:
-                return R.drawable.ic_ski;
-            case 6:
-                return R.drawable.ic_walk;
-            case 7:
-                return R.drawable.ic_skate;
-            default:
-                return R.drawable.ic_hike;
+    private void sortRoutes(ArrayList<Activity> sortingList) {
+        sortBy = sharedPreferences.getInt(SORT_BY, 0);
+        reverse = sharedPreferences.getBoolean(REVERSE, false);
+        if (sortBy == 0) {
+            if (reverse) {
+                for (int i = 1; i < sortingList.size() - 1; i++) {
+                    Activity current = sortingList.get(i);
+                    int j = i - 1;
+                    while ((j > -1) && (sortingList.get(j).getTimeStart() < current.getTimeStart())) {
+                        sortingList.set(j + 1, sortingList.get(j));
+                        j--;
+                    }
+                    sortingList.set(j + 1, current);
+                }
+            } else {
+                for (int i = 1; i < sortingList.size() - 1; i++) {
+                    Activity current = sortingList.get(i);
+                    int j = i - 1;
+                    while ((j > -1) && (sortingList.get(j).getTimeStart() > current.getTimeStart())) {
+                        sortingList.set(j + 1, sortingList.get(j));
+                        j--;
+                    }
+                    sortingList.set(j + 1, current);
+                }
+            }
+        } else {
+            if (reverse) {
+                for (int i = 1; i < sortingList.size() - 1; i++) {
+                    Activity current = sortingList.get(i);
+                    int j = i - 1;
+                    while ((j > -1) && (sortingList.get(j).getIdType() < current.getIdType())) {
+                        sortingList.set(j + 1, sortingList.get(j));
+                        j--;
+                    }
+                    sortingList.set(j + 1, current);
+                }
+            } else {
+                for (int i = 1; i < sortingList.size() - 1; i++) {
+                    Activity current = sortingList.get(i);
+                    int j = i - 1;
+                    while ((j > -1) && (sortingList.get(j).getIdType() > current.getIdType())) {
+                        sortingList.set(j + 1, sortingList.get(j));
+                        j--;
+                    }
+                    sortingList.set(j + 1, current);
+                }
+            }
         }
+        reloadRouteItemsList();
+        if (adapter != null && !sharedPreferences.getBoolean(getString(R.string.reloadPref), false))
+            adapter.notifyDataSetChanged();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.routes_menu, menu);
+        if (sortBy == 0) {
+            menu.findItem(R.id.sortDate).setChecked(true);
+        } else {
+            menu.findItem(R.id.sortType).setChecked(true);
+        }
+        menu.getItem(1).setChecked(reverse);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        item.setChecked(!item.isChecked());
+        switch (item.getItemId()) {
+            case R.id.sortDate:
+                editor.putInt(SORT_BY, 0);
+                break;
+            case R.id.sortType:
+                editor.putInt(SORT_BY, 1);
+                break;
+            case R.id.sortReverse:
+                editor.putBoolean(REVERSE, item.isChecked());
+                break;
+        }
+        editor.apply();
+        this.sortRoutes(activities);
+        return super.onOptionsItemSelected(item);
+    }
+
 }

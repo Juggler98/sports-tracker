@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:title="Sort by">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/sortDate"
+                    android:title="Date" />
+                <item
+                    android:id="@+id/sortType"
+                    android:title="Type" />
+            </group>
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/sortReverse"
+        android:checkable="true"
+        android:title="Reverse order" />
+
+</menu>
