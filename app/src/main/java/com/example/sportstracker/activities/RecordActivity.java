@@ -20,7 +20,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.sportstracker.fragments.DashboardFragment;
 import com.example.sportstracker.data.Database;
 import com.example.sportstracker.data.Point;
 import com.example.sportstracker.R;
@@ -60,7 +59,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private BroadcastReceiver broadcastReceiver;
     private SharedPreferences sharedPreferences;
-    private SharedPreferences defaultSharedPreferences;
 
     private final String FIRST_START = "start";
     private final String LAT = "lat";
@@ -117,7 +115,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         database = new Database(RecordActivity.this);
 
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
-        defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         routeID = sharedPreferences.getInt(getString(R.string.routeNamePref), 0);
 
         delayMillis = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.timeIntervalPref),"4")) * 1000;
