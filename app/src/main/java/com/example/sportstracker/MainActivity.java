@@ -380,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void run() {
                     loadingDialog.startLoadingDialog();
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
                 }
             });
             for (Point point : points) {
