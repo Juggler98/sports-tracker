@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
-import android.widget.Toast;
-
 
 /**
  *  Broadcast receiver to receive if button stop was clicked on notification.
@@ -16,8 +14,8 @@ public class NotificationReceiver extends BroadcastReceiver {
     /**
      * If stop was clicked Service GPS is stopped.
      *
-     * @param context
-     * @param intent
+     * @param context application context
+     * @param intent application intent
      */
     @Override
     public void onReceive(Context context, Intent intent) {
