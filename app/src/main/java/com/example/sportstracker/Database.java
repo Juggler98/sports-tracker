@@ -11,8 +11,6 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-import static java.lang.Math.round;
-
 public class Database extends SQLiteOpenHelper {
 
     private static final String TABLE_TYPE = "type_activity";
@@ -82,7 +80,7 @@ public class Database extends SQLiteOpenHelper {
         //db.execSQL("ALTER TABLE " + TABLE_POINT + " ADD COLUMN paused INTEGER;");
     }
 
-    public boolean addTypes(String type) {
+    private boolean addTypes(String type) {
         Log.d("DB_LC", "DB_ADD_TYPES");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -112,7 +110,7 @@ public class Database extends SQLiteOpenHelper {
         return insert != -1;
     }
 
-    public boolean addPoint(Point point) {
+    public void addPoint(Point point) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -134,15 +132,8 @@ public class Database extends SQLiteOpenHelper {
         if (point.getPaused()) {
             cv.put("paused", point.getPaused());
         }
-        long insert = db.insert(TABLE_POINT, null, cv);
+        db.insert(TABLE_POINT, null, cv);
         db.close();
-
-        if (insert == -1) {
-            return false;
-        } else {
-            Log.d("DB_LC", "DB_Add_Point");
-            return true;
-        }
     }
 
 
