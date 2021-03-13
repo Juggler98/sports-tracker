@@ -12,7 +12,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.example.sportstracker.data.Database;
 import com.example.sportstracker.R;
@@ -23,7 +22,6 @@ import com.example.sportstracker.RoutesMethods;
 
 import java.util.ArrayList;
 
-
 /**
  * This activity show all recorder routes. Click for more detail and long click for delete activity.
  */
@@ -32,23 +30,19 @@ public class RoutesActivity extends AppCompatActivity {
     private RoutesMethods routesMethods = new RoutesMethods();
     private Database database;
 
-    private ListView listView;
-
-    private ArrayList<String> arrayListListView = new ArrayList<>();
-    private ArrayList<Route> activities = new ArrayList<>();
-
-    private RecyclerView recyclerView;
-    private RouteAdapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
+    //private ListView listView;
+    //private ArrayList<String> arrayListListView = new ArrayList<>();
 
     private ArrayList<RouteItem> routeItemsList = new ArrayList<>();
+    private ArrayList<Route> activities = new ArrayList<>();
 
-    private int activityOpen;
+    private RouteAdapter adapter;
 
-    SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
     private final String SORT_BY = "sortByPref";
     private final String REVERSE = "reversePref";
 
+    private int activityOpen;
     private int sortBy = 0;
     private boolean reverse = false;
 
@@ -65,9 +59,9 @@ public class RoutesActivity extends AppCompatActivity {
 
         sortRoutes(activities);
 
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         adapter = new RouteAdapter(routeItemsList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -121,8 +115,8 @@ public class RoutesActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-        Log.d("Routes_LC", "onStart Routes");
         super.onStart();
+        Log.d("Routes_LC", "onStart Routes");
     }
 
     @Override

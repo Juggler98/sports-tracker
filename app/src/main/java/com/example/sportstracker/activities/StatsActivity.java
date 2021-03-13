@@ -14,7 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.example.sportstracker.data.Database;
 import com.example.sportstracker.dialogs.LoadingDialog;
@@ -23,23 +22,18 @@ import com.example.sportstracker.RoutesMethods;
 import com.example.sportstracker.adapters.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
-import static java.lang.Math.round;
-
 /**
  * Activity for showing global stats.
  */
 public class StatsActivity extends AppCompatActivity {
 
     private RoutesMethods routesMethods = new RoutesMethods();
-    private Database database;
 
+    private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
     private LoadingDialog loadingDialog;
-
-    private SectionsPagerAdapter sectionsPagerAdapter;
-
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -48,18 +42,13 @@ public class StatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
+        Database database = new Database(this);
 
-        loadingDialog = new LoadingDialog(StatsActivity.this, false);
         //loadingDialog.startLoadingDialog();
 
-
-        database = new Database(this);
-
         viewPager = findViewById(R.id.viewPager);
-        tabLayout = findViewById(R.id.tabLayout);
-
         viewPager.setOffscreenPageLimit(7);
-
+        tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 0);
@@ -71,7 +60,9 @@ public class StatsActivity extends AppCompatActivity {
                 sectionsPagerAdapter.addPage("All");
         }
 
+        loadingDialog = new LoadingDialog(StatsActivity.this, false);
         loadingDialog.startLoadingDialog();
+
         Handler handler = new Handler();
         handler.post(new Runnable() {
             @Override
@@ -83,12 +74,15 @@ public class StatsActivity extends AppCompatActivity {
                 viewPager.setAdapter(sectionsPagerAdapter);
                 for (int i = 0; i < 8; i++) {
                     TabLayout.Tab tab = tabLayout.getTabAt(i);
-                    if (i < 7)
-                        tab.setIcon(routesMethods.getIcon(i + 1));
-                    else
-                        tab.setIcon(R.drawable.ic_all);
+                    if (tab != null) {
+                        if (i < 7)
+                            tab.setIcon(routesMethods.getIcon(i + 1));
+                        else
+                            tab.setIcon(R.drawable.ic_all);
 //                      tab.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
-                    tab.getIcon().setTint(getColor(R.color.colorIcon));
+                        if (tab.getIcon() != null)
+                            tab.getIcon().setTint(getColor(R.color.colorIcon));
+                    }
                 }
                 loadingDialog.dismissDialog();
                 //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
@@ -127,38 +121,38 @@ public class StatsActivity extends AppCompatActivity {
 //        //loadingDialog.dismissDialog();
 //    }
 
-    private class ImportRunnable implements Runnable {
-        private SectionsPagerAdapter sectionsPagerAdapter;
-
-        ImportRunnable(SectionsPagerAdapter sectionsPagerAdapter) {
-            this.sectionsPagerAdapter = sectionsPagerAdapter;
-        }
-
-        @Override
-        public void run() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    //loadingDialog.startLoadingDialog();
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-                }
-            });
-            viewPager.post(new Runnable() {
-                @Override
-                public void run() {
-                    viewPager.setAdapter(sectionsPagerAdapter);
-                }
-            });
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    loadingDialog.dismissDialog();
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                    Toast.makeText(getApplicationContext(), "Load Successful: ", Toast.LENGTH_LONG).show();
-                }
-            });
-        }
-    }
+//    private class ImportRunnable implements Runnable {
+//        private SectionsPagerAdapter sectionsPagerAdapter;
+//
+//        ImportRunnable(SectionsPagerAdapter sectionsPagerAdapter) {
+//            this.sectionsPagerAdapter = sectionsPagerAdapter;
+//        }
+//
+//        @Override
+//        public void run() {
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    //loadingDialog.startLoadingDialog();
+//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+//                }
+//            });
+//            viewPager.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    viewPager.setAdapter(sectionsPagerAdapter);
+//                }
+//            });
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    loadingDialog.dismissDialog();
+//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+//                    Toast.makeText(getApplicationContext(), "Load Successful: ", Toast.LENGTH_LONG).show();
+//                }
+//            });
+//        }
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

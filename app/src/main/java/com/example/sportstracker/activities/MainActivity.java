@@ -57,31 +57,25 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private DrawerLayout drawer;
     private static int PICK_GPX_FILE = 1;
+    private DrawerLayout drawer;
     private Database database;
-    //private ArrayList<Point> importPoints;
-    private volatile LoadingDialog loadingDialog;
 
-    private volatile boolean isImporting;
-    private SharedPreferences sharedPreferences;
-    private final String IMPORTING = "isImporting";
+    private volatile LoadingDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("MAIN_LC", "onCreate");
         setContentView(R.layout.activity_main);
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
-
-        try {
+        if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(getString(R.string.title_activity_main));
-        } catch (Exception e) {
-            Log.d("MAIN_LC", "Cannot set Title of Action Bar");
-        }
+
+        database = new Database(MainActivity.this);
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
@@ -98,28 +92,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.setCheckedItem(R.id.nav_dashboard);
         }
 
-        database = new Database(MainActivity.this);
-
-        Log.d("MAIN_LC", "onCreate");
-
         // permit start app only with getting GPS permission
         permission();
 
         loadingDialog = new LoadingDialog(MainActivity.this, false);
         loadingDialog.setText("Importing...");
-        //sharedPreferences.getBoolean(IMPORTING, false)
-        //Toast.makeText(this, "isImporting: " + isImporting, Toast.LENGTH_SHORT).show();
-
-//        Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (isImporting) {
-//                    loadingDialog.startLoadingDialog();
-//                }
-//            }
-//        }, 5000);
-
     }
 
     @Override
@@ -139,10 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 2:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 break;
-            default:
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
-
     }
 
     @Override
@@ -156,12 +130,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Log.d("Main_LC", "NavigationBar clicked");
         switch (item.getItemId()) {
             case R.id.nav_dashboard:
-                getSupportActionBar().setTitle("Dashboard");
+                if (getSupportActionBar() != null)
+                    getSupportActionBar().setTitle("Dashboard");
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new DashboardFragment()).commit();
                 break;
             case R.id.nav_map:
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    getSupportActionBar().setTitle("Map");
+                    if (getSupportActionBar() != null)
+                        getSupportActionBar().setTitle("Map");
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new MapFragment()).commit();
                 }
                 break;
@@ -198,11 +174,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     /**
-     * Check if user permit GPS access. If yes, app will continue and he can start recording  and if not app is closed.
+     * Check if user permit GPS access. If yes, app will continue and he can start recording and if not app is closed.
      *
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
+     * @param requestCode  requestCode
+     * @param permissions  permissions
+     * @param grantResults grantResults
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -260,8 +236,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int activityType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.routeTypePref), "1"));
 
-        final ArrayList<Point> points = getPointsFromFile(uri);
-//        importPoints = getPointsFromFile(uri);
+        ArrayList<Point> points = getPointsFromFile(uri);
 
         if (points.size() > 0) {
             Route route = new Route(activityType, points.get(0).getTime());
@@ -269,98 +244,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             database.updateActivity(database.getLastActivityID(), 0, points.get(points.size() - 1).getTime(), "");
             database.updateActivity(database.getLastActivityID(), 0, 0, this.getNameFromFile(uri));
 
-            /*for (Point point : points) {
-                database.addPoint(point);
-            }/*
-
-            /*Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    for (Point point : points) {
-                        database.addPoint(point);
-                    }
-                }
-            };*/
-
-
-
+            //Import is running in new Thread
             ImportRunnable runnable = new ImportRunnable(points);
             new Thread(runnable).start();
 
-//            ImportThreads thread = new ImportThreads(points);
-//            thread.start();
-
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            loadingDialog.startLoadingDialog();
-//                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-//                        }
-//                    });
-//                    for (Point point : points) {
-//                        database.addPoint(point);
-//                    }
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            loadingDialog.dismissDialog();
-//                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-//                            Toast.makeText(getApplicationContext(), "Import Successful: " + points.size(), Toast.LENGTH_LONG).show();
-//                        }
-//                    });
-//                }
-//            }).start();
-
-
-            /*Thread thread = new Thread(runnable);
-            thread.start();*/
-
-            /*ImportService importService = new ImportService(points);
-            ServiceImport serviceImport = new ServiceImport(points);
-            Intent intent = new Intent(MainActivity.this, serviceImport.getClass());
-            this.startService(intent);*/
-
-            /*ImportService importService = new ImportService();
-            Intent intent = new Intent(MainActivity.this, importService.getClass());
-            intent.putExtra(getString(R.string.intentExtra), 5);
-            this.startService(intent);*/
-
-            //Toast.makeText(this, "Import Successful", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Import Failed", Toast.LENGTH_LONG).show();
-        }
-    }
-
-    private class ImportThreads extends Thread {
-        private ArrayList<Point> points;
-
-        ImportThreads(ArrayList<Point> points) {
-            this.points = points;
-        }
-
-        @Override
-        public void run() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    loadingDialog.startLoadingDialog();
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-                }
-            });
-            for (Point point : points) {
-                database.addPoint(point);
-            }
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    loadingDialog.dismissDialog();
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                    Toast.makeText(getApplicationContext(), "Import Successful: " + points.size(), Toast.LENGTH_LONG).show();
-                }
-            });
         }
     }
 
@@ -393,33 +282,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             });
         }
     }
-
-//    public class ImportService extends Service {
-//
-//        @Override
-//        public void onCreate() {
-//            super.onCreate();
-//        }
-//
-//        @Override
-//        public int onStartCommand(Intent intent, int flags, int startId) {
-//            Log.d("LC_ImportService", "On Start Command");
-//            for (Point point : importPoints) {
-//                database.addPoint(point);
-//            }
-//            Toast.makeText(this, "Done: " + importPoints.size(), Toast.LENGTH_SHORT).show();
-//            stopSelf();
-//            return START_NOT_STICKY;
-//        }
-//
-//        @Nullable
-//        @Override
-//        public IBinder onBind(Intent intent) {
-//            return null;
-//        }
-//    }
-
-
 
     private ArrayList<Point> getPointsFromFile(Uri uri) {
         ArrayList<Point> points = new ArrayList<>();

@@ -451,33 +451,36 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                 "</gpx>";
         try {
             ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(exportTo, "w");
-            FileOutputStream fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
-            fileOutputStream.write(header.getBytes());
-            fileOutputStream.write(metadata.getBytes());
-            fileOutputStream.write(trk.getBytes());
-            for (Point point : points) {
-                String trkpt = "<trkpt lat=\"" + point.getLat() + "\" lon=\"" + point.getLon() + "\">\n";
-                String ele = "\t<ele>" + point.getEle() + "</ele>\n";
-                String time = "\t<time>" + this.getUTC(point.getTime()) + "</time>\n";
-                String speed = "\t<speed>" + round(point.getSpeed() * 100) / 100.0 + "</speed>\n";
-                String course = "\t<course>" + round(point.getCourse() * 10) / 10.0 + "</course>\n";
-                fileOutputStream.write(trkpt.getBytes());
-                fileOutputStream.write(ele.getBytes());
-                fileOutputStream.write(time.getBytes());
-                if (point.getSpeed() > 0)
-                    fileOutputStream.write(speed.getBytes());
-                if (point.getCourse() >= 0) {
-                    fileOutputStream.write(course.getBytes());
+            FileOutputStream fileOutputStream;
+            if (pfd != null) {
+                fileOutputStream = new FileOutputStream(pfd.getFileDescriptor());
+                fileOutputStream.write(header.getBytes());
+                fileOutputStream.write(metadata.getBytes());
+                fileOutputStream.write(trk.getBytes());
+                for (Point point : points) {
+                    String trkpt = "<trkpt lat=\"" + point.getLat() + "\" lon=\"" + point.getLon() + "\">\n";
+                    String ele = "\t<ele>" + point.getEle() + "</ele>\n";
+                    String time = "\t<time>" + this.getUTC(point.getTime()) + "</time>\n";
+                    String speed = "\t<speed>" + round(point.getSpeed() * 100) / 100.0 + "</speed>\n";
+                    String course = "\t<course>" + round(point.getCourse() * 10) / 10.0 + "</course>\n";
+                    fileOutputStream.write(trkpt.getBytes());
+                    fileOutputStream.write(ele.getBytes());
+                    fileOutputStream.write(time.getBytes());
+                    if (point.getSpeed() > 0)
+                        fileOutputStream.write(speed.getBytes());
+                    if (point.getCourse() >= 0) {
+                        fileOutputStream.write(course.getBytes());
+                    }
+                    fileOutputStream.write("</trkpt>\n".getBytes());
+                    if (point.getPaused()) {
+                        fileOutputStream.write("</trkseg>\n<trkseg>\n".getBytes());
+                    }
                 }
-                fileOutputStream.write("</trkpt>\n".getBytes());
-                if (point.getPaused()) {
-                    fileOutputStream.write("</trkseg>\n<trkseg>\n".getBytes());
-                }
+                fileOutputStream.write(fileEnd.getBytes());
+                fileOutputStream.close();
+                pfd.close();
+                Toast.makeText(this, "Exported to: " + exportTo.getLastPathSegment(), Toast.LENGTH_LONG).show();
             }
-            fileOutputStream.write(fileEnd.getBytes());
-            fileOutputStream.close();
-            pfd.close();
-            Toast.makeText(this, "Exported to: " + exportTo.getLastPathSegment(), Toast.LENGTH_LONG).show();
         } catch (NullPointerException | IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "Export Failed", Toast.LENGTH_LONG).show();

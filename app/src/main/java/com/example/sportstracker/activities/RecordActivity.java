@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 
-
 /**
  * Show mapView with actual tracking progress.
  */
@@ -281,14 +280,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         super.onPause();
     }
 
-    public void openFragment(View v) {
-        DashboardFragment fragment = new DashboardFragment();
-        fragment.setEnterTransition(android.R.transition.slide_bottom);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.container, fragment)
-                .commit();
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -330,7 +321,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
     /**
      * Create map and every time is location changed is written polyline on the map.
      *
-     * @param googleMap
+     * @param googleMap googleMap
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -354,8 +345,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             case 3:
                 gMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
                 break;
-            default:
-                gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
 
         // move camera to restored position
@@ -375,7 +364,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     String latLon = intent.getStringExtra(getString(R.string.intentExtra));
-                    String[] tokens = latLon.split(",");
+                    String[] tokens = latLon != null ? latLon.split(",") : new String[0];
                     double lat = Double.parseDouble(tokens[0]);
                     double lon = Double.parseDouble(tokens[1]);
                     LatLng latlng = new LatLng(lat, lon);
