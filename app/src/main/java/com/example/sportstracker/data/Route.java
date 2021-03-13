@@ -1,5 +1,7 @@
 package com.example.sportstracker.data;
 
+import androidx.annotation.NonNull;
+
 public class Route {
 
     private int id;
@@ -17,6 +19,7 @@ public class Route {
     public Route() {
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Activity{" +

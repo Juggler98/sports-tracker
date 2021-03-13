@@ -47,7 +47,6 @@ public class ServiceGPS extends Service {
     private SharedPreferences defaultSharedPreferences;
 
 
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -85,8 +84,8 @@ public class ServiceGPS extends Service {
                 point.setPaused(true);
                 database.setPause(routeID, database.getLastPointID(routeID));
             } else {
-                int minHorizontal = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.horizontalPref),"20"));
-                int minVertical = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.verticalPref),"15"));
+                int minHorizontal = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.horizontalPref), "20"));
+                int minVertical = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.verticalPref), "15"));
 
                 minHorizontal = max(minHorizontal, 4);
                 minVertical = max(minVertical, 4);
@@ -103,11 +102,11 @@ public class ServiceGPS extends Service {
             // when location is changed notification is updated
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notification.setContentText(Math.round(routesMethods.getDistance(database.getPoints(routeID)) / 10) / 100.0 + " km ");
-            notificationManager.notify(1, notification.build());
+            if (notificationManager != null)
+                notificationManager.notify(1, notification.build());
 
             Log.d("GPS_LC", "Write Location to: " + routeID);
         }
-
 
 
         //this method is deprecated in API level 29. This callback will never be invoked on Android Q and above.
@@ -179,11 +178,11 @@ public class ServiceGPS extends Service {
         Log.d("GPS_LC", "Creating new Route: " + routeID);
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 
-        int minDistance = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.distanceIntervalPref),"10"));
-        int minTime = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.timeIntervalPref),"4")) * 1000;
+        int minDistance = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.distanceIntervalPref), "10"));
+        int minTime = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.timeIntervalPref), "4")) * 1000;
 
         minDistance = min(minDistance, 50);
-        minTime = min(minTime, 30*1000);
+        minTime = min(minTime, 30 * 1000);
 
         minDistance = max(minDistance, 5);
         minTime = max(minTime, 1000);

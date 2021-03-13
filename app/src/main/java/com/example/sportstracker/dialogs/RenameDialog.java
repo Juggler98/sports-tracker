@@ -1,5 +1,6 @@
 package com.example.sportstracker.dialogs;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
@@ -32,6 +33,7 @@ public class RenameDialog extends AppCompatDialogFragment {
      */
     @NonNull
     @Override
+    @SuppressLint("InflateParams")
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         Activity activity = requireActivity();
 

@@ -1,5 +1,7 @@
 package com.example.sportstracker.data;
 
+import androidx.annotation.NonNull;
+
 public class Point {
 
     private int id;
@@ -32,6 +34,7 @@ public class Point {
     public Point() {
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Point{" +

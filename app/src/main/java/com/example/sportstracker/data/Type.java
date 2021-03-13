@@ -1,5 +1,7 @@
 package com.example.sportstracker.data;
 
+import androidx.annotation.NonNull;
+
 public class Type {
 
     private int id;
@@ -13,6 +15,7 @@ public class Type {
     public Type() {
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Type{" +

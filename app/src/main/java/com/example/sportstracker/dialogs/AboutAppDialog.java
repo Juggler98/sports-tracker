@@ -16,7 +16,7 @@ public class AboutAppDialog extends AppCompatDialogFragment {
 
     /**
      * Creates Dialog about app
-     * @param savedInstanceState
+     * @param savedInstanceState savedInstanceState
      * @return AlertDialog
      */
     @NonNull
