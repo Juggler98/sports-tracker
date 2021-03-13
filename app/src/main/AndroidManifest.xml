@@ -54,6 +54,7 @@
         </activity>
         <receiver android:name=".NotificationReceiver" />
         <service android:name=".ServiceGPS" />
+
     </application>
 
 </manifest>

@@ -12,6 +12,7 @@ import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,6 +20,8 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private static int PICK_GPX_FILE = 1;
     private Database database;
+    private ArrayList<Point> importPoints;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +95,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         database = new Database(MainActivity.this);
-        database.checkTypes();
 
         Log.d("MAIN_LC", "onCreate");
 
@@ -230,35 +233,117 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int activityType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.routeTypePref), "1"));
 
-        final ArrayList<Point> points = getPointsFromFile(uri);
+//        final ArrayList<Point> points = getPointsFromFile(uri);
+        importPoints = getPointsFromFile(uri);
 
-        if (points.size() > 0) {
-            Activity activity = new Activity(activityType, points.get(0).getTime());
+        if (importPoints.size() > 0) {
+            Activity activity = new Activity(activityType, importPoints.get(0).getTime());
             database.createActivity(activity);
-            database.updateActivity(database.getLastActivityID(), 0, points.get(points.size() - 1).getTime(), "");
+            database.updateActivity(database.getLastActivityID(), 0, importPoints.get(importPoints.size() - 1).getTime(), "");
             database.updateActivity(database.getLastActivityID(), 0, 0, this.getNameFromFile(uri));
 
-//            Runnable runnable = new Runnable() {
-//                @Override
-//                public void run() {
-//                    for (Point point : points) {
-//                        database.addPoint(point);
-//                    }
-//                }
-//            };
-
-            for (Point point : points) {
+            /*for (Point point : points) {
                 database.addPoint(point);
-            }
+            }/*
 
-//            Thread thread = new Thread(runnable);
-//            thread.start();
+            /*Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    for (Point point : points) {
+                        database.addPoint(point);
+                    }
+                }
+            };*/
 
-            Toast.makeText(this, "Import Successful", Toast.LENGTH_LONG).show();
+
+
+            /*ImportThread runnable = new ImportThread(points);
+            new Thread(runnable).start();*/
+
+            ImportThreads thread = new ImportThreads(importPoints);
+            thread.start();
+
+            /*Thread thread = new Thread(runnable);
+            thread.start();*/
+
+            /*ImportService importService = new ImportService(points);
+            ServiceImport serviceImport = new ServiceImport(points);
+            Intent intent = new Intent(MainActivity.this, serviceImport.getClass());
+            this.startService(intent);*/
+
+            /*ImportService importService = new ImportService();
+            Intent intent = new Intent(MainActivity.this, importService.getClass());
+            intent.putExtra(getString(R.string.intentExtra), 5);
+            this.startService(intent);*/
+
+            //Toast.makeText(this, "Import Successful", Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "Import Failed", Toast.LENGTH_LONG).show();
         }
     }
+
+    public class ImportThreads extends Thread {
+        private ArrayList<Point> points;
+
+        ImportThreads(ArrayList<Point> points) {
+            this.points = points;
+        }
+
+        @Override
+        public void run() {
+            for (Point point : points) {
+                database.addPoint(point);
+            }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Import Successful", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    private class ImportThread implements Runnable {
+        private ArrayList<Point> points;
+
+        ImportThread(ArrayList<Point> points) {
+            this.points = points;
+        }
+
+        @Override
+        public void run() {
+            for (Point point : points) {
+                database.addPoint(point);
+            }
+        }
+    }
+
+//    public class ImportService extends Service {
+//
+//        @Override
+//        public void onCreate() {
+//            super.onCreate();
+//        }
+//
+//        @Override
+//        public int onStartCommand(Intent intent, int flags, int startId) {
+//            Log.d("LC_ImportService", "On Start Command");
+//            for (Point point : importPoints) {
+//                database.addPoint(point);
+//            }
+//            Toast.makeText(this, "Done: " + importPoints.size(), Toast.LENGTH_SHORT).show();
+//            stopSelf();
+//            return START_NOT_STICKY;
+//        }
+//
+//        @Nullable
+//        @Override
+//        public IBinder onBind(Intent intent) {
+//            return null;
+//        }
+//    }
+
+
 
     private ArrayList<Point> getPointsFromFile(Uri uri) {
         ArrayList<Point> points = new ArrayList<>();
@@ -382,8 +467,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //https://developer.android.com/reference/kotlin/java/text/SimpleDateFormat
     private ArrayList<SimpleDateFormat> getDateFormats() {
         ArrayList<SimpleDateFormat> patterns = new ArrayList<>();
-        patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault()));
         patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault()));
+        patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault()));
         patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.getDefault()));
         patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX", Locale.getDefault()));
         patterns.add(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ", Locale.getDefault()));

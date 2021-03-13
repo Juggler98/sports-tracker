@@ -60,6 +60,13 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL(createTableActivity);
         db.execSQL(createTablePoint);
 
+        this.addTypes("Hike");
+        this.addTypes("Bike");
+        this.addTypes("Run");
+        this.addTypes("Swim");
+        this.addTypes("Ski");
+        this.addTypes("Walk");
+        this.addTypes("Skate");
     }
 
     @Override
@@ -74,7 +81,7 @@ public class Database extends SQLiteOpenHelper {
 //        db.execSQL("ALTER TABLE " + TABLE_POINT + " CHANGE TO hacc;");
 
         //db.execSQL("ALTER TABLE " + TABLE_ACTIVITY + " ADD COLUMN auto_pause INTEGER;");
-       //db.execSQL("ALTER TABLE " + TABLE_POINT + " ADD COLUMN paused INTEGER;");
+        //db.execSQL("ALTER TABLE " + TABLE_POINT + " ADD COLUMN paused INTEGER;");
     }
 
     public boolean addTypes(String type) {
@@ -86,11 +93,7 @@ public class Database extends SQLiteOpenHelper {
         long insert = db.insert(TABLE_TYPE, null, cv);
         db.close();
 
-        if (insert == -1) {
-            return false;
-        } else {
-            return true;
-        }
+        return insert != -1;
     }
 
     public boolean createActivity(Activity activity) {
@@ -108,12 +111,7 @@ public class Database extends SQLiteOpenHelper {
         long insert = db.insert(TABLE_ACTIVITY, null, cv);
         db.close();
 
-        if (insert == -1) {
-            return false;
-        } else {
-            Log.d("DB_LC", "DB_ADD_Activity_Succes");
-            return true;
-        }
+        return insert != -1;
     }
 
     public boolean addPoint(Point point) {
@@ -127,14 +125,14 @@ public class Database extends SQLiteOpenHelper {
         cv.put("ele", point.getEle());
         cv.put("time", point.getTime());
         //if (point.getSpeed() != -1) {
-            cv.put("speed", point.getSpeed());
+        cv.put("speed", point.getSpeed());
         //}
         //if (point.getCourse() != -1)
-            cv.put("course", point.getCourse());
+        cv.put("course", point.getCourse());
         //if (point.getHdop() != -1)
-            cv.put("hdop", point.getHdop());
+        cv.put("hdop", point.getHdop());
         //if (point.getVdop() != -1)
-            cv.put("vdop", point.getVdop());
+        cv.put("vdop", point.getVdop());
         if (point.getPaused()) {
             cv.put("paused", point.getPaused());
         }
@@ -150,22 +148,22 @@ public class Database extends SQLiteOpenHelper {
     }
 
 
-    public void checkTypes() {
-        String queryString = "SELECT * FROM " + TABLE_TYPE;
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery(queryString, null);
-        if (!cursor.moveToFirst()) {
-            this.addTypes("Hike");
-            this.addTypes("Bike");
-            this.addTypes("Run");
-            this.addTypes("Swim");
-            this.addTypes("Ski");
-            this.addTypes("Walk");
-            this.addTypes("Skate");
-        }
-        cursor.close();
-        db.close();
-    }
+//    public void checkTypes() {
+//        String queryString = "SELECT * FROM " + TABLE_TYPE;
+//        SQLiteDatabase db = getReadableDatabase();
+//        Cursor cursor = db.rawQuery(queryString, null);
+//        if (!cursor.moveToFirst()) {
+//            this.addTypes("Hike");
+//            this.addTypes("Bike");
+//            this.addTypes("Run");
+//            this.addTypes("Swim");
+//            this.addTypes("Ski");
+//            this.addTypes("Walk");
+//            this.addTypes("Skate");
+//        }
+//        cursor.close();
+//        db.close();
+//    }
 
     public String getType(int type) {
         String queryString = "SELECT type FROM " + TABLE_TYPE + " WHERE id_type_activity = " + type;
@@ -291,7 +289,7 @@ public class Database extends SQLiteOpenHelper {
     public void deleteActivity(int activityID) {
         String deletePoints = "DELETE FROM " + TABLE_POINT + " WHERE id_activity = " + activityID;
         String deleteActivity = "DELETE FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + activityID;
-               //+ " AND time_end IS NOT NULL";
+        //+ " AND time_end IS NOT NULL";
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(deletePoints);
         db.execSQL(deleteActivity);
