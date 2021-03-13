@@ -1,10 +1,12 @@
-package com.example.sportstracker;
+package com.example.sportstracker.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
+
+import com.example.sportstracker.R;
 
 public class LoadingDialog {
 

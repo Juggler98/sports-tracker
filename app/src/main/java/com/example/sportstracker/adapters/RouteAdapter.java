@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.sportstracker.R;
+import com.example.sportstracker.data.RouteItem;
 
 import java.util.ArrayList;
 

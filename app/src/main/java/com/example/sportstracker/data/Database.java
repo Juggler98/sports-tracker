@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.data;
 
 import android.content.ContentValues;
 import android.content.Context;

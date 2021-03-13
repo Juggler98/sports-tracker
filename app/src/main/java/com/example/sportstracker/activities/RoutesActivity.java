@@ -14,11 +14,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
 
-import com.example.sportstracker.Database;
+import com.example.sportstracker.data.Database;
 import com.example.sportstracker.R;
-import com.example.sportstracker.Route;
-import com.example.sportstracker.RouteAdapter;
-import com.example.sportstracker.RouteItem;
+import com.example.sportstracker.data.Route;
+import com.example.sportstracker.adapters.RouteAdapter;
+import com.example.sportstracker.data.RouteItem;
 import com.example.sportstracker.RoutesMethods;
 
 import java.util.ArrayList;

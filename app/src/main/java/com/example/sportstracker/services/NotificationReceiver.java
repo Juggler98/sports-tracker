@@ -1,10 +1,12 @@
-package com.example.sportstracker;
+package com.example.sportstracker.services;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
+
+import com.example.sportstracker.R;
 
 /**
  *  Broadcast receiver to receive if button stop was clicked on notification.

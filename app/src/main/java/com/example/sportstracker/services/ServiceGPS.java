@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.services;
 
 import android.annotation.SuppressLint;
 import android.app.NotificationManager;
@@ -20,7 +20,11 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
+import com.example.sportstracker.R;
+import com.example.sportstracker.RoutesMethods;
 import com.example.sportstracker.activities.RecordActivity;
+import com.example.sportstracker.data.Database;
+import com.example.sportstracker.data.Point;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;

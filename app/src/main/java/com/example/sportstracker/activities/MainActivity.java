@@ -23,15 +23,15 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.sportstracker.AboutAppDialog;
-import com.example.sportstracker.DashboardFragment;
-import com.example.sportstracker.Database;
-import com.example.sportstracker.LoadingDialog;
-import com.example.sportstracker.MapFragment;
-import com.example.sportstracker.PermissionDialog;
-import com.example.sportstracker.Point;
+import com.example.sportstracker.dialogs.AboutAppDialog;
+import com.example.sportstracker.fragments.DashboardFragment;
+import com.example.sportstracker.data.Database;
+import com.example.sportstracker.dialogs.LoadingDialog;
+import com.example.sportstracker.fragments.MapFragment;
+import com.example.sportstracker.dialogs.PermissionDialog;
+import com.example.sportstracker.data.Point;
 import com.example.sportstracker.R;
-import com.example.sportstracker.Route;
+import com.example.sportstracker.data.Route;
 import com.google.android.material.navigation.NavigationView;
 
 import org.w3c.dom.Document;

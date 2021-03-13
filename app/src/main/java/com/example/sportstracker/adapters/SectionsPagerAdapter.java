@@ -1,14 +1,12 @@
-package com.example.sportstracker;
-
-import android.content.Context;
+package com.example.sportstracker.adapters;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+
+import com.example.sportstracker.fragments.PlaceholderFragment;
 
 import java.util.ArrayList;
 

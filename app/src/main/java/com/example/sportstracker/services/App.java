@@ -1,10 +1,12 @@
-package com.example.sportstracker;
+package com.example.sportstracker.services;
 
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
 import android.util.Log;
+
+import com.example.sportstracker.R;
 
 /**
  * Creates Notification channel for android API >= 26.

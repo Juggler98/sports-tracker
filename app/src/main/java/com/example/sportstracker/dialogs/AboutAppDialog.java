@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

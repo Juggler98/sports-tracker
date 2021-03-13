@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.dialogs;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
+
+import com.example.sportstracker.R;
 
 /**
  * Dialog for rename Activity name.

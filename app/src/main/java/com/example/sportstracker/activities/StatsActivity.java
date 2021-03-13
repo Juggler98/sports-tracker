@@ -16,11 +16,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.sportstracker.Database;
-import com.example.sportstracker.LoadingDialog;
+import com.example.sportstracker.data.Database;
+import com.example.sportstracker.dialogs.LoadingDialog;
 import com.example.sportstracker.R;
 import com.example.sportstracker.RoutesMethods;
-import com.example.sportstracker.SectionsPagerAdapter;
+import com.example.sportstracker.adapters.SectionsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 import static java.lang.Math.round;

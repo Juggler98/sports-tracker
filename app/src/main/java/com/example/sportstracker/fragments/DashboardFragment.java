@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.fragments;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -20,6 +20,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.example.sportstracker.data.Database;
+import com.example.sportstracker.R;
+import com.example.sportstracker.data.Route;
+import com.example.sportstracker.services.ServiceGPS;
 import com.example.sportstracker.activities.RecordActivity;
 import com.example.sportstracker.activities.RoutesActivity;
 import com.example.sportstracker.activities.StatsActivity;

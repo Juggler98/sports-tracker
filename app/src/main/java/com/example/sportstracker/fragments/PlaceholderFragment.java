@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.example.sportstracker.data.Database;
+import com.example.sportstracker.data.Point;
+import com.example.sportstracker.R;
+import com.example.sportstracker.data.Route;
+import com.example.sportstracker.RoutesMethods;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

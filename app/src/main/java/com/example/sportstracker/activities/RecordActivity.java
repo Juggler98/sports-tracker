@@ -20,13 +20,13 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.sportstracker.DashboardFragment;
-import com.example.sportstracker.Database;
-import com.example.sportstracker.Point;
+import com.example.sportstracker.fragments.DashboardFragment;
+import com.example.sportstracker.data.Database;
+import com.example.sportstracker.data.Point;
 import com.example.sportstracker.R;
-import com.example.sportstracker.Route;
+import com.example.sportstracker.data.Route;
 import com.example.sportstracker.RoutesMethods;
-import com.example.sportstracker.ServiceGPS;
+import com.example.sportstracker.services.ServiceGPS;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;

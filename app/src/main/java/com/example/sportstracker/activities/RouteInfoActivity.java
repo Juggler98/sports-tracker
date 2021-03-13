@@ -23,11 +23,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.sportstracker.Database;
-import com.example.sportstracker.Point;
+import com.example.sportstracker.data.Database;
+import com.example.sportstracker.data.Point;
 import com.example.sportstracker.R;
-import com.example.sportstracker.RenameDialog;
-import com.example.sportstracker.Route;
+import com.example.sportstracker.dialogs.RenameDialog;
+import com.example.sportstracker.data.Route;
 import com.example.sportstracker.RoutesMethods;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
