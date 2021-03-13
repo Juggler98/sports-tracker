@@ -57,7 +57,9 @@ public class PlaceholderFragment extends Fragment {
         RoutesMethods routesMethods = new RoutesMethods();
         ArrayList<Route> activities = database.getActivities();
 
-        int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+        int sectionNumber = 1;
+        if (getArguments() != null)
+            sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 
         int activitiesCount = 0;
         double distanceD = 0;
@@ -111,7 +113,7 @@ public class PlaceholderFragment extends Fragment {
         int minutesYear = (int) minutesDYear;
 
         activityCount.setText(getString(R.string.activitiesCount, activitiesCountYear));
-        distance.setText(getString(R.string.distance_stats,Math.round(distanceDYear/1000.0)));
+        distance.setText(getString(R.string.distance_stats, Math.round(distanceDYear / 1000.0)));
         time.setText(getString(R.string.time_data_stats, hoursYear, minutesYear));
 
         if (sectionNumber != 4) {
@@ -123,7 +125,7 @@ public class PlaceholderFragment extends Fragment {
         }
 
         activityCountAll.setText(getString(R.string.activitiesCount, activitiesCount));
-        distanceAll.setText(getString(R.string.distance_stats,Math.round(distanceD/1000.0)));
+        distanceAll.setText(getString(R.string.distance_stats, Math.round(distanceD / 1000.0)));
         timeAll.setText(getString(R.string.time_data_stats, hours, minutes));
 
 
