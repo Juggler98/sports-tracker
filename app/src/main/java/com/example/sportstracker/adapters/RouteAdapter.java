@@ -26,12 +26,12 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
         this.listener = listener;
     }
 
-    public static class RouteViewHolder extends RecyclerView.ViewHolder {
-        public ImageView imageView;
-        public TextView textView1;
-        public TextView textView2;
+    static class RouteViewHolder extends RecyclerView.ViewHolder {
+        ImageView imageView;
+        TextView textView1;
+        TextView textView2;
 
-        public RouteViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
+        RouteViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageView);
             textView1 = itemView.findViewById(R.id.textView1);

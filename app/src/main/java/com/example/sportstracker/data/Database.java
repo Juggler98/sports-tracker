@@ -80,19 +80,17 @@ public class Database extends SQLiteOpenHelper {
         //db.execSQL("ALTER TABLE " + TABLE_POINT + " ADD COLUMN paused INTEGER;");
     }
 
-    private boolean addTypes(String type) {
+    private void addTypes(String type) {
         Log.d("DB_LC", "DB_ADD_TYPES");
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put("type", type);
-        long insert = db.insert(TABLE_TYPE, null, cv);
+        db.insert(TABLE_TYPE, null, cv);
         db.close();
-
-        return insert != -1;
     }
 
-    public boolean createActivity(Route route) {
+    public void createActivity(Route route) {
         Log.d("DB_LC", "DB_ADD_Activity");
 
         SQLiteDatabase db = this.getWritableDatabase();
@@ -103,11 +101,8 @@ public class Database extends SQLiteOpenHelper {
         if (!route.getAutoPause()) {
             cv.put("auto_pause", route.getAutoPause());
         }
-//        cv.put("title", "Hello");
-        long insert = db.insert(TABLE_ACTIVITY, null, cv);
+        db.insert(TABLE_ACTIVITY, null, cv);
         db.close();
-
-        return insert != -1;
     }
 
     public void addPoint(Point point) {
@@ -224,22 +219,12 @@ public class Database extends SQLiteOpenHelper {
                 if (route.getTimeEnd() != 0.0 || route.getId() != this.getLastActivityID()) {
                     routes.add(route);
                 }
-//                activities.add(activity);
             } while (cursor.moveToNext());
         }
         cursor.close();
         db.close();
         return routes;
     }
-
-//    public Activity getActivity(int activityID) {
-//        ArrayList<Activity> activities = this.getActivities();
-//        for (int i = 0; i < activities.size(); i++) {
-//            if (activities.get(i).getId() == activityID)
-//                return activities.get(i);
-//        }
-//        return null;
-//    }
 
     public Route getActivity(int activityID) {
         Route route = null;
@@ -278,7 +263,6 @@ public class Database extends SQLiteOpenHelper {
     public void deleteActivity(int activityID) {
         String deletePoints = "DELETE FROM " + TABLE_POINT + " WHERE id_activity = " + activityID;
         String deleteActivity = "DELETE FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + activityID;
-        //+ " AND time_end IS NOT NULL";
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(deletePoints);
         db.execSQL(deleteActivity);
@@ -286,21 +270,20 @@ public class Database extends SQLiteOpenHelper {
         Log.d("DB_LC", "Delete Activity: " + activityID);
     }
 
-    private void deleteType(int typeID) {
+    //Only For Debug
+    /*private void deleteType(int typeID) {
         String deleteType = "DELETE FROM " + TABLE_TYPE + " WHERE id_type_activity = " + typeID;
         SQLiteDatabase db = getWritableDatabase();
         db.execSQL(deleteType);
         db.close();
         Log.d("DB_LC", "Delete Type: " + typeID);
-    }
+    }*/
 
-    public boolean updateActivity(int activityID, int type, double endTime, String name) {
+    public void updateActivity(int activityID, int type, double endTime, String name) {
         String changeType = "UPDATE " + TABLE_ACTIVITY + " SET type_id = " + type + " WHERE id_activity = " + activityID;
         String setEndTime = "UPDATE " + TABLE_ACTIVITY + " SET time_end = " + endTime + " WHERE id_activity = " + activityID;
-//        String setTitle = "UPDATE " + TABLE_ACTIVITY + " SET title = " + name + " WHERE id_activity = " + activityID;
 
         SQLiteDatabase db = getWritableDatabase();
-        int update = 0;
 
         if (endTime != 0.0) {
             db.execSQL(setEndTime);
@@ -310,14 +293,10 @@ public class Database extends SQLiteOpenHelper {
             ContentValues cv = new ContentValues();
             cv.put("title", name);
             String[] whereArgs = {activityID + ""};
-            update = db.update(TABLE_ACTIVITY, cv, "id_activity=?", whereArgs);
+            db.update(TABLE_ACTIVITY, cv, "id_activity=?", whereArgs);
         }
-//        if (!name.equals(" ")) {
-//            db.execSQL(setTitle);
-//        }
         db.close();
         Log.d("DB_LC", "Change Activity: " + activityID + ", " + type + ", " + endTime + ", " + name);
-        return update > 0;
     }
 
     public ArrayList<Point> getPoints(int activityID) {
@@ -357,12 +336,11 @@ public class Database extends SQLiteOpenHelper {
         return points;
     }
 
-    public boolean setPause(int activityID, int pointID) {
+    public void setPause(int activityID, int pointID) {
         String updatePause = "UPDATE " + TABLE_POINT + " SET paused = " + 1 + " WHERE id_activity = " + activityID +
                 " AND id_point = " + pointID;
 
         SQLiteDatabase db = getWritableDatabase();
-        int update = 0;
         db.execSQL(updatePause);
 //            ContentValues cv = new ContentValues();
 //            cv.put("paused", 1);
@@ -370,7 +348,6 @@ public class Database extends SQLiteOpenHelper {
 //            update = db.update(TABLE_POINT, cv, "id_activity=? AND id_point=?", whereArgs);
         db.close();
         Log.d("DB_LC", "setPause: " + activityID + ", " + pointID);
-        return true;
     }
 
     public void deleteAll() {
