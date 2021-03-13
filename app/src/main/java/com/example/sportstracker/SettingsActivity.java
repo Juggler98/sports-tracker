@@ -50,6 +50,24 @@ public class SettingsActivity extends AppCompatActivity {
                     }
                 });
             }
+            EditTextPreference horizontal = findPreference(getString(R.string.horizontalPref));
+            EditTextPreference vertical = findPreference(getString(R.string.verticalPref));
+            if (horizontal != null) {
+                horizontal.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                    @Override
+                    public void onBindEditText(@NonNull EditText editText) {
+                        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    }
+                });
+            }
+            if (vertical != null) {
+                vertical.setOnBindEditTextListener(new EditTextPreference.OnBindEditTextListener() {
+                    @Override
+                    public void onBindEditText(@NonNull EditText editText) {
+                        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    }
+                });
+            }
             ListPreference preferredType = findPreference(getString(R.string.routeTypePref));
             if (preferredType != null) {
                 changeIcon(preferredType, preferredType.getValue());
