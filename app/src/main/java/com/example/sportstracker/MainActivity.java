@@ -16,10 +16,12 @@ import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -61,17 +63,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawer;
     private static int PICK_GPX_FILE = 1;
     private Database database;
-    private ArrayList<Point> importPoints;
+    //private ArrayList<Point> importPoints;
+    private volatile LoadingDialog loadingDialog;
+
+    private volatile boolean isImporting;
+    private SharedPreferences sharedPreferences;
+    private final String IMPORTING = "isImporting";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_main);
 
         androidx.appcompat.widget.Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
 
         try {
             getSupportActionBar().setTitle(getString(R.string.title_activity_main));
@@ -100,6 +107,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // permit start app only with getting GPS permission
         permission();
+
+        loadingDialog = new LoadingDialog(MainActivity.this);
+        //sharedPreferences.getBoolean(IMPORTING, false)
+        //Toast.makeText(this, "isImporting: " + isImporting, Toast.LENGTH_SHORT).show();
+
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                if (isImporting) {
+//                    loadingDialog.startLoadingDialog();
+//                }
+//            }
+//        }, 5000);
+
     }
 
     @Override
@@ -122,6 +144,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
         }
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        loadingDialog.dismissDialog();
     }
 
     @Override
@@ -233,13 +262,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int activityType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.routeTypePref), "1"));
 
-//        final ArrayList<Point> points = getPointsFromFile(uri);
-        importPoints = getPointsFromFile(uri);
+        ArrayList<Point> points = getPointsFromFile(uri);
+//        importPoints = getPointsFromFile(uri);
 
-        if (importPoints.size() > 0) {
-            Activity activity = new Activity(activityType, importPoints.get(0).getTime());
+        if (points.size() > 0) {
+            Activity activity = new Activity(activityType, points.get(0).getTime());
             database.createActivity(activity);
-            database.updateActivity(database.getLastActivityID(), 0, importPoints.get(importPoints.size() - 1).getTime(), "");
+            database.updateActivity(database.getLastActivityID(), 0, points.get(points.size() - 1).getTime(), "");
             database.updateActivity(database.getLastActivityID(), 0, 0, this.getNameFromFile(uri));
 
             /*for (Point point : points) {
@@ -260,8 +289,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             /*ImportThread runnable = new ImportThread(points);
             new Thread(runnable).start();*/
 
-            ImportThreads thread = new ImportThreads(importPoints);
+            ImportThreads thread = new ImportThreads(points);
             thread.start();
+
 
             /*Thread thread = new Thread(runnable);
             thread.start();*/
@@ -291,13 +321,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         @Override
         public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadingDialog.startLoadingDialog();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+                }
+            });
             for (Point point : points) {
                 database.addPoint(point);
             }
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(), "Import Successful", Toast.LENGTH_LONG).show();
+                    loadingDialog.dismissDialog();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                    Toast.makeText(getApplicationContext(), "Import Successful: " + points.size(), Toast.LENGTH_LONG).show();
                 }
             });
         }
