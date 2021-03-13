@@ -9,8 +9,6 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.util.ArrayList;
 
 import static java.lang.Math.round;
@@ -96,16 +94,16 @@ public class Database extends SQLiteOpenHelper {
         return insert != -1;
     }
 
-    public boolean createActivity(Activity activity) {
+    public boolean createActivity(Route route) {
         Log.d("DB_LC", "DB_ADD_Activity");
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
-        cv.put("type_id", activity.getIdType());
-        cv.put("time_start", activity.getTimeStart());
-        if (!activity.getAutoPause()) {
-            cv.put("auto_pause", activity.getAutoPause());
+        cv.put("type_id", route.getIdType());
+        cv.put("time_start", route.getTimeStart());
+        if (!route.getAutoPause()) {
+            cv.put("auto_pause", route.getAutoPause());
         }
 //        cv.put("title", "Hello");
         long insert = db.insert(TABLE_ACTIVITY, null, cv);
@@ -204,8 +202,8 @@ public class Database extends SQLiteOpenHelper {
         return lastID;
     }
 
-    public ArrayList<Activity> getActivities() {
-        ArrayList<Activity> activities = new ArrayList<>();
+    public ArrayList<Route> getActivities() {
+        ArrayList<Route> routes = new ArrayList<>();
         String queryString = "SELECT * FROM " + TABLE_ACTIVITY;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
@@ -216,31 +214,31 @@ public class Database extends SQLiteOpenHelper {
                 int id = cursor.getInt(0);
                 int type = cursor.getInt(1);
                 double timeStart = cursor.getDouble(2);
-                Activity activity = new Activity(type, timeStart);
-                activity.setId(id);
+                Route route = new Route(type, timeStart);
+                route.setId(id);
                 if (cursor.getType(3) != 0) {
-                    activity.setTimeEnd(cursor.getDouble(3));
+                    route.setTimeEnd(cursor.getDouble(3));
 //                    Log.d("DB_LC", "EndTime is: " + cursor.getDouble(3));
                 }
                 if (cursor.getType(4) != 0) {
-                    activity.setTitle(cursor.getString(4));
+                    route.setTitle(cursor.getString(4));
 //                    Log.d("DB_LC", "Title is: " + cursor.getString(4));
                 }
                 if (cursor.getType(5) != 0) {
                     if (cursor.getInt(5) == 1)
-                        activity.setAutoPause(true);
+                        route.setAutoPause(true);
                     else
-                        activity.setAutoPause(false);
+                        route.setAutoPause(false);
                 }
-                if (activity.getTimeEnd() != 0.0 || activity.getId() != this.getLastActivityID()) {
-                    activities.add(activity);
+                if (route.getTimeEnd() != 0.0 || route.getId() != this.getLastActivityID()) {
+                    routes.add(route);
                 }
 //                activities.add(activity);
             } while (cursor.moveToNext());
         }
         cursor.close();
         db.close();
-        return activities;
+        return routes;
     }
 
 //    public Activity getActivity(int activityID) {
@@ -252,8 +250,8 @@ public class Database extends SQLiteOpenHelper {
 //        return null;
 //    }
 
-    public Activity getActivity(int activityID) {
-        Activity activity = null;
+    public Route getActivity(int activityID) {
+        Route route = null;
         String queryString = "SELECT * FROM " + TABLE_ACTIVITY + " WHERE id_activity = " + activityID;
         SQLiteDatabase db = getReadableDatabase();
         Cursor cursor = db.rawQuery(queryString, null);
@@ -261,24 +259,24 @@ public class Database extends SQLiteOpenHelper {
             int id = cursor.getInt(0);
             int type = cursor.getInt(1);
             double timeStart = cursor.getDouble(2);
-            activity = new Activity(type, timeStart);
-            activity.setId(id);
+            route = new Route(type, timeStart);
+            route.setId(id);
             if (cursor.getType(3) != 0) {
-                activity.setTimeEnd(cursor.getDouble(3));
+                route.setTimeEnd(cursor.getDouble(3));
             }
             if (cursor.getType(4) != 0) {
-                activity.setTitle(cursor.getString(4));
+                route.setTitle(cursor.getString(4));
             }
             if (cursor.getType(5) != 0) {
                 if (cursor.getInt(5) == 1)
-                    activity.setAutoPause(true);
+                    route.setAutoPause(true);
                 else
-                    activity.setAutoPause(false);
+                    route.setAutoPause(false);
             }
         }
         cursor.close();
         db.close();
-        return activity;
+        return route;
     }
 
     /**

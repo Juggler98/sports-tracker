@@ -12,18 +12,13 @@ import androidx.preference.PreferenceManager;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -32,19 +27,12 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -267,8 +255,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        importPoints = getPointsFromFile(uri);
 
         if (points.size() > 0) {
-            Activity activity = new Activity(activityType, points.get(0).getTime());
-            database.createActivity(activity);
+            Route route = new Route(activityType, points.get(0).getTime());
+            database.createActivity(route);
             database.updateActivity(database.getLastActivityID(), 0, points.get(points.size() - 1).getTime(), "");
             database.updateActivity(database.getLastActivityID(), 0, 0, this.getNameFromFile(uri));
 

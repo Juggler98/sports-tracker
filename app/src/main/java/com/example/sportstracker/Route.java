@@ -1,6 +1,6 @@
 package com.example.sportstracker;
 
-public class Activity {
+public class Route {
 
     private int id;
     private int idType;
@@ -9,12 +9,12 @@ public class Activity {
     private String title = "";
     private boolean autoPause = true;
 
-    public Activity(int idType, double timeStart) {
+    public Route(int idType, double timeStart) {
         this.idType = idType;
         this.timeStart = timeStart;
     }
 
-    public Activity() {
+    public Route() {
     }
 
     @Override

@@ -55,7 +55,7 @@ public class PlaceholderFragment extends Fragment {
 
         Database database = new Database(getContext());
         RoutesMethods routesMethods = new RoutesMethods();
-        ArrayList<Activity> activities = database.getActivities();
+        ArrayList<Route> activities = database.getActivities();
 
         int sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
 
@@ -69,12 +69,12 @@ public class PlaceholderFragment extends Fragment {
         double timeDYear = 0;
         double elevationGainDYear = 0;
 
-        for (Activity activity : activities) {
-            if (activity.getIdType() == sectionNumber || sectionNumber == 8) {
-                int activityID = activity.getId();
+        for (Route route : activities) {
+            if (route.getIdType() == sectionNumber || sectionNumber == 8) {
+                int activityID = route.getId();
                 ArrayList<Point> points = database.getPoints(activityID);
                 double distancePartial = routesMethods.getDistance(points);
-                double timePartial = routesMethods.getHours(points, activity.getAutoPause())[1];
+                double timePartial = routesMethods.getHours(points, route.getAutoPause())[1];
                 double elevationGainPartial = routesMethods.getElevationGainLoss(points)[0];
                 distanceD += distancePartial;
                 timeD += timePartial;
@@ -82,7 +82,7 @@ public class PlaceholderFragment extends Fragment {
                 activitiesCount++;
 
                 DateFormat format = new SimpleDateFormat("yyyy", Locale.getDefault());
-                Date activityDate = new Date((long) activity.getTimeStart());
+                Date activityDate = new Date((long) route.getTimeStart());
                 String yearStr = format.format(activityDate);
                 int activityYear = Integer.parseInt(yearStr);
 
@@ -92,7 +92,7 @@ public class PlaceholderFragment extends Fragment {
 
                 if (activityYear == actualYear) {
                     double distancePartialYear = routesMethods.getDistance(points);
-                    double timePartialYear = routesMethods.getHours(points, activity.getAutoPause())[1];
+                    double timePartialYear = routesMethods.getHours(points, route.getAutoPause())[1];
                     double elevationGainPartialYear = routesMethods.getElevationGainLoss(points)[0];
                     distanceDYear += distancePartialYear;
                     timeDYear += timePartialYear;

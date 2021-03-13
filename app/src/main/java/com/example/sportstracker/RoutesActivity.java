@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,12 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,7 +28,7 @@ public class RoutesActivity extends AppCompatActivity {
     private ListView listView;
 
     private ArrayList<String> arrayListListView = new ArrayList<>();
-    private ArrayList<Activity> activities = new ArrayList<>();
+    private ArrayList<Route> activities = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private RouteAdapter adapter;
@@ -189,8 +182,8 @@ public class RoutesActivity extends AppCompatActivity {
 
     private void reloadRouteItemsList() {
         routeItemsList.clear();
-        for (Activity activity : activities) {
-            routeItemsList.add(new RouteItem(routesMethods.getIcon(activity.getIdType()), routesMethods.getDate(activity.getTimeStart()), activity.getTitle()));
+        for (Route route : activities) {
+            routeItemsList.add(new RouteItem(routesMethods.getIcon(route.getIdType()), routesMethods.getDate(route.getTimeStart()), route.getTitle()));
         }
     }
 
@@ -200,13 +193,13 @@ public class RoutesActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void sortRoutes(ArrayList<Activity> sortingList) {
+    private void sortRoutes(ArrayList<Route> sortingList) {
         sortBy = sharedPreferences.getInt(SORT_BY, 0);
         reverse = sharedPreferences.getBoolean(REVERSE, false);
         if (sortBy == 0) {
             if (reverse) {
                 for (int i = 1; i < sortingList.size() - 1; i++) {
-                    Activity current = sortingList.get(i);
+                    Route current = sortingList.get(i);
                     int j = i - 1;
                     while ((j > -1) && (sortingList.get(j).getTimeStart() < current.getTimeStart())) {
                         sortingList.set(j + 1, sortingList.get(j));
@@ -216,7 +209,7 @@ public class RoutesActivity extends AppCompatActivity {
                 }
             } else {
                 for (int i = 1; i < sortingList.size() - 1; i++) {
-                    Activity current = sortingList.get(i);
+                    Route current = sortingList.get(i);
                     int j = i - 1;
                     while ((j > -1) && (sortingList.get(j).getTimeStart() > current.getTimeStart())) {
                         sortingList.set(j + 1, sortingList.get(j));
@@ -228,7 +221,7 @@ public class RoutesActivity extends AppCompatActivity {
         } else {
             if (reverse) {
                 for (int i = 1; i < sortingList.size() - 1; i++) {
-                    Activity current = sortingList.get(i);
+                    Route current = sortingList.get(i);
                     int j = i - 1;
                     while ((j > -1) && (sortingList.get(j).getIdType() < current.getIdType())) {
                         sortingList.set(j + 1, sortingList.get(j));
@@ -238,7 +231,7 @@ public class RoutesActivity extends AppCompatActivity {
                 }
             } else {
                 for (int i = 1; i < sortingList.size() - 1; i++) {
-                    Activity current = sortingList.get(i);
+                    Route current = sortingList.get(i);
                     int j = i - 1;
                     while ((j > -1) && (sortingList.get(j).getIdType() > current.getIdType())) {
                         sortingList.set(j + 1, sortingList.get(j));
