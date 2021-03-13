@@ -108,7 +108,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // permit start app only with getting GPS permission
         permission();
 
-        loadingDialog = new LoadingDialog(MainActivity.this);
+        loadingDialog = new LoadingDialog(MainActivity.this, false);
+        loadingDialog.setText("Importing...");
         //sharedPreferences.getBoolean(IMPORTING, false)
         //Toast.makeText(this, "isImporting: " + isImporting, Toast.LENGTH_SHORT).show();
 
@@ -262,7 +263,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int activityType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.routeTypePref), "1"));
 
-        ArrayList<Point> points = getPointsFromFile(uri);
+        final ArrayList<Point> points = getPointsFromFile(uri);
 //        importPoints = getPointsFromFile(uri);
 
         if (points.size() > 0) {
@@ -286,11 +287,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
-            /*ImportThread runnable = new ImportThread(points);
-            new Thread(runnable).start();*/
+            ImportRunnable runnable = new ImportRunnable(points);
+            new Thread(runnable).start();
 
-            ImportThreads thread = new ImportThreads(points);
-            thread.start();
+//            ImportThreads thread = new ImportThreads(points);
+//            thread.start();
+
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            loadingDialog.startLoadingDialog();
+//                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+//                        }
+//                    });
+//                    for (Point point : points) {
+//                        database.addPoint(point);
+//                    }
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            loadingDialog.dismissDialog();
+//                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+//                            Toast.makeText(getApplicationContext(), "Import Successful: " + points.size(), Toast.LENGTH_LONG).show();
+//                        }
+//                    });
+//                }
+//            }).start();
 
 
             /*Thread thread = new Thread(runnable);
@@ -312,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public class ImportThreads extends Thread {
+    private class ImportThreads extends Thread {
         private ArrayList<Point> points;
 
         ImportThreads(ArrayList<Point> points) {
@@ -342,18 +367,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private class ImportThread implements Runnable {
+    private class ImportRunnable implements Runnable {
         private ArrayList<Point> points;
 
-        ImportThread(ArrayList<Point> points) {
+        ImportRunnable(ArrayList<Point> points) {
             this.points = points;
         }
 
         @Override
         public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadingDialog.startLoadingDialog();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+                }
+            });
             for (Point point : points) {
                 database.addPoint(point);
             }
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadingDialog.dismissDialog();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                    Toast.makeText(getApplicationContext(), "Import Successful: " + points.size(), Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 

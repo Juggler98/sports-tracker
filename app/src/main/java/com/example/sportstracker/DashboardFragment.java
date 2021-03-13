@@ -39,6 +39,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
 
     private int activityType = 1;
 
+    private LoadingDialog loadingDialog;
+
 
     @Nullable
     @Override
@@ -61,6 +63,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
 
         database = new Database(getContext());
 
+        loadingDialog = new LoadingDialog(getActivity(), true);
+
         return view;
     }
 
@@ -68,6 +72,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
     public void onResume() {
         super.onResume();
         activityType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.routeTypePref),"1"));
+        loadingDialog.dismissDialog();
     }
 
     @Override
@@ -90,6 +95,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
                 startActivity(intent);
                 break;
             case R.id.stats_card:
+                //loadingDialog.startLoadingDialog();
                 intent = new Intent(v.getContext(), StatsActivity.class);
                 startActivity(intent);
                 break;

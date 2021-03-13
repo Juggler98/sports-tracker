@@ -19,7 +19,10 @@ import androidx.viewpager.widget.ViewPager;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.pm.ActivityInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -29,6 +32,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -48,11 +52,21 @@ public class StatsActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
+    private LoadingDialog loadingDialog;
+
+    private SectionsPagerAdapter sectionsPagerAdapter;
+
+
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stats);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+
+
+        loadingDialog = new LoadingDialog(StatsActivity.this, false);
+        //loadingDialog.startLoadingDialog();
 
 
         database = new Database(this);
@@ -60,9 +74,11 @@ public class StatsActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewPager);
         tabLayout = findViewById(R.id.tabLayout);
 
+        viewPager.setOffscreenPageLimit(7);
+
         tabLayout.setupWithViewPager(viewPager);
 
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 0);
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 0);
 
         for (int i = 1; i <= 8; i++) {
             if (i < 8)
@@ -71,18 +87,93 @@ public class StatsActivity extends AppCompatActivity {
                 sectionsPagerAdapter.addPage("All");
         }
 
-        viewPager.setAdapter(sectionsPagerAdapter);
+        loadingDialog.startLoadingDialog();
+        Handler handler = new Handler();
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+//                ImportRunnable importRunnable = new ImportRunnable(sectionsPagerAdapter);
+//                new Thread(importRunnable).start();
 
-        for (int i = 0; i < 8; i++) {
-            TabLayout.Tab tab = tabLayout.getTabAt(i);
-            if (i < 7)
-                tab.setIcon(routesMethods.getIcon(i + 1));
-            else
-                tab.setIcon(R.drawable.ic_all);
-//            tab.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
-            tab.getIcon().setTint(getColor(R.color.colorIcon));
+//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
+                viewPager.setAdapter(sectionsPagerAdapter);
+                for (int i = 0; i < 8; i++) {
+                    TabLayout.Tab tab = tabLayout.getTabAt(i);
+                    if (i < 7)
+                        tab.setIcon(routesMethods.getIcon(i + 1));
+                    else
+                        tab.setIcon(R.drawable.ic_all);
+//                      tab.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
+                    tab.getIcon().setTint(getColor(R.color.colorIcon));
+                }
+                loadingDialog.dismissDialog();
+                //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                //Toast.makeText(getApplicationContext(), "Load Successful: ", Toast.LENGTH_LONG).show();
+
+            }
+        });
+
+
+//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                //loadingDialog.startLoadingDialog();
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                //loadingDialog.startLoadingDialog();
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//                loadingDialog.dismissDialog();
+//            }
+//        });
+
+    }
+
+//    private void load(SectionsPagerAdapter sectionsPagerAdapter) {
+//        ImportRunnable importRunnable = new ImportRunnable(sectionsPagerAdapter);
+//        new Thread(importRunnable).start();
+//
+//        //loadingDialog.startLoadingDialog();
+//        //viewPager.setAdapter(sectionsPagerAdapter);
+//        //loadingDialog.dismissDialog();
+//    }
+
+    private class ImportRunnable implements Runnable {
+        private SectionsPagerAdapter sectionsPagerAdapter;
+
+        ImportRunnable(SectionsPagerAdapter sectionsPagerAdapter) {
+            this.sectionsPagerAdapter = sectionsPagerAdapter;
         }
 
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //loadingDialog.startLoadingDialog();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+                }
+            });
+            viewPager.post(new Runnable() {
+                @Override
+                public void run() {
+                    viewPager.setAdapter(sectionsPagerAdapter);
+                }
+            });
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    loadingDialog.dismissDialog();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                    Toast.makeText(getApplicationContext(), "Load Successful: ", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     @Override
