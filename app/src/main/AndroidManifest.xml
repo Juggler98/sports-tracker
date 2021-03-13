@@ -16,25 +16,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".StatsActivity"
-            android:parentActivityName=".MainActivity"
+        <activity android:name=".activities.StatsActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:label="@string/title_all_stats" />
 
-        <activity android:name=".RecordActivity"
-            android:parentActivityName=".MainActivity"
+        <activity android:name=".activities.RecordActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
-            android:name=".RouteInfoActivity"
-            android:parentActivityName=".RoutesActivity"
+            android:name=".activities.RouteInfoActivity"
+            android:parentActivityName=".activities.RoutesActivity"
             android:label="@string/title_activity_stats" />
         <activity
-            android:name=".RoutesActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".activities.RoutesActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:label="@string/title_activity_routes" />
         <activity
-            android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity"
+            android:name=".activities.SettingsActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:label="@string/title_activity_settings" />
 
         <meta-data
@@ -42,7 +42,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"
             >

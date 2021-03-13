@@ -13,7 +13,7 @@ public class LoadingDialog {
     private boolean cancelable;
     private TextView textView;
 
-    LoadingDialog(Activity activity, boolean cancelable) {
+    public LoadingDialog(Activity activity, boolean cancelable) {
         this.activity = activity;
         this.cancelable = cancelable;
         init();

@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.activities;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -16,6 +16,9 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreferenceCompat;
+
+import com.example.sportstracker.R;
+import com.example.sportstracker.RoutesMethods;
 
 public class SettingsActivity extends AppCompatActivity {
 

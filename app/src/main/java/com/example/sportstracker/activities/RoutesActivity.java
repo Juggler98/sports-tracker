@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +13,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ListView;
+
+import com.example.sportstracker.Database;
+import com.example.sportstracker.R;
+import com.example.sportstracker.Route;
+import com.example.sportstracker.RouteAdapter;
+import com.example.sportstracker.RouteItem;
+import com.example.sportstracker.RoutesMethods;
 
 import java.util.ArrayList;
 

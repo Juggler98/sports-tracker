@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +23,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.sportstracker.Database;
+import com.example.sportstracker.Point;
+import com.example.sportstracker.R;
+import com.example.sportstracker.RenameDialog;
+import com.example.sportstracker.Route;
+import com.example.sportstracker.RoutesMethods;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;

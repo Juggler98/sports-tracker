@@ -1,4 +1,4 @@
-package com.example.sportstracker;
+package com.example.sportstracker.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +23,15 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.sportstracker.AboutAppDialog;
+import com.example.sportstracker.DashboardFragment;
+import com.example.sportstracker.Database;
+import com.example.sportstracker.LoadingDialog;
+import com.example.sportstracker.MapFragment;
+import com.example.sportstracker.PermissionDialog;
+import com.example.sportstracker.Point;
+import com.example.sportstracker.R;
+import com.example.sportstracker.Route;
 import com.google.android.material.navigation.NavigationView;
 
 import org.w3c.dom.Document;

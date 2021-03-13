@@ -20,6 +20,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.PreferenceManager;
 
+import com.example.sportstracker.activities.RecordActivity;
+import com.example.sportstracker.activities.RoutesActivity;
+import com.example.sportstracker.activities.StatsActivity;
+
 import java.util.ArrayList;
 
 
