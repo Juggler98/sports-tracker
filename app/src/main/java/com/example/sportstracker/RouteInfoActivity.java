@@ -40,7 +40,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
-import static java.lang.Math.max;
 import static java.lang.Math.round;
 
 /**
@@ -55,7 +54,6 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private TextView avgMovingInfo;
     private TextView maxSpeedInfo;
 
-
     private TextView avgSpeedMoving;
     private TextView maxSpeed;
 
@@ -63,7 +61,6 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
     private ArrayList<LatLng> latLngArrayList = new ArrayList<>();
     private ArrayList<Point> points = new ArrayList<>();
-
 
     private SharedPreferences sharedPreferences;
 
@@ -127,7 +124,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         if (name.equals(""))
             name = "Details";
 
-        getSupportActionBar().setTitle(name);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(name);
 
         DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault());
         Date date = new Date((long) route.getTimeStart());
@@ -282,10 +280,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             case 3:
                 googleMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
                 break;
-            default:
-                googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         }
-
     }
 
     @Override
@@ -303,7 +298,8 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         database.updateActivity(routeID, 0, 0.0, name);
         route = database.getActivity(routeID);
         name = name.equals("") ? "Details" : name;
-        getSupportActionBar().setTitle(name);
+        if (getSupportActionBar() != null)
+            getSupportActionBar().setTitle(name);
         Log.d("RouteInfo_LC", "Renaming: " + routeID + " " + name);
         setReloadIsNeeded();
     }
@@ -414,7 +410,6 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     public void createGpx() {
-        String fileName;
         if (route.getTitle().equals("")) {
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault());
             Date date = new Date((long) route.getTimeStart());
@@ -428,7 +423,6 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         intent.putExtra(Intent.EXTRA_TITLE, routeName + ".gpx");
         startActivityForResult(intent, EXPORT_GPX);
     }
-
 
 
     private void writeToGpx(Uri exportTo) {
@@ -456,11 +450,11 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             fileOutputStream.write(metadata.getBytes());
             fileOutputStream.write(trk.getBytes());
             for (Point point : points) {
-                String trkpt = "<trkpt lat=\"" + point.getLat() + "\" lon=\"" + point.getLon() +"\">\n";
-                String ele = "\t<ele>" + point.getEle() +"</ele>\n";
-                String time = "\t<time>" + this.getUTC(point.getTime()) +"</time>\n";
-                String speed = "\t<speed>" + round(point.getSpeed() * 100) / 100.0 +"</speed>\n";
-                String course = "\t<course>" + round(point.getCourse() * 10) / 10.0 +"</course>\n";
+                String trkpt = "<trkpt lat=\"" + point.getLat() + "\" lon=\"" + point.getLon() + "\">\n";
+                String ele = "\t<ele>" + point.getEle() + "</ele>\n";
+                String time = "\t<time>" + this.getUTC(point.getTime()) + "</time>\n";
+                String speed = "\t<speed>" + round(point.getSpeed() * 100) / 100.0 + "</speed>\n";
+                String course = "\t<course>" + round(point.getCourse() * 10) / 10.0 + "</course>\n";
                 fileOutputStream.write(trkpt.getBytes());
                 fileOutputStream.write(ele.getBytes());
                 fileOutputStream.write(time.getBytes());
@@ -478,7 +472,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             fileOutputStream.close();
             pfd.close();
             Toast.makeText(this, "Exported to: " + exportTo.getLastPathSegment(), Toast.LENGTH_LONG).show();
-        } catch (IOException e) {
+        } catch (NullPointerException | IOException e) {
             e.printStackTrace();
             Toast.makeText(this, "Export Failed", Toast.LENGTH_LONG).show();
         }
