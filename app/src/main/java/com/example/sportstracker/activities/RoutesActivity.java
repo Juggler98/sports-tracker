@@ -200,57 +200,31 @@ public class RoutesActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //Insertion Sort
+    //https://stackabuse.com/insertion-sort-in-java/
     private void sortRoutes(ArrayList<Route> sortingList) {
         sortBy = sharedPreferences.getInt(SORT_BY, 0);
         reverse = sharedPreferences.getBoolean(REVERSE, false);
-        if (sortBy == 0) {
-            if (reverse) {
-                for (int i = 1; i < sortingList.size() - 1; i++) {
-                    Route current = sortingList.get(i);
-                    int j = i - 1;
-                    while ((j > -1) && (sortingList.get(j).getTimeStart() < current.getTimeStart())) {
-                        sortingList.set(j + 1, sortingList.get(j));
-                        j--;
-                    }
-                    sortingList.set(j + 1, current);
-                }
-            } else {
-                for (int i = 1; i < sortingList.size() - 1; i++) {
-                    Route current = sortingList.get(i);
-                    int j = i - 1;
-                    while ((j > -1) && (sortingList.get(j).getTimeStart() > current.getTimeStart())) {
-                        sortingList.set(j + 1, sortingList.get(j));
-                        j--;
-                    }
-                    sortingList.set(j + 1, current);
-                }
+        for (int i = 1; i < sortingList.size(); i++) {
+            Route current = sortingList.get(i);
+            int j = i - 1;
+            while (j > -1 && this.compare(sortingList.get(j), current)) {
+                sortingList.set(j + 1, sortingList.get(j));
+                j--;
             }
-        } else {
-            if (reverse) {
-                for (int i = 1; i < sortingList.size() - 1; i++) {
-                    Route current = sortingList.get(i);
-                    int j = i - 1;
-                    while ((j > -1) && (sortingList.get(j).getIdType() < current.getIdType())) {
-                        sortingList.set(j + 1, sortingList.get(j));
-                        j--;
-                    }
-                    sortingList.set(j + 1, current);
-                }
-            } else {
-                for (int i = 1; i < sortingList.size() - 1; i++) {
-                    Route current = sortingList.get(i);
-                    int j = i - 1;
-                    while ((j > -1) && (sortingList.get(j).getIdType() > current.getIdType())) {
-                        sortingList.set(j + 1, sortingList.get(j));
-                        j--;
-                    }
-                    sortingList.set(j + 1, current);
-                }
-            }
+            sortingList.set(j + 1, current);
         }
         reloadRouteItemsList();
         if (adapter != null && !sharedPreferences.getBoolean(getString(R.string.reloadPref), false))
             adapter.notifyDataSetChanged();
+    }
+
+    private boolean compare(Route route1, Route route2) {
+        if (sortBy == 0) {
+            return Double.compare(route1.getTimeStart(), route2.getTimeStart()) == (reverse ? -1 : 1);
+        } else {
+            return Integer.compare(route1.getIdType(), route2.getIdType()) == (reverse ? -1 : 1);
+        }
     }
 
     @Override

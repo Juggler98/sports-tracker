@@ -30,7 +30,7 @@ public class RoutesMethods {
      * @return distance of route in metres
      */
     public double getDistance(ArrayList<Point> points) {
-        Log.d("DB_LC", "DB_getDistance");
+        //Log.d("DB_LC", "DB_getDistance");
         double lat1;
         double lat2;
         double lon1;
