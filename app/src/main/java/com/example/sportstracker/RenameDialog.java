@@ -1,5 +1,6 @@
 package com.example.sportstracker;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,7 +15,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
-
 /**
  * Dialog for rename Activity name.
  */
@@ -25,15 +25,17 @@ public class RenameDialog extends AppCompatDialogFragment {
 
     /**
      *  Dialog for Renaming activity.
-     * @param savedInstanceState
+     * @param savedInstanceState savedIntanceState
      * @return AlertDialog
      */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        Activity activity = requireActivity();
 
-        LayoutInflater inflater = getActivity().getLayoutInflater();
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+
+        LayoutInflater inflater = activity.getLayoutInflater();
         View view = inflater.inflate(R.layout.rename_dialog, null);
 
         builder.setView(view).setTitle("Rename Activity").setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -50,7 +52,7 @@ public class RenameDialog extends AppCompatDialogFragment {
         });
 
         editTextRename = view.findViewById(R.id.rename);
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.sharedPreferences), getActivity().MODE_PRIVATE);
+        SharedPreferences sharedPreferences = activity.getSharedPreferences(getString(R.string.sharedPreferences), Context.MODE_PRIVATE);
         String routeName = sharedPreferences.getString(getString(R.string.renamePref), "");
         editTextRename.setText(routeName);
 
@@ -59,7 +61,7 @@ public class RenameDialog extends AppCompatDialogFragment {
 
     /**
      * Attach renameDialogListener as RenameDialogListener.
-     * @param context
+     * @param context context
      */
     @Override
     public void onAttach(@NonNull Context context) {
