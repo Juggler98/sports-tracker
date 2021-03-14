@@ -16,7 +16,7 @@
                 android:layout_weight="1"
                 android:background="@color/statsInfo"
                 android:gravity="center"
-                android:text="Year-to-date" />
+                android:text="@string/year_to_date" />
 
         </TableRow>
 
@@ -28,8 +28,7 @@
                 android:layout_height="44dp"
                 android:layout_marginTop="4dp"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/activities" />
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/activitiesCount"
@@ -51,7 +50,7 @@
                 android:layout_height="44dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/distance" />
+                android:text="@string/info_distance" />
 
             <TextView
                 android:id="@+id/distance"
@@ -72,7 +71,7 @@
                 android:layout_height="44dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/time" />
+                android:text="@string/info_time" />
 
             <TextView
                 android:id="@+id/time"
@@ -93,7 +92,7 @@
                 android:layout_height="44dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/elevation_gain" />
+                android:text="@string/info_elevation_gain" />
 
             <TextView
                 android:id="@+id/elevationGain"
@@ -113,7 +112,7 @@
                 android:layout_weight="1"
                 android:background="@color/statsInfo"
                 android:gravity="center"
-                android:text="All time" />
+                android:text="@string/all_time" />
 
         </TableRow>
 
@@ -125,8 +124,7 @@
                 android:layout_height="44dp"
                 android:layout_marginTop="4dp"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/activities" />
+                android:gravity="center" />
 
             <TextView
                 android:id="@+id/activitiesAllTimeCount"
@@ -147,7 +145,7 @@
                 android:layout_height="44dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/distance" />
+                android:text="@string/info_distance" />
 
             <TextView
                 android:id="@+id/distanceAllTime"
@@ -168,7 +166,7 @@
                 android:layout_height="44dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/time" />
+                android:text="@string/info_time" />
 
             <TextView
                 android:id="@+id/timeAllTime"
@@ -189,7 +187,7 @@
                 android:layout_height="44dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/elevation_gain" />
+                android:text="@string/info_elevation_gain" />
 
             <TextView
                 android:id="@+id/elevationGainAllTime"
@@ -206,4 +204,3 @@
     </TableLayout>
 
 </ScrollView>
-

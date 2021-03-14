@@ -25,4 +25,5 @@ public class PermissionDialog extends AppCompatDialogFragment {
         });
         return builder.create();
     }
+
 }

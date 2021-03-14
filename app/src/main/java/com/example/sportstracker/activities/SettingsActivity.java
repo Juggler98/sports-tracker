@@ -11,8 +11,6 @@ import androidx.preference.EditTextPreference;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
-import androidx.preference.PreferenceManager;
-import androidx.preference.SwitchPreferenceCompat;
 
 import com.example.sportstracker.R;
 import com.example.sportstracker.RoutesMethods;
@@ -25,7 +23,6 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.acitivity_settings);
         getSupportFragmentManager().beginTransaction().replace(R.id.settingsContainer, new SettingsFragment()).commit();
     }
-
 
     public static class SettingsFragment extends PreferenceFragmentCompat implements Preference.OnPreferenceChangeListener {
 
@@ -73,26 +70,6 @@ public class SettingsActivity extends AppCompatActivity {
                 changeIcon(preferredType, preferredType.getValue());
                 preferredType.setOnPreferenceChangeListener(this);
             }
-            SwitchPreferenceCompat autoPause = findPreference(getString(R.string.autoPausePref));
-            if (autoPause != null) {
-
-            }
-        }
-
-        @Override
-        public PreferenceManager getPreferenceManager() {
-            return super.getPreferenceManager();
-        }
-
-        @Override
-        public void onResume() {
-            super.onResume();
-
-        }
-
-        @Override
-        public void onPause() {
-            super.onPause();
         }
 
         @Override
@@ -110,5 +87,3 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
 }
-
-

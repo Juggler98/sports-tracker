@@ -10,7 +10,7 @@ import com.example.sportstracker.R;
 
 public class LoadingDialog {
 
-    private Activity activity;
+    private final Activity activity;
     private AlertDialog dialog;
     private TextView textView;
 

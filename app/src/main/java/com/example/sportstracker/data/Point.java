@@ -56,10 +56,6 @@ public class Point {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     int getIdActivity() {
         return idActivity;
     }
@@ -80,19 +76,11 @@ public class Point {
         return time;
     }
 
-    public void setTime(double time) {
-        this.time = time;
-    }
-
     public double getSpeed() {
         return speed;
     }
 
-    public void setSpeed(double speed) {
-        this.speed = speed;
-    }
-
-    double getHdop() {
+    public double getHdop() {
         return hdop;
     }
 

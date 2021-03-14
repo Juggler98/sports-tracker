@@ -15,11 +15,7 @@ import com.example.sportstracker.R;
 import com.example.sportstracker.data.Route;
 import com.example.sportstracker.RoutesMethods;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -89,22 +85,13 @@ public class PlaceholderFragment extends Fragment {
                 elevationGainD += elevationGainPartial;
                 activitiesCount++;
 
-                DateFormat format = new SimpleDateFormat("yyyy", Locale.getDefault());
-                Date activityDate = new Date((long) route.getTimeStart());
-                String yearStr = format.format(activityDate);
-                int activityYear = Integer.parseInt(yearStr);
-
-                Date actualDate = new Date(System.currentTimeMillis());
-                yearStr = format.format(actualDate);
-                int actualYear = Integer.parseInt(yearStr);
+                int activityYear = Integer.parseInt(routesMethods.getDate(route.getTimeStart(), "yyyy"));
+                int actualYear = Integer.parseInt(routesMethods.getDate(System.currentTimeMillis(), "yyyy"));
 
                 if (activityYear == actualYear) {
-                    double distancePartialYear = routesMethods.getDistance(points);
-                    double timePartialYear = routesMethods.getHours(points, route.getAutoPause())[1];
-                    double elevationGainPartialYear = routesMethods.getElevationGainLoss(points)[0];
-                    distanceDYear += distancePartialYear;
-                    timeDYear += timePartialYear;
-                    elevationGainDYear += elevationGainPartialYear;
+                    distanceDYear += distancePartial;
+                    timeDYear += timePartial;
+                    elevationGainDYear += elevationGainPartial;
                     activitiesCountYear++;
                 }
             }
@@ -118,9 +105,9 @@ public class PlaceholderFragment extends Fragment {
         double minutesDYear = (timeDYear - hoursYear) * 60.0;
         int minutesYear = (int) minutesDYear;
 
-        activityCount.setText(getString(R.string.activitiesCount, activitiesCountYear));
-        distance.setText(getString(R.string.distance_stats, Math.round(distanceDYear / 1000.0)));
-        time.setText(getString(R.string.time_data_stats, hoursYear, minutesYear));
+        activityCount.setText(getString(R.string.stats_count, activitiesCountYear));
+        distance.setText(getString(R.string.stats_distance, Math.round(distanceDYear / 1000.0)));
+        time.setText(getString(R.string.stats_time, hoursYear, minutesYear));
 
         if (sectionNumber != 4) {
             elevationGain.setText(getString(R.string.metres, Math.round(elevationGainDYear)));
@@ -130,9 +117,9 @@ public class PlaceholderFragment extends Fragment {
             elevationGainAll.setText(getString(R.string.metres, 0));
         }
 
-        activityCountAll.setText(getString(R.string.activitiesCount, activitiesCount));
-        distanceAll.setText(getString(R.string.distance_stats, Math.round(distanceD / 1000.0)));
-        timeAll.setText(getString(R.string.time_data_stats, hours, minutes));
+        activityCountAll.setText(getString(R.string.stats_count, activitiesCount));
+        distanceAll.setText(getString(R.string.stats_distance, Math.round(distanceD / 1000.0)));
+        timeAll.setText(getString(R.string.stats_time, hours, minutes));
 
 
         String activityType = database.getType(sectionNumber);
@@ -151,4 +138,5 @@ public class PlaceholderFragment extends Fragment {
 
         return root;
     }
+
 }

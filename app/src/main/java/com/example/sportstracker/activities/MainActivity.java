@@ -57,7 +57,7 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    private static int PICK_GPX_FILE = 1;
+    private static final int PICK_GPX_FILE = 1;
     private DrawerLayout drawer;
     private Database database;
 
@@ -254,7 +254,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private class ImportRunnable implements Runnable {
-        private ArrayList<Point> points;
+        private final ArrayList<Point> points;
 
         ImportRunnable(ArrayList<Point> points) {
             this.points = points;
@@ -416,6 +416,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         patterns.add(new SimpleDateFormat("yyyyMMdd'T'HHmmssXXX", Locale.getDefault()));
         return patterns;
     }
-
 
 }

@@ -27,13 +27,10 @@ import java.util.ArrayList;
  */
 public class RoutesActivity extends AppCompatActivity {
 
-    private RoutesMethods routesMethods = new RoutesMethods();
+    private final RoutesMethods routesMethods = new RoutesMethods();
     private Database database;
 
-    //private ListView listView;
-    //private ArrayList<String> arrayListListView = new ArrayList<>();
-
-    private ArrayList<RouteItem> routeItemsList = new ArrayList<>();
+    private final ArrayList<RouteItem> routeItemsList = new ArrayList<>();
     private ArrayList<Route> activities = new ArrayList<>();
 
     private RouteAdapter adapter;
@@ -74,43 +71,6 @@ public class RoutesActivity extends AppCompatActivity {
             }
         });
 
-//        listView = findViewById(R.id.listView);
-//        loadListView();
-//        listView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, activities));
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                openStats(activities.get(position).getId());
-//            }
-//        });
-
-//        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//            @Override
-//            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
-//                final int positionFinal = position;
-//                AlertDialog.Builder builder = new AlertDialog.Builder(RoutesActivity.this);
-//                builder.setMessage("Delete this activity?").setCancelable(true).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        database.deleteActivity(activities.get(position).getId());
-//                        activities = database.getActivities();
-//                        loadListView();
-//                        listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
-//                    }
-//                }).setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.cancel();
-//                    }
-//                });
-//                AlertDialog alertDialog = builder.create();
-//                alertDialog.show();
-//
-//                return true;
-//            }
-//        });
-
-
     }
 
     @Override
@@ -135,21 +95,14 @@ public class RoutesActivity extends AppCompatActivity {
         if (isReloadNeeded) {
             activities = database.getActivities();
             sortRoutes(activities);
-            if (activities.size() < oldSize) {
-                routeItemsList.remove(activityOpen);
-                adapter.notifyItemRemoved(activityOpen);
-            } else if (activities.size() > oldSize) {
-//                Activity activity = activities.get(activities.size()-1);
-//                routeItemsList.add(new RouteItem(getIcon(activity.getIdType()), routesMethods.getDate(activity.getTimeStart()), activity.getTitle()));
-//                adapter.notifyItemInserted(routeItemsList.size() - 1 - 5);
-            } else {
+            if (activities.size() == oldSize) {
                 routeItemsList.get(activityOpen).setTitle(activities.get(activityOpen).getTitle());
                 routeItemsList.get(activityOpen).setIcon(routesMethods.getIcon(activities.get(activityOpen).getIdType()));
                 adapter.notifyItemChanged(activityOpen);
-//                Log.d("Routes_LC", "onResume Routes " + activityOpen);
+            } else if (activities.size() < oldSize) {
+                routeItemsList.remove(activityOpen);
+                adapter.notifyItemRemoved(activityOpen);
             }
-//            loadListView();
-//            listView.setAdapter(new ArrayAdapter<>(RoutesActivity.this, android.R.layout.simple_list_item_1, arrayListListView));
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(getString(R.string.reloadPref), false);
             editor.apply();
@@ -169,22 +122,10 @@ public class RoutesActivity extends AppCompatActivity {
         Log.d("Routes_LC", "onStop Routes");
     }
 
-//    private void loadListView() {
-//        arrayListListView.clear();
-//        for (int i = 0; i < activities.size(); ++i) {
-//            Activity activity = activities.get(i);
-//            if (activity.getTitle().equals("")) {
-//                arrayListListView.add((i + 1) + ". " + routesMethods.getDate(activity.getTimeStart()));
-//            } else {
-//                arrayListListView.add((i + 1) + ". " + activity.getTitle());
-//            }
-//        }
-//    }
-
     private void reloadRouteItemsList() {
         routeItemsList.clear();
         for (Route route : activities) {
-            routeItemsList.add(new RouteItem(routesMethods.getIcon(route.getIdType()), routesMethods.getDate(route.getTimeStart()), route.getTitle()));
+            routeItemsList.add(new RouteItem(routesMethods.getIcon(route.getIdType()), routesMethods.getDate(route.getTimeStart(), "dd.MM.yyyy HH:mm"), route.getTitle()));
         }
     }
 

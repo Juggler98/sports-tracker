@@ -69,7 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_weight="1"
-                    android:contentDescription="Info Button"
+                    android:contentDescription="@string/desc_button_info"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:src="@drawable/ic_info"
                     android:tint="@color/colorIcon">
@@ -81,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:contentDescription="Pause Button"
+                    android:contentDescription="@string/desc_button_pause"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:src="@drawable/ic_pause"
                     android:tint="@color/colorIcon">
@@ -93,7 +93,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:contentDescription="Stop Button"
+                    android:contentDescription="@string/desc_button_stop"
                     android:foreground="?android:attr/selectableItemBackground"
                     android:src="@drawable/ic_stop"
                     android:tint="@color/colorIcon">
@@ -107,11 +107,9 @@
 
     </LinearLayout>
 
-
     <!--            </LinearLayout>-->
 
     <!--    </ScrollView>-->
-
 
     <com.google.android.material.navigation.NavigationView
 
@@ -148,14 +146,14 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Distance" />
+                        android:text="@string/info_distance" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Altitude" />
+                        android:text="@string/info_altitude" />
 
                 </TableRow>
 
@@ -167,7 +165,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="12.5 km"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -177,7 +174,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="0 m"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -193,7 +189,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Time"
+                        android:text="@string/info_time"
                         android:textStyle="italic" />
 
                     <TextView
@@ -201,7 +197,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Time (mov)"
+                        android:text="@string/info_time_mov"
                         android:textStyle="italic" />
 
                 </TableRow>
@@ -214,7 +210,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="0:00:45"
                         android:textSize="24sp"
 
                         android:textStyle="bold" />
@@ -225,7 +220,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="0:00:25"
                         android:textSize="24sp"
 
                         android:textStyle="bold" />
@@ -242,7 +236,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Avg speed"
+                        android:text="@string/info_avg_speed"
                         android:textStyle="italic" />
 
                     <TextView
@@ -251,7 +245,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Avg speed (mov)"
+                        android:text="@string/info_avg_speed_mov"
                         android:textStyle="italic" />
 
                 </TableRow>
@@ -264,7 +258,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="12.5 km/h"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -274,7 +267,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="10 km/h"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -289,15 +281,14 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Ele gain" />
+                        android:text="@string/info_ele_gain" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Ele loss"
-                        android:textStyle="bold" />
+                        android:text="@string/info_ele_loss" />
 
                 </TableRow>
 
@@ -309,7 +300,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="250 m"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -319,7 +309,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="-120 m"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
@@ -335,7 +324,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="Speed" />
+                        android:text="@string/info_speed" />
 
                 </TableRow>
 
@@ -347,12 +336,10 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="0 km/h"
                         android:textSize="24sp"
                         android:textStyle="bold" />
 
                 </TableRow>
-
 
             </TableLayout>
 
@@ -360,10 +347,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </com.google.android.material.navigation.NavigationView>
 
-
 </androidx.drawerlayout.widget.DrawerLayout>
-
-

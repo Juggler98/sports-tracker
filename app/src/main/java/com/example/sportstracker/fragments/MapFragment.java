@@ -67,5 +67,4 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Log.d("LC_MapFragment", "MapFragment OnDestroy");
     }
 
-
 }

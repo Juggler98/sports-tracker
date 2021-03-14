@@ -2,7 +2,7 @@ package com.example.sportstracker.data;
 
 public class RouteItem {
     private int icon;
-    private String date;
+    private final String date;
     private String title;
 
     public RouteItem(int icon, String date, String title) {

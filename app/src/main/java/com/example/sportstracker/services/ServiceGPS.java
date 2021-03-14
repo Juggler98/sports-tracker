@@ -30,7 +30,6 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static java.lang.Math.round;
 
-
 /**
  * Creates foreground service with location manager to get location change.
  */
@@ -38,22 +37,15 @@ public class ServiceGPS extends Service {
 
     private LocationManager locationManager;
     private int routeID;
-    private RoutesMethods routesMethods = new RoutesMethods();
+    private final RoutesMethods routesMethods = new RoutesMethods();
     private NotificationCompat.Builder notification;
 
-    private Database database = new Database(ServiceGPS.this);
+    private final Database database = new Database(ServiceGPS.this);
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences defaultSharedPreferences;
 
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.d("GPS_LC", "GPS onCreate");
-    }
-
-    LocationListener locationListener = new LocationListener() {
+    private final LocationListener locationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
             Log.d("GPS_LC", "Location is Changed");
@@ -71,16 +63,10 @@ public class ServiceGPS extends Service {
 
             Log.d("GPS_LC_TIME", location.getTime() + "");
 
-//            DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-//            Date date = new Date(location.getTime());
-//            String time = format.format(date);
-
             Point point = new Point(routeID, database.getLastPointID(routeID) + 1,
                     latitude, longitude, elevation, time, speed, course, hdop, vdop);
 
             if (sharedPreferences.getBoolean(getString(R.string.pausePref), false)) {
-                Log.d("GPS_LC_TIME", "Trueeeeeeeee");
-
                 point.setPaused(true);
                 database.setPause(routeID, database.getLastPointID(routeID));
             } else {
@@ -90,13 +76,13 @@ public class ServiceGPS extends Service {
                 minHorizontal = max(minHorizontal, 4);
                 minVertical = max(minVertical, 4);
 
-//            if (point.getHdop() <= minHorizontal && point.getVdop() <= minVertical) {
-                database.addPoint(point);
-                // send coordinates to record activity to write lines on map
-                Intent intent = new Intent(getString(R.string.intentExtra));
-                intent.putExtra(getString(R.string.intentExtra), latitude + "," + longitude);
-                sendBroadcast(intent);
-//            }
+                if (point.getHdop() <= minHorizontal && point.getVdop() <= minVertical) {
+                    database.addPoint(point);
+                    // send coordinates to record activity to write lines on map
+                    Intent intent = new Intent(getString(R.string.intentExtra));
+                    intent.putExtra(getString(R.string.intentExtra), latitude + "," + longitude);
+                    sendBroadcast(intent);
+                }
             }
 
             // when location is changed notification is updated
@@ -107,7 +93,6 @@ public class ServiceGPS extends Service {
 
             Log.d("GPS_LC", "Write Location to: " + routeID);
         }
-
 
         //this method is deprecated in API level 29. This callback will never be invoked on Android Q and above.
 
@@ -129,20 +114,10 @@ public class ServiceGPS extends Service {
     };
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        Log.d("GPS_LC", "GPS Service Location Destroyed");
-        if (locationManager != null) {
-            locationManager.removeUpdates(locationListener);
-        }
-        database.updateActivity(routeID, 0, System.currentTimeMillis(), "");
-
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(getString(R.string.pausePref), false);
-        editor.apply();
-        stopSelf();
+    public void onCreate() {
+        super.onCreate();
+        Log.d("GPS_LC", "GPS onCreate");
     }
-
 
     @SuppressLint("MissingPermission")
     @Override
@@ -162,11 +137,7 @@ public class ServiceGPS extends Service {
         broadCastIntent.putExtra(getString(R.string.intentExtra), "stop this");
         PendingIntent actionIntent = PendingIntent.getBroadcast(this, 0, broadCastIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-//        DateFormat format = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-//        Date date = new Date();
-//        String time = format.format(date);
-
-        Log.d("GPS_LC", routeID + " ");
+        Log.d("GPS_LC", routeID + "");
 
         // creates notification
         notification = new NotificationCompat.Builder(this, getString(R.string.chanelID)).setContentTitle("GPS Tracking is running").setContentText("0.0 km").setSmallIcon(R.drawable.ic_notification)
@@ -191,6 +162,21 @@ public class ServiceGPS extends Service {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, minTime, minDistance, locationListener);
 
         return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.d("GPS_LC", "GPS Service Location Destroyed");
+        if (locationManager != null) {
+            locationManager.removeUpdates(locationListener);
+        }
+        database.updateActivity(routeID, 0, System.currentTimeMillis(), "");
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(getString(R.string.pausePref), false);
+        editor.apply();
+        stopSelf();
     }
 
     @Nullable

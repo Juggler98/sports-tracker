@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
 
-    private ArrayList<String> pageTitles = new ArrayList<>();
+    private final ArrayList<String> pageTitles = new ArrayList<>();
 
     public SectionsPagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);

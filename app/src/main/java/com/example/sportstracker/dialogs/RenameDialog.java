@@ -85,4 +85,5 @@ public class RenameDialog extends AppCompatDialogFragment {
     public interface RenameDialogListener {
         void applyText(String name);
     }
+
 }

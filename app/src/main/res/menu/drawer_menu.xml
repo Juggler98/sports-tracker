@@ -7,32 +7,32 @@
         <item
             android:id="@+id/nav_dashboard"
             android:icon="@drawable/ic_dashboard"
-            android:title="Dashboard" />
+            android:title="@string/drawer_dashboard" />
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_map"
-            android:title="Map" />
+            android:title="@string/drawer_map" />
     </group>
 
-    <item android:title="Import">
+    <item android:title="@string/drawer_import">
         <menu>
             <item
                 android:id="@+id/nav_import"
                 android:icon="@drawable/ic_import"
-                android:title="Import" />
+                android:title="@string/drawer_import" />
         </menu>
     </item>
 
-    <item android:title="System">
+    <item android:title="@string/drawer_system">
         <menu>
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_settings"
-                android:title="Settings" />
+                android:title="@string/drawer_settings" />
             <item
                 android:id="@+id/nav_info"
                 android:icon="@drawable/ic_info"
-                android:title="Info" />
+                android:title="@string/drawer_info" />
         </menu>
     </item>
 

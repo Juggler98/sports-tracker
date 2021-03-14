@@ -4,13 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.RoutesActivity">
-    <!--    android:background="@color/background">-->
-
-    <!--    <ListView-->
-    <!--        android:id="@+id/listView"-->
-    <!--        style="@style/Widget.AppCompat.ListView"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent" />-->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

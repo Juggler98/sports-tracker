@@ -31,4 +31,5 @@ public class NotificationReceiver extends BroadcastReceiver {
         Intent intent1 = new Intent(context, ServiceGPS.class);
         context.stopService(intent1);
     }
+
 }

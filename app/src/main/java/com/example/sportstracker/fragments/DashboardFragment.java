@@ -28,9 +28,6 @@ import com.example.sportstracker.activities.RecordActivity;
 import com.example.sportstracker.activities.RoutesActivity;
 import com.example.sportstracker.activities.StatsActivity;
 
-import java.util.ArrayList;
-
-
 public class DashboardFragment extends Fragment implements View.OnClickListener {
 
     private SharedPreferences defaultSharedPreferences;
@@ -131,7 +128,6 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
     }
 
     private void createActivityTypeDialog() {
-
         String[] types = database.getTypes();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -158,6 +154,5 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
         Intent intent = new Intent(getContext(), RecordActivity.class);
         startActivity(intent);
     }
-
 
 }

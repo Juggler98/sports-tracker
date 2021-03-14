@@ -13,14 +13,9 @@ import com.example.sportstracker.R;
  */
 public class App extends Application {
 
-    /**
-     * Channel ID which using foreground service
-     */
-    //public static final String CHANNEL_ID = "ChannelID";
     @Override
     public void onCreate() {
         super.onCreate();
-
         createNotificationChannel();
     }
 
@@ -32,6 +27,6 @@ public class App extends Application {
                 notificationManager.createNotificationChannel(notificationChannel);
             Log.d("GPS_LC", "New Channel");
         }
-
     }
+
 }

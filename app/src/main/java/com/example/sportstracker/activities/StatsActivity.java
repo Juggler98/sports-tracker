@@ -26,7 +26,8 @@ import com.google.android.material.tabs.TabLayout;
  */
 public class StatsActivity extends AppCompatActivity {
 
-    private RoutesMethods routesMethods = new RoutesMethods();
+    private final RoutesMethods routesMethods = new RoutesMethods();
+    private Database database;
 
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
@@ -40,9 +41,7 @@ public class StatsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stats);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
 
-        Database database = new Database(this);
-
-        //loadingDialog.startLoadingDialog();
+        database = new Database(this);
 
         viewPager = findViewById(R.id.viewPager);
         viewPager.setOffscreenPageLimit(7);
@@ -65,10 +64,6 @@ public class StatsActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-//                ImportRunnable importRunnable = new ImportRunnable(sectionsPagerAdapter);
-//                new Thread(importRunnable).start();
-
-//                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LOCKED);
                 viewPager.setAdapter(sectionsPagerAdapter);
                 for (int i = 0; i < 8; i++) {
                     TabLayout.Tab tab = tabLayout.getTabAt(i);
@@ -77,80 +72,15 @@ public class StatsActivity extends AppCompatActivity {
                             tab.setIcon(routesMethods.getIcon(i + 1));
                         else
                             tab.setIcon(R.drawable.ic_all);
-//                      tab.setTabLabelVisibility(TabLayout.TAB_LABEL_VISIBILITY_UNLABELED);
                         if (tab.getIcon() != null)
                             tab.getIcon().setTint(getColor(R.color.colorIcon));
                     }
                 }
                 loadingDialog.dismissDialog();
-                //setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                //Toast.makeText(getApplicationContext(), "Load Successful: ", Toast.LENGTH_LONG).show();
-
             }
         });
 
-
-//        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                //loadingDialog.startLoadingDialog();
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                //loadingDialog.startLoadingDialog();
-//
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//                loadingDialog.dismissDialog();
-//            }
-//        });
-
     }
-
-//    private void load(SectionsPagerAdapter sectionsPagerAdapter) {
-//        ImportRunnable importRunnable = new ImportRunnable(sectionsPagerAdapter);
-//        new Thread(importRunnable).start();
-//
-//        //loadingDialog.startLoadingDialog();
-//        //viewPager.setAdapter(sectionsPagerAdapter);
-//        //loadingDialog.dismissDialog();
-//    }
-
-//    private class ImportRunnable implements Runnable {
-//        private SectionsPagerAdapter sectionsPagerAdapter;
-//
-//        ImportRunnable(SectionsPagerAdapter sectionsPagerAdapter) {
-//            this.sectionsPagerAdapter = sectionsPagerAdapter;
-//        }
-//
-//        @Override
-//        public void run() {
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    //loadingDialog.startLoadingDialog();
-//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
-//                }
-//            });
-//            viewPager.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    viewPager.setAdapter(sectionsPagerAdapter);
-//                }
-//            });
-//            runOnUiThread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    loadingDialog.dismissDialog();
-//                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-//                    Toast.makeText(getApplicationContext(), "Load Successful: ", Toast.LENGTH_LONG).show();
-//                }
-//            });
-//        }
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -172,7 +102,7 @@ public class StatsActivity extends AppCompatActivity {
                     builder.setMessage("All activities of each type will be deleted.\nThis cannot be undone.").setCancelable(true).setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            //database.deleteAll();
+                            database.deleteAll();
                             finish();
                         }
                     }).setNegativeButton("No", new DialogInterface.OnClickListener() {

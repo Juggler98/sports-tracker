@@ -15,7 +15,7 @@ import com.example.sportstracker.data.RouteItem;
 import java.util.ArrayList;
 
 public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHolder> {
-    private ArrayList<RouteItem> routeItems;
+    private final ArrayList<RouteItem> routeItems;
     private OnItemClickListener listener;
 
     public interface OnItemClickListener {
@@ -27,9 +27,9 @@ public class RouteAdapter extends RecyclerView.Adapter<RouteAdapter.RouteViewHol
     }
 
     static class RouteViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView textView1;
-        TextView textView2;
+        final ImageView imageView;
+        final TextView textView1;
+        final TextView textView2;
 
         RouteViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);

@@ -42,10 +42,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 
 import static java.lang.Math.round;
@@ -55,7 +52,7 @@ import static java.lang.Math.round;
  */
 public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCallback, RenameDialog.RenameDialogListener {
 
-    private RoutesMethods routesMethods = new RoutesMethods();
+    private final RoutesMethods routesMethods = new RoutesMethods();
 
     private TextView avgSpeed;
     private TextView avgInfo;
@@ -135,45 +132,40 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(name);
 
-        DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault());
-        Date date = new Date((long) route.getTimeStart());
-        String routeDate = format.format(date);
-
-        dateView.setText(routeDate);
+        dateView.setText(routesMethods.getDate(route.getTimeStart(), "dd.MM.yyyy HH:mm:ss"));
 
         double distanceD = routesMethods.getDistance(points) / 1000.0;
-        distance.setText(Math.round(distanceD * 100) / 100.0 + " " + getString(R.string.km));
+        distance.setText(String.format(Locale.US, getString(R.string.route_distance), distanceD));
 
         double[] hours = routesMethods.getHours(points, route.getAutoPause());
-
         int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[0]);
-        String minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
-        String secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
-        time.setText(getString(R.string.time_data, hoursMinutesSeconds[0], minutesStr, secondsStr));
+        String[] minutesSeconds = routesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
+        time.setText(getString(R.string.route_time, hoursMinutesSeconds[0], minutesSeconds[0], minutesSeconds[1]));
 
         hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[1]);
-        minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
-        secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
-        timeMoving.setText(getString(R.string.time_data, hoursMinutesSeconds[0], minutesStr, secondsStr));
+        minutesSeconds = routesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
+        timeMoving.setText(getString(R.string.route_time, hoursMinutesSeconds[0], minutesSeconds[0], minutesSeconds[1]));
 
-        elevationGain.setText(getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[0]));
-        elevationLoss.setText("-" + getString(R.string.metres, (int) routesMethods.getElevationGainLoss(points)[1]));
+        double[] elevationGainLoss = routesMethods.getElevationGainLoss(points);
+        elevationGain.setText(getString(R.string.metres, (int) elevationGainLoss[0]));
+        elevationLoss.setText(getString(R.string.metres, (int) elevationGainLoss[1]));
 
-        maxAltitude.setText((int) routesMethods.getAltitudeMaxMin(points)[0] + " m");
-        minAltitude.setText((int) routesMethods.getAltitudeMaxMin(points)[1] + " m");
+        double[] altitudeMaxMin = routesMethods.getAltitudeMaxMin(points);
+        maxAltitude.setText(getString(R.string.metres, (int) altitudeMaxMin[0]));
+        minAltitude.setText(getString(R.string.metres, (int) altitudeMaxMin[1]));
 
-        maximumSpeed = round(routesMethods.getMaxSpeed(points) * 3.6 * 10) / 10.0;
+        maximumSpeed = routesMethods.getMaxSpeed(points) * 3.6;
 
         if (hours[0] == 0)
             this.avg = 0.0;
         else
-            this.avg = round(distanceD / hours[0] * 10.0) / 10.0;
+            this.avg = distanceD / hours[0];
 
 
         if (hours[1] == 0)
             this.avgMov = 0.0;
         else
-            this.avgMov = round(distanceD / hours[1] * 10.0) / 10.0;
+            this.avgMov = distanceD / hours[1];
 
         avgVsPace = route.getIdType() == 3;
 
@@ -298,7 +290,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         mapView.onStart();
     }
 
-    public void openDialog() {
+    private void openDialog() {
         RenameDialog renameDialog = new RenameDialog();
         renameDialog.show(getSupportFragmentManager(), "rename");
     }
@@ -316,49 +308,37 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     // if click on avg speed it changed to avg pace and opposite
     private void setAvgSpeedPace() {
         if (avgVsPace) {
-            String[] pace;
-            avgInfo.setText(getString(R.string.avg_pace));
-            avgMovingInfo.setText("Avg pace (mov)");
-            maxSpeedInfo.setText("Max pace");
+            avgInfo.setText(getString(R.string.info_avg_pace));
+            avgMovingInfo.setText(getString(R.string.info_avg_pace_mov));
+            maxSpeedInfo.setText(getString(R.string.info_max_pace));
             if (avg == 0) {
-                avgSpeed.setText(getString(R.string.avg_pace_null));
+                avgSpeed.setText(getString(R.string.route_pace_null));
             } else {
-                pace = this.getPace(avg);
-                avgSpeed.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
+                String[] pace = routesMethods.getPace(avg);
+                avgSpeed.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
             if (avgMov == 0) {
-                avgSpeedMoving.setText(getString(R.string.avg_pace_null));
+                avgSpeedMoving.setText(getString(R.string.route_pace_null));
             } else {
-                pace = this.getPace(avgMov);
-                avgSpeedMoving.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
+                String[] pace = routesMethods.getPace(avgMov);
+                avgSpeedMoving.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
             if (maximumSpeed == 0) {
-                maxSpeed.setText(getString(R.string.avg_pace_null));
+                maxSpeed.setText(getString(R.string.route_pace_null));
             } else {
-                pace = this.getPace(maximumSpeed);
-                maxSpeed.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
+                String[] pace = routesMethods.getPace(maximumSpeed);
+                maxSpeed.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
         } else {
-            avgInfo.setText(getString(R.string.avg_speed));
-            avgSpeed.setText(avg + " " + getString(R.string.kmh));
-            avgMovingInfo.setText("Avg speed (mov)");
-            avgSpeedMoving.setText(avgMov + " " + getString(R.string.kmh));
-            maxSpeedInfo.setText("Max speed");
-            maxSpeed.setText(maximumSpeed + " " + getString(R.string.kmh));
+            avgInfo.setText(getString(R.string.info_avg_speed));
+            avgSpeed.setText(String.format(Locale.US, getString(R.string.route_speed), avg));
+            avgMovingInfo.setText(getString(R.string.info_avg_speed_mov));
+            avgSpeedMoving.setText(String.format(Locale.US, getString(R.string.route_speed), avgMov));
+            maxSpeedInfo.setText(getString(R.string.info_max_speed));
+            maxSpeed.setText(String.format(Locale.US, getString(R.string.route_speed), maximumSpeed));
         }
     }
 
-    private String[] getPace(double speed) {
-        String[] pace = new String[2];
-        double minutesD = 60 / speed;
-        int minutes = (int) minutesD;
-        double secondsD = (minutesD - minutes) * 60.0;
-        int seconds = (int) secondsD;
-        String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
-        pace[0] = minutes + "";
-        pace[1] = secondsStr;
-        return pace;
-    }
 
     @Override
     public void applyText(String name) {
@@ -406,14 +386,11 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         editor.apply();
     }
 
-    public void createGpx() {
-        if (route.getTitle().equals("")) {
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault());
-            Date date = new Date((long) route.getTimeStart());
-            routeName = format.format(date);
-        } else {
+    private void createGpx() {
+        if (route.getTitle().equals(""))
+            routeName = routesMethods.getDate(route.getTimeStart(), "yyyy-MM-dd_HH-mm-ss");
+        else
             routeName = route.getTitle();
-        }
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         intent.setType("application/gpx");
@@ -451,7 +428,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                 for (Point point : points) {
                     String trkpt = "<trkpt lat=\"" + point.getLat() + "\" lon=\"" + point.getLon() + "\">\n";
                     String ele = "\t<ele>" + point.getEle() + "</ele>\n";
-                    String time = "\t<time>" + this.getUTC(point.getTime()) + "</time>\n";
+                    String time = "\t<time>" + routesMethods.getDate(point.getTime(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") + "</time>\n";
                     String speed = "\t<speed>" + round(point.getSpeed() * 100) / 100.0 + "</speed>\n";
                     String course = "\t<course>" + round(point.getCourse() * 10) / 10.0 + "</course>\n";
                     fileOutputStream.write(trkpt.getBytes());
@@ -488,16 +465,11 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         }
     }
 
-    private String getUTC(double time) {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-        Date date = new Date((long) time);
-        return format.format(date);
-    }
-
     @SuppressLint("InflateParams")
     private void showSpeedPaceDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(RouteInfoActivity.this);
         View view = getLayoutInflater().inflate(R.layout.speedpace_dialog, null);
+        builder.setTitle("Speed vs Pace");
         builder.setMessage("\nTap the speed to change it to pace or vice versa.");
         builder.setView(view);
         final SharedPreferences.Editor editor = sharedPreferences.edit();

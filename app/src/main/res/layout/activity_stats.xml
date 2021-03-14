@@ -19,7 +19,6 @@
             android:background="@color/statsTab"
             app:tabMode="scrollable" />
 
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager.widget.ViewPager
@@ -27,6 +26,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

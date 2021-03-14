@@ -68,7 +68,7 @@ public class RoutesMethods {
                 if (elevationDifference > 5) {
                     elevationGain += elevationDifference;
                 } else if (elevationDifference < -8) {
-                    elevationLoss += elevationDifference * -1;
+                    elevationLoss += elevationDifference;
                 }
                 ele1 = ele2;
             } else {
@@ -90,14 +90,15 @@ public class RoutesMethods {
         double minAltitude = Integer.MAX_VALUE;
         for (Point point : points) {
             if (point.getVdop() < 8) {
-                if (point.getEle() > maxAltitude)
-                    maxAltitude = point.getEle();
-                if (point.getEle() < minAltitude)
-                    minAltitude = point.getEle();
+                double altitude = point.getEle();
+                if (altitude > maxAltitude)
+                    maxAltitude = altitude;
+                if (altitude < minAltitude)
+                    minAltitude = altitude;
             }
         }
-        altitudeMaxMin[0] = maxAltitude == Integer.MIN_VALUE ? 0 : (maxAltitude);
-        altitudeMaxMin[1] = minAltitude == Integer.MAX_VALUE ? 0 : (minAltitude);
+        altitudeMaxMin[0] = maxAltitude == Integer.MIN_VALUE ? 0 : maxAltitude;
+        altitudeMaxMin[1] = minAltitude == Integer.MAX_VALUE ? 0 : minAltitude;
         return altitudeMaxMin;
     }
 
@@ -214,10 +215,22 @@ public class RoutesMethods {
         return r * c;
     }
 
-    public String getDate(double time) {
-        DateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault());
+    public String getDate(double time, String pattern) {
+        DateFormat dateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
         Date date = new Date((long) time);
-        return format.format(date);
+        return dateFormat.format(date);
+    }
+
+    public String[] getPace(double speed) {
+        String[] pace = new String[2];
+        double minutesD = 60 / speed;
+        int minutes = (int) minutesD;
+        double secondsD = (minutesD - minutes) * 60.0;
+        int seconds = (int) secondsD;
+        String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
+        pace[0] = minutes + "";
+        pace[1] = secondsStr;
+        return pace;
     }
 
     public int[] getHoursMinutesSeconds(double time) {
@@ -227,6 +240,13 @@ public class RoutesMethods {
         double secondsD = (minutesD - minutes) * 60.0;
         int seconds = (int) secondsD;
         return new int[]{hours, minutes, seconds};
+    }
+
+    public String[] getMinutesSeconds(int minutes, int seconds) {
+        String[] minutesSeconds = new String[2];
+        minutesSeconds[0] = minutes < 10 ? "0" + minutes : "" + minutes;
+        minutesSeconds[1] = seconds < 10 ? "0" + seconds : "" + seconds;
+        return minutesSeconds;
     }
 
     public int getIcon(int type) {

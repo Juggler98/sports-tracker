@@ -39,6 +39,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -48,7 +49,7 @@ import static java.lang.Math.min;
  */
 public class RecordActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private RoutesMethods routesMethods = new RoutesMethods();
+    private final RoutesMethods routesMethods = new RoutesMethods();
     private MapView mapView;
     private GoogleMap gMap;
 
@@ -69,7 +70,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private CameraPosition cameraPosition;
     private ArrayList<LatLng> latLngArrayList = new ArrayList<>();
-    private ArrayList<Point> twoPoints = new ArrayList<>();
+    private final ArrayList<Point> twoPoints = new ArrayList<>();
     private double oldSpeed = 0;
     private Database database;
 
@@ -273,11 +274,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d("RECORD_LC", "onDestroy");
@@ -417,18 +413,16 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
         double[] hours = routesMethods.getHours(points, route.getAutoPause());
         int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[0]);
-        String minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
-        String secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
-        timeView.setText(hoursMinutesSeconds[0] + ":" + minutesStr + ":" + secondsStr);
+        String[] minutesSeconds = routesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
+        timeView.setText(getString(R.string.route_time, hoursMinutesSeconds[0], minutesSeconds[0], minutesSeconds[1]));
 
         hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[1]);
-        minutesStr = hoursMinutesSeconds[1] < 10 ? "0" + hoursMinutesSeconds[1] : "" + hoursMinutesSeconds[1];
-        secondsStr = hoursMinutesSeconds[2] < 10 ? "0" + hoursMinutesSeconds[2] : "" + hoursMinutesSeconds[2];
-        timeMovingView.setText(hoursMinutesSeconds[0] + ":" + minutesStr + ":" + secondsStr);
+        minutesSeconds = routesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
+        timeMovingView.setText(getString(R.string.route_time, hoursMinutesSeconds[0], minutesSeconds[0], minutesSeconds[1]));
 
-        distanceView.setText(Math.round(distance * 100.0) / 100.0 + " km");
+        distanceView.setText(String.format(Locale.US, getString(R.string.route_distance), distance));
         if (points.size() > 0) {
-            altitudeView.setText((int) points.get(points.size() - 1).getEle() + " m");
+            altitudeView.setText(getString(R.string.metres, (int) points.get(points.size() - 1).getEle()));
             speed = points.get(points.size() - 1).getSpeed();
             if (speed <= 0 && twoPoints.size() == 2) {
                 speed = routesMethods.getSpeed(twoPoints);
@@ -439,14 +433,24 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             oldSpeed = speed;
         } else {
             speed = 0;
+            altitudeView.setText("-");
         }
 
-        eleGainView.setText(Math.round(routesMethods.getElevationGainLoss(points)[0]) + " m");
-        eleLossView.setText("-" + Math.round(routesMethods.getElevationGainLoss(points)[1]) + " m");
+        double[] elevationGainLoss = routesMethods.getElevationGainLoss(points);
+        eleGainView.setText(getString(R.string.metres, (int) elevationGainLoss[0]));
+        eleLossView.setText(getString(R.string.metres, (int) elevationGainLoss[1]));
 
-        avgSpeed = Math.round(distance / hours[0] * 10) / 10.0;
-        avgSpeedMoving = Math.round(distance / hours[1] * 10) / 10.0;
-        speed = Math.round(speed * 3.6 * 10) / 10.0;
+        if (hours[0] == 0)
+            avgSpeed = 0.0;
+        else
+            avgSpeed = distance / hours[0];
+
+        if (hours[1] == 0)
+            this.avgSpeedMoving = 0.0;
+        else
+            this.avgSpeedMoving = distance / hours[1];
+
+        speed = speed * 3.6;
 
         setAvgSpeedPace();
 
@@ -459,48 +463,35 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
     private void setAvgSpeedPace() {
         if (avgVsPace) {
-            avgSpeedInfoView.setText(getString(R.string.avg_pace));
-            avgSpeedMovingInfoView.setText("Avg Pace (mov)");
-            speedInfoView.setText("Pace");
+            avgSpeedInfoView.setText(getString(R.string.info_avg_pace));
+            avgSpeedMovingInfoView.setText(getString(R.string.info_avg_pace_mov));
+            speedInfoView.setText(getString(R.string.info_pace));
             if (avgSpeed == 0) {
-                avgSpeedView.setText(getString(R.string.avg_pace_null));
+                avgSpeedView.setText(getString(R.string.route_pace_null));
             } else {
-                String[] pace = this.getPace(avgSpeed);
-                avgSpeedView.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
+                String[] pace = routesMethods.getPace(avgSpeed);
+                avgSpeedView.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
             if (avgSpeedMoving == 0) {
-                avgSpeedMovingView.setText(getString(R.string.avg_pace_null));
+                avgSpeedMovingView.setText(getString(R.string.route_pace_null));
             } else {
-                String[] pace = this.getPace(avgSpeedMoving);
-                avgSpeedMovingView.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
+                String[] pace = routesMethods.getPace(avgSpeedMoving);
+                avgSpeedMovingView.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
             if (speed == 0) {
-                speedView.setText(getString(R.string.avg_pace_null));
+                speedView.setText(getString(R.string.route_pace_null));
             } else {
-                String[] pace = this.getPace(speed);
-                speedView.setText(getString(R.string.avgPace_data, pace[0], pace[1]));
+                String[] pace = routesMethods.getPace(speed);
+                speedView.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
         } else {
-            avgSpeedInfoView.setText(getString(R.string.avg_speed));
-            avgSpeedView.setText(avgSpeed + " " + getString(R.string.kmh));
-            avgSpeedMovingInfoView.setText("Avg speed (mov)");
-            avgSpeedMovingView.setText(avgSpeedMoving + " " + getString(R.string.kmh));
-            speedInfoView.setText("Speed");
-            speedView.setText(speed + " " + getString(R.string.kmh));
+            avgSpeedInfoView.setText(getString(R.string.info_avg_speed));
+            avgSpeedView.setText(String.format(Locale.US, getString(R.string.route_speed), avgSpeed));
+            avgSpeedMovingInfoView.setText(getString(R.string.info_avg_speed_mov));
+            avgSpeedMovingView.setText(String.format(Locale.US, getString(R.string.route_speed), avgSpeedMoving));
+            speedInfoView.setText(getString(R.string.info_speed));
+            speedView.setText(String.format(Locale.US, getString(R.string.route_speed), speed));
         }
     }
-
-    private String[] getPace(double speed) {
-        String[] pace = new String[2];
-        double minutesD = 60 / speed;
-        int minutes = (int) minutesD;
-        double secondsD = (minutesD - minutes) * 60.0;
-        int seconds = (int) secondsD;
-        String secondsStr = seconds < 10 ? "0" + seconds : "" + seconds;
-        pace[0] = minutes + "";
-        pace[1] = secondsStr;
-        return pace;
-    }
-
 
 }

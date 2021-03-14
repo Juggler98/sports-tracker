@@ -12,12 +12,11 @@
         android:id="@+id/neverShow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Never show again"
+        android:text="@string/never_show_again"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
