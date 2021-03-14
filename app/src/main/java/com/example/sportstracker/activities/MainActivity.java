@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // permit start app only with getting GPS permission
         permission();
 
-        loadingDialog = new LoadingDialog(MainActivity.this, false);
+        loadingDialog = new LoadingDialog(MainActivity.this);
         loadingDialog.setText("Importing...");
     }
 

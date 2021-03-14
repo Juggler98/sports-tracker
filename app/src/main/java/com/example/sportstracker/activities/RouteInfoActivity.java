@@ -19,6 +19,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -69,6 +71,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     private ArrayList<Point> points = new ArrayList<>();
 
     private SharedPreferences sharedPreferences;
+    private final String NEVER_SHOW = "neverShowPref";
 
     private int routeID;
     private boolean avgVsPace;
@@ -85,8 +88,6 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
     private static final int EXPORT_GPX = 2;
 
-
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +100,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(getString(R.string.reloadPref));
+            //editor.putBoolean(NEVER_SHOW, false);
         editor.apply();
 
         mapView = findViewById(R.id.mapView);
@@ -201,6 +203,9 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             }
         });
 
+        if (!sharedPreferences.getBoolean(NEVER_SHOW, false))
+            this.showSpeedPaceDialog();
+
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
     }
@@ -264,9 +269,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         if (!latLngArrayList.isEmpty()) {
             // show map of recorded route
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngArrayList.get(latLngArrayList.size() / 4), 13));
-//            var iconBase = 'https://maps.google.com/mapfiles/kml/shapes/';
             googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
-//            googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(latLngArrayList.size() - 1)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
             googleMap.addMarker(new MarkerOptions().position(latLngArrayList.get(latLngArrayList.size() - 1)).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_finish)));
             googleMap.addPolyline(new PolylineOptions().addAll(latLngArrayList).color(Color.RED));
         }
@@ -311,13 +314,12 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
     }
 
     // if click on avg speed it changed to avg pace and opposite
-    @SuppressLint("SetTextI18n")
     private void setAvgSpeedPace() {
         if (avgVsPace) {
             String[] pace;
             avgInfo.setText(getString(R.string.avg_pace));
-            avgMovingInfo.setText("Avg Pace (mov)");
-            maxSpeedInfo.setText("Max Pace");
+            avgMovingInfo.setText("Avg pace (mov)");
+            maxSpeedInfo.setText("Max pace");
             if (avg == 0) {
                 avgSpeed.setText(getString(R.string.avg_pace_null));
             } else {
@@ -341,7 +343,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             avgSpeed.setText(avg + " " + getString(R.string.kmh));
             avgMovingInfo.setText("Avg speed (mov)");
             avgSpeedMoving.setText(avgMov + " " + getString(R.string.kmh));
-            maxSpeedInfo.setText("Max Speed");
+            maxSpeedInfo.setText("Max speed");
             maxSpeed.setText(maximumSpeed + " " + getString(R.string.kmh));
         }
     }
@@ -501,6 +503,30 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
         Date date = new Date((long) time);
         return format.format(date);
+    }
+
+    @SuppressLint("InflateParams")
+    private void showSpeedPaceDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(RouteInfoActivity.this);
+        View view = getLayoutInflater().inflate(R.layout.speedpace_dialog, null);
+        builder.setMessage("\nTap the speed to change it to pace or vice versa.");
+        builder.setView(view);
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        CheckBox checkBox = view.findViewById(R.id.neverShow);
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                editor.putBoolean(NEVER_SHOW, isChecked);
+            }
+        });
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                editor.apply();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
 }

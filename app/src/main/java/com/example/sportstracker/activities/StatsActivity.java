@@ -60,7 +60,7 @@ public class StatsActivity extends AppCompatActivity {
                 sectionsPagerAdapter.addPage("All");
         }
 
-        loadingDialog = new LoadingDialog(StatsActivity.this, false);
+        loadingDialog = new LoadingDialog(StatsActivity.this);
         loadingDialog.startLoadingDialog();
 
         Handler handler = new Handler();

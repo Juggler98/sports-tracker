@@ -13,22 +13,19 @@ public class LoadingDialog {
 
     private Activity activity;
     private AlertDialog dialog;
-    private boolean cancelable;
     private TextView textView;
 
-    public LoadingDialog(Activity activity, boolean cancelable) {
+    public LoadingDialog(Activity activity) {
         this.activity = activity;
-        this.cancelable = cancelable;
         init();
     }
 
     @SuppressLint("InflateParams")
     private void init() {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View view = inflater.inflate(R.layout.loading_dialog, null);
+        View view = activity.getLayoutInflater().inflate(R.layout.loading_dialog, null);
         builder.setView(view);
-        builder.setCancelable(cancelable);
+        builder.setCancelable(false);
         textView = view.findViewById(R.id.loadingText);
         dialog = builder.create();
     }
