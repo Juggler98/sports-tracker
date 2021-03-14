@@ -44,23 +44,15 @@ public class Route {
         return idType;
     }
 
-    public void setIdType(int idType) {
-        this.idType = idType;
-    }
-
     public double getTimeStart() {
         return timeStart;
     }
 
-    public void setTimeStart(double timeStart) {
-        this.timeStart = timeStart;
-    }
-
-    public double getTimeEnd() {
+    double getTimeEnd() {
         return timeEnd;
     }
 
-    public void setTimeEnd(double timeEnd) {
+    void setTimeEnd(double timeEnd) {
         this.timeEnd = timeEnd;
     }
 

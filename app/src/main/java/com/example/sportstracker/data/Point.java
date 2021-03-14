@@ -60,36 +60,20 @@ public class Point {
         this.id = id;
     }
 
-    public int getIdActivity() {
+    int getIdActivity() {
         return idActivity;
-    }
-
-    public void setIdActivity(int idActivity) {
-        this.idActivity = idActivity;
     }
 
     public double getLat() {
         return lat;
     }
 
-    public void setLat(double lat) {
-        this.lat = lat;
-    }
-
     public double getLon() {
         return lon;
     }
 
-    public void setLon(double lon) {
-        this.lon = lon;
-    }
-
     public double getEle() {
         return ele;
-    }
-
-    public void setEle(double ele) {
-        this.ele = ele;
     }
 
     public double getTime() {
@@ -108,28 +92,16 @@ public class Point {
         this.speed = speed;
     }
 
-    public double getHdop() {
+    double getHdop() {
         return hdop;
-    }
-
-    public void setHdop(double hdop) {
-        this.hdop = hdop;
     }
 
     public double getCourse() {
         return course;
     }
 
-    public void setCourse(double course) {
-        this.course = course;
-    }
-
     public double getVdop() {
         return vdop;
-    }
-
-    public void setVdop(double vdop) {
-        this.vdop = vdop;
     }
 
     public boolean getPaused() {

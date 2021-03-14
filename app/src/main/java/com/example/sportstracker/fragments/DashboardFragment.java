@@ -131,18 +131,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
     }
 
     private void createActivityTypeDialog() {
-        int type = 1;
-        String typeStr;
-        ArrayList<String> arrayList = new ArrayList<>();
-        do {
-            typeStr = database.getType(type++);
-            if (!typeStr.equals("")) {
-                arrayList.add(typeStr);
-            }
-        } while (!typeStr.equals(""));
 
-        String[] types = new String[arrayList.size()];
-        types = arrayList.toArray(types);
+        String[] types = database.getTypes();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Select Activity Type").setSingleChoiceItems(types, routeType - 1, new DialogInterface.OnClickListener() {

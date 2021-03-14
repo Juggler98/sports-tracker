@@ -23,10 +23,6 @@ public class RouteItem {
         return date;
     }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
-
     public String getTitle() {
         return title;
     }

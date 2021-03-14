@@ -28,7 +28,7 @@ public class RenameDialog extends AppCompatDialogFragment {
 
     /**
      *  Dialog for Renaming activity.
-     * @param savedInstanceState savedIntanceState
+     * @param savedInstanceState savedInstanceState
      * @return AlertDialog
      */
     @NonNull

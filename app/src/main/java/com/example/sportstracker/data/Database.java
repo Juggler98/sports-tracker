@@ -131,6 +131,33 @@ public class Database extends SQLiteOpenHelper {
         db.close();
     }
 
+//    public void addPoints(ArrayList<Point> points) {
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        for (Point point : points) {
+//            ContentValues cv = new ContentValues();
+//            cv.put("id_activity", point.getIdActivity());
+//            cv.put("id_point", point.getId());
+//            cv.put("lat", point.getLat());
+//            cv.put("lon", point.getLon());
+//            cv.put("ele", point.getEle());
+//            cv.put("time", point.getTime());
+//            //if (point.getSpeed() != -1) {
+//            cv.put("speed", point.getSpeed());
+//            //}
+//            //if (point.getCourse() != -1)
+//            cv.put("course", point.getCourse());
+//            //if (point.getHdop() != -1)
+//            cv.put("hdop", point.getHdop());
+//            //if (point.getVdop() != -1)
+//            cv.put("vdop", point.getVdop());
+//            if (point.getPaused()) {
+//                cv.put("paused", point.getPaused());
+//            }
+//            db.insert(TABLE_POINT, null, cv);
+//        }
+//        db.close();
+//    }
+
 
 //    public void checkTypes() {
 //        String queryString = "SELECT * FROM " + TABLE_TYPE;
@@ -160,6 +187,22 @@ public class Database extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return typeStr;
+    }
+
+    public String[] getTypes() {
+        String queryString = "SELECT type FROM " + TABLE_TYPE;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+        String[] types = new String[cursor.getCount()];
+        int row = 0;
+        if (cursor.moveToFirst()) {
+            do {
+                types[row++] = cursor.getString(0);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return types;
     }
 
     public int getLastActivityID() {
@@ -335,6 +378,43 @@ public class Database extends SQLiteOpenHelper {
         db.close();
         return points;
     }
+
+//    public ArrayList<Point> getAllPoints() {
+//        ArrayList<Point> points = new ArrayList<>();
+//        String queryString = "SELECT * FROM " + TABLE_POINT;
+//        SQLiteDatabase db = getReadableDatabase();
+//        Cursor cursor = db.rawQuery(queryString, null);
+//        if (cursor.moveToFirst()) {
+////            Log.d("DB_LC", "Column count: " + cursor.getColumnCount());
+////            Log.d("DB_LC", "Row count: " + cursor.getCount());
+//            do {
+//                int idActivity = cursor.getInt(0);
+//                int idPoint = cursor.getInt(1);
+//                double lat = cursor.getDouble(2);
+//                double lon = cursor.getDouble(3);
+//                double ele = cursor.getDouble(4);
+//                double time = cursor.getDouble(5);
+//                double speed = cursor.getType(6) == 0 ? -1 : cursor.getDouble(6);
+//                double hdop = cursor.getType(7) == 0 ? -1 : cursor.getDouble(7);
+//                double course = cursor.getType(8) == 0 ? -1 : cursor.getDouble(8);
+//                double vdop = cursor.getType(9) == 0 ? -1 : cursor.getDouble(9);
+////                Log.d("DB_LC", "VDOP: " +  cursor.getDouble(8));
+//
+//                Point point = new Point(idActivity, idPoint, lat, lon, ele, time, speed, course, hdop, vdop);
+//                if (cursor.getType(10) != 0) {
+//                    if (cursor.getInt(10) == 1) {
+//                        point.setPaused(true);
+//                    } else {
+//                        point.setPaused(false);
+//                    }
+//                }
+//                points.add(point);
+//            } while (cursor.moveToNext());
+//        }
+//        cursor.close();
+//        db.close();
+//        return points;
+//    }
 
     public void setPause(int activityID, int pointID) {
         String updatePause = "UPDATE " + TABLE_POINT + " SET paused = " + 1 + " WHERE id_activity = " + activityID +

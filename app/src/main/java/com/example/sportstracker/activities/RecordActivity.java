@@ -176,7 +176,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             }
         });
 
-
         // Stop tracking.
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -365,15 +364,13 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
                     String[] tokens = latLon != null ? latLon.split(",") : new String[0];
                     double lat = Double.parseDouble(tokens[0]);
                     double lon = Double.parseDouble(tokens[1]);
-                    LatLng latlng = new LatLng(lat, lon);
-                    latLngArrayList.add(latlng);
+                    LatLng latLng = new LatLng(lat, lon);
+                    latLngArrayList.add(latLng);
                     //write line on map
                     gMap.addPolyline(new PolylineOptions().addAll(latLngArrayList).color(Color.RED));
-
                     Log.d("mapLC", "On Receive: " + lat + " " + lon);
                     if (firstChangeOfPosition) {
-                        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latlng, 15));
-//                        gMap.addMarker(new MarkerOptions().position(latlng).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
                         gMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
                         firstChangeOfPosition = false;
                         Log.d("MAP_LC", "First Change of Position");
@@ -393,7 +390,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
                 gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngArrayList.get(latLngArrayList.size() - 1), 15));
             }
             // marker for first position
-//            gMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
             gMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
             gMap.addPolyline(new PolylineOptions().addAll(latLngArrayList).color(Color.RED));
             firstChangeOfPosition = false;
@@ -444,8 +440,6 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         } else {
             speed = 0;
         }
-
-
 
         eleGainView.setText(Math.round(routesMethods.getElevationGainLoss(points)[0]) + " m");
         eleLossView.setText("-" + Math.round(routesMethods.getElevationGainLoss(points)[1]) + " m");

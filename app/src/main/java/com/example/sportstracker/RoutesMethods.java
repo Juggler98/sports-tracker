@@ -82,7 +82,7 @@ public class RoutesMethods {
 
     /**
      * @param points points
-     * @return min max altitue
+     * @return min max altitude
      */
     public double[] getAltitudeMaxMin(ArrayList<Point> points) {
         double[] altitudeMaxMin = new double[2];
