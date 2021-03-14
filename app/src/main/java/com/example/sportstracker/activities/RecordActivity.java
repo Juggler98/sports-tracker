@@ -118,8 +118,8 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         routeID = sharedPreferences.getInt(getString(R.string.routeNamePref), 0);
 
-        delayMillis = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.timeIntervalPref),"4")) * 1000;
-        delayMillis = min(delayMillis, 30*1000);
+        delayMillis = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.timeIntervalPref), "4")) * 1000;
+        delayMillis = min(delayMillis, 30 * 1000);
         delayMillis = max(delayMillis, 1000);
 
         ImageView stopButton = findViewById(R.id.stop);
@@ -256,7 +256,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
 
         boolean pause = sharedPreferences.getBoolean(getString(R.string.pausePref), false);
         if (pause)
-           pauseButton.setImageResource(R.drawable.ic_record);
+            pauseButton.setImageResource(R.drawable.ic_record);
         else
             pauseButton.setImageResource(R.drawable.ic_pause);
 
@@ -328,7 +328,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         gMap.getUiSettings().setZoomControlsEnabled(true);
 
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        int mapType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.mapTypePref),"0"));
+        int mapType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.mapTypePref), "0"));
         switch (mapType) {
             case 0:
                 gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
@@ -413,7 +413,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         if (points.size() > 0) {
             twoPoints.add(points.get(points.size() - 1));
         }
-        double distance = routesMethods.getDistance(points)/1000.0;
+        double distance = routesMethods.getDistance(points) / 1000.0;
 
         double[] hours = routesMethods.getHours(points, route.getAutoPause());
         int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[0]);

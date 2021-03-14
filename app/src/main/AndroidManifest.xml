@@ -16,26 +16,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".activities.StatsActivity"
-            android:parentActivityName=".activities.MainActivity"
-            android:label="@string/title_all_stats" />
+        <activity
+            android:name=".activities.StatsActivity"
+            android:label="@string/title_all_stats"
+            android:parentActivityName=".activities.MainActivity" />
 
-        <activity android:name=".activities.RecordActivity"
+        <activity
+            android:name=".activities.RecordActivity"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.RouteInfoActivity"
-            android:parentActivityName=".activities.RoutesActivity"
-            android:label="@string/title_activity_stats" />
+            android:label="@string/title_activity_stats"
+            android:parentActivityName=".activities.RoutesActivity" />
         <activity
             android:name=".activities.RoutesActivity"
-            android:parentActivityName=".activities.MainActivity"
-            android:label="@string/title_activity_routes" />
+            android:label="@string/title_activity_routes"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.SettingsActivity"
-            android:parentActivityName=".activities.MainActivity"
-            android:label="@string/title_activity_settings" />
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".activities.MainActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -44,8 +45,7 @@
         <activity
             android:name=".activities.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

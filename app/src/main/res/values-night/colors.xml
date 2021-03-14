@@ -2,20 +2,17 @@
 <resources>
     <color name="colorPrimary">#3A3A3A</color>
     <color name="colorPrimaryDark">#3A3A3A</color>
-<!--    <color name="colorPrimaryDark">#636363</color>-->
+    <!--    <color name="colorPrimaryDark">#636363</color>-->
     <color name="colorAccent">#FFFFFF</color>
 
-<!--    <color name="button_color">#30cfd0</color>-->
-<!--    <color name="background">#FFFFFF</color>-->
-<!--    <color name="backgroundBlack">#1B1B1B</color>-->
+    <!--    <color name="button_color">#30cfd0</color>-->
+    <!--    <color name="background">#FFFFFF</color>-->
+    <!--    <color name="backgroundBlack">#1B1B1B</color>-->
     <color name="dashboardCard">#474747</color>
     <color name="statsTab">#424242</color>
     <color name="colorIcon">#CCCCCC</color>
     <color name="statsInfo">#606060</color>
 
-
-
-
     <color name="textColor">#FFFFFF</color>
-<!--    <color name="ic_launcher_background">#8BC34A</color>-->
+    <!--    <color name="ic_launcher_background">#8BC34A</color>-->
 </resources>

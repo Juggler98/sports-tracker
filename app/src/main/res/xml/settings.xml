@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory android:title="Map">
 
@@ -9,80 +8,72 @@
             android:defaultValue="0"
             android:entries="@array/map_type"
             android:entryValues="@array/map_value"
-            android:key="@string/mapTypePref"
-            android:title="Map type"
-            app:useSimpleSummaryProvider="true"
-            android:tint="@color/colorIcon"
             android:icon="@drawable/ic_map"
-            app:itemIconTint="@color/textColor"
+            android:key="@string/mapTypePref"
             android:negativeButtonText="Cancel"
-            />
+            android:tint="@color/colorIcon"
+            android:title="Map type"
+            app:itemIconTint="@color/textColor"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
-
 
     <PreferenceCategory android:title="Routes">
 
         <SwitchPreferenceCompat
+            android:colorControlActivated="@android:color/black"
             android:defaultValue="true"
+            android:icon="@drawable/ic_pause_settings"
             android:key="@string/autoPausePref"
             android:summaryOff="Auto pause is deactivated. It is recommended to turn on."
             android:summaryOn="Auto pause is activated."
-            android:title="Auto pause"
-            android:icon="@drawable/ic_pause_settings"
-            android:colorControlActivated="@android:color/black"
-            />
+            android:title="Auto pause" />
 
         <ListPreference
             android:defaultValue="1"
             android:entries="@array/route_type"
             android:entryValues="@array/route_value"
-            android:key="@string/routeTypePref"
-            android:title="Preferred Activity Type"
-            app:useSimpleSummaryProvider="true"
             android:icon="@drawable/ic_all"
+            android:key="@string/routeTypePref"
             android:negativeButtonText="Cancel"
-            />
+            android:title="Preferred Activity Type"
+            app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference
             android:defaultValue="10"
-            android:key="@string/distanceIntervalPref"
-            android:summary="Minimum distance to save route point."
-            android:title="Distance interval"
             android:dialogMessage="\nMinimum distance to save route point in metres.\nShould be between 5 and 50."
-            android:positiveButtonText="OK"
+            android:key="@string/distanceIntervalPref"
             android:negativeButtonText="Cancel"
-            />
+            android:positiveButtonText="OK"
+            android:summary="Minimum distance to save route point."
+            android:title="Distance interval" />
 
         <EditTextPreference
             android:defaultValue="4"
-            android:key="@string/timeIntervalPref"
-            android:summary="Minimum time to save route point."
-            android:title="Time interval"
             android:dialogMessage="\nMinimum time to save route point in seconds.\nShould be between 1 and 30."
-            android:positiveButtonText="OK"
+            android:key="@string/timeIntervalPref"
             android:negativeButtonText="Cancel"
-            />
+            android:positiveButtonText="OK"
+            android:summary="Minimum time to save route point."
+            android:title="Time interval" />
 
         <EditTextPreference
             android:defaultValue="20"
-            android:key="@string/horizontalPref"
-            android:summary="Maximum horizontal deviation."
-            android:title="Horizontal accuracy"
             android:dialogMessage="\nMaximum deviation to save route point in metres.\nShould be at least 15."
-            android:positiveButtonText="OK"
+            android:key="@string/horizontalPref"
             android:negativeButtonText="Cancel"
-            />
+            android:positiveButtonText="OK"
+            android:summary="Maximum horizontal deviation."
+            android:title="Horizontal accuracy" />
 
         <EditTextPreference
             android:defaultValue="16"
-            android:key="@string/verticalPref"
-            android:summary="Maximum vertical deviation."
-            android:title="Vertical accuracy"
             android:dialogMessage="\nMaximum deviation to save route point in metres.\nShould be at least 10."
-            android:positiveButtonText="OK"
+            android:key="@string/verticalPref"
             android:negativeButtonText="Cancel"
-            />
+            android:positiveButtonText="OK"
+            android:summary="Maximum vertical deviation."
+            android:title="Vertical accuracy" />
 
     </PreferenceCategory>
 
@@ -92,14 +83,12 @@
             android:defaultValue="0"
             android:entries="@array/night_mode"
             android:entryValues="@array/night_value"
-            android:key="@string/nightModePref"
-            android:title="Night mode"
-            app:useSimpleSummaryProvider="true"
             android:icon="@drawable/ic_night"
+            android:key="@string/nightModePref"
             android:negativeButtonText="Cancel"
-            />
+            android:title="Night mode"
+            app:useSimpleSummaryProvider="true" />
 
     </PreferenceCategory>
-
 
 </PreferenceScreen>

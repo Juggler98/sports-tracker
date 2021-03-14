@@ -1,4 +1,4 @@
- <resources>
+<resources>
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
@@ -6,36 +6,30 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="buttonStyle">@style/CustomButton</item>
 
-<!--        <item name="android:textColorPrimary">@android:color/white</item>-->
+        <!--        <item name="android:textColorPrimary">@android:color/white</item>-->
 
     </style>
 
-     <style name="AppTheme.NoActionBar">
-         <item name="windowActionBar">false</item>
-         <item name="windowNoTitle">true</item>
-         <item name="android:statusBarColor">@android:color/transparent</item>
-     </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
 
-     <style name="CustomButton" parent="Widget.AppCompat.Button">
-         <item name="android:background">@drawable/button_design</item>
-         <item name="android:textSize">12sp</item>
-     </style>
+    <style name="divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginStart">4dp</item>
+        <item name="android:layout_marginEnd">4dp</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
 
-     <style name="divider">
-         <item name ="android:layout_width">match_parent</item>
-         <item name ="android:layout_height">1dp</item>
-         <item name ="android:layout_marginStart">4dp</item>
-         <item name ="android:layout_marginEnd">4dp</item>
-         <item name ="android:layout_marginTop">4dp</item>
-         <item name ="android:layout_marginBottom">4dp</item>
-         <item name ="android:background">?android:attr/listDivider</item>
-     </style>
-
-     <style name="CustomTextSize" parent="Widget.AppCompat.TextView">
+    <style name="CustomTextSize" parent="Widget.AppCompat.TextView">
         <item name="android:textSize">12sp</item>
-     </style>
+    </style>
 
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

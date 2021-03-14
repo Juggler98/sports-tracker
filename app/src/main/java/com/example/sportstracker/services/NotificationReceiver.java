@@ -9,7 +9,7 @@ import android.util.Log;
 import com.example.sportstracker.R;
 
 /**
- *  Broadcast receiver to receive if button stop was clicked on notification.
+ * Broadcast receiver to receive if button stop was clicked on notification.
  */
 public class NotificationReceiver extends BroadcastReceiver {
 
@@ -17,7 +17,7 @@ public class NotificationReceiver extends BroadcastReceiver {
      * If stop was clicked Service GPS is stopped.
      *
      * @param context application context
-     * @param intent application intent
+     * @param intent  application intent
      */
     @Override
     public void onReceive(Context context, Intent intent) {

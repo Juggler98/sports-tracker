@@ -100,7 +100,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(getString(R.string.reloadPref));
-            //editor.putBoolean(NEVER_SHOW, false);
+        //editor.putBoolean(NEVER_SHOW, false);
         editor.apply();
 
         mapView = findViewById(R.id.mapView);

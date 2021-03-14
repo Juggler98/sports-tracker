@@ -10,12 +10,13 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 /**
- *  Creates information about app dialog.
+ * Creates information about app dialog.
  */
 public class AboutAppDialog extends AppCompatDialogFragment {
 
     /**
      * Creates Dialog about app
+     *
      * @param savedInstanceState savedInstanceState
      * @return AlertDialog
      */

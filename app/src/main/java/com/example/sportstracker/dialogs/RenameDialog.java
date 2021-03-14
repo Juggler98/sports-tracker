@@ -27,7 +27,8 @@ public class RenameDialog extends AppCompatDialogFragment {
     private RenameDialogListener renameDialogListener;
 
     /**
-     *  Dialog for Renaming activity.
+     * Dialog for Renaming activity.
+     *
      * @param savedInstanceState savedInstanceState
      * @return AlertDialog
      */
@@ -65,6 +66,7 @@ public class RenameDialog extends AppCompatDialogFragment {
 
     /**
      * Attach renameDialogListener as RenameDialogListener.
+     *
      * @param context context
      */
     @Override
@@ -78,7 +80,7 @@ public class RenameDialog extends AppCompatDialogFragment {
     }
 
     /**
-     *  Creates interface with method applyText, which can cause rename of activity.
+     * Creates interface with method applyText, which can cause rename of activity.
      */
     public interface RenameDialogListener {
         void applyText(String name);

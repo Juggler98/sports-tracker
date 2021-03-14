@@ -4,19 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".activities.RouteInfoActivity"
     android:isScrollContainer="true"
-    >
-
-
-
+    android:orientation="vertical"
+    tools:context=".activities.RouteInfoActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-
 
         <com.google.android.gms.maps.MapView
             android:id="@+id/mapView"
@@ -25,17 +19,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/scrollView"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-
-            />
-
-
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="vertical"-->
-<!--            >-->
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ScrollView
             android:id="@+id/scrollView"
@@ -44,296 +28,277 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/mapView"
-            app:layout_constraintTop_toTopOf="parent"
-            >
-
-        <TableLayout
-            android:id="@+id/tableLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-
-            >
-
-            <TableRow
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="16dp">
-
-                <TextView
-                    android:id="@+id/date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="1.1.2021"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/icon"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/ic_hike"
-                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                    android:tint="@color/colorIcon"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-
-                    >
-
-
-                </ImageView>
-
-
-            </TableRow>
-
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Distance" />
-
-
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/distance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="12.5 km"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Time" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Time (moving)" />
-
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="0:00:45"
-                    android:textSize="20sp"
-
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/timeMoving"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="0:00:25"
-                    android:textSize="20sp"
-
-                    android:textStyle="bold" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/avgInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Avg speed" />
-
-                <TextView
-                    android:id="@+id/avgMovingInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Avg speed (moving)" />
-
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/avgSpeed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="12.5 km/h"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/avgSpeedMoving"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="10 km/h"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Elevation gain" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Elevation loss" />
-
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/elevationGain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="250 m"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/elevationLoss"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="-120 m"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Max Altitude" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Min Altitude" />
-
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/maxAltitude"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="250 m"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/minAltitude"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="-120 m"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-            </TableRow>
-
-            <View style="@style/divider" />
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/maxSpeedInfo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="Max Speed" />
-
-
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:id="@+id/maxSpeed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="12 km/h"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-
-            </TableRow>
-
-        </TableLayout>
-
-<!--        </LinearLayout>-->
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TableLayout
+                android:id="@+id/tableLayout2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TableRow
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="1.1.2021"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:id="@+id/icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_weight="1"
+                        android:contentDescription="Type Icon"
+                        android:src="@drawable/ic_hike"
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                        android:tint="@color/colorIcon"
+                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Distance" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/distance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="12.5 km"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+                <View style="@style/divider" />
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Time" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Time (moving)" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="0:00:45"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/timeMoving"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="0:00:25"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+                <View style="@style/divider" />
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/avgInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Avg speed" />
+
+                    <TextView
+                        android:id="@+id/avgMovingInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Avg speed (moving)" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/avgSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="12.5 km/h"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/avgSpeedMoving"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="10 km/h"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+                <View style="@style/divider" />
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Elevation gain" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Elevation loss" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/elevationGain"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="250 m"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/elevationLoss"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="-120 m"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+                <View style="@style/divider" />
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Max Altitude" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Min Altitude" />
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/maxAltitude"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="250 m"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/minAltitude"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="-120 m"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                </TableRow>
+
+                <View style="@style/divider" />
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/maxSpeedInfo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="Max Speed" />
+
+
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:id="@+id/maxSpeed"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="12 km/h"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+
+                </TableRow>
+
+            </TableLayout>
 
         </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
 
 </LinearLayout>
