@@ -18,7 +18,7 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_POINT = "point";
 
     public Database(@Nullable Context context) {
-        super(context, "tracking.db", null, 3);
+        super(context, "tracking.db", null, 4);
     }
 
     @Override
@@ -44,9 +44,9 @@ public class Database extends SQLiteOpenHelper {
                 "ele REAL NOT NULL," +
                 "time REAL NOT NULL," +
                 "speed REAL," +
-                "hdop REAL," +
+                "hacc REAL," +
                 "course REAL," +
-                "vdop REAL," +
+                "vacc REAL," +
                 "paused INTEGER," +
                 "FOREIGN KEY(id_activity) REFERENCES " + TABLE_ACTIVITY + "(id_activity)," +
                 "PRIMARY KEY (id_point, id_activity))";
@@ -73,11 +73,31 @@ public class Database extends SQLiteOpenHelper {
 //
 //        onCreate(db);
 
-//        db.execSQL("ALTER TABLE " + TABLE_POINT + " RENAME COLUMN hdop to hacc;");
-//        db.execSQL("ALTER TABLE " + TABLE_POINT + " CHANGE TO hacc;");
-
         //db.execSQL("ALTER TABLE " + TABLE_ACTIVITY + " ADD COLUMN auto_pause INTEGER;");
         //db.execSQL("ALTER TABLE " + TABLE_POINT + " ADD COLUMN paused INTEGER;");
+
+        String createTablePoint = "CREATE TABLE " + "point2" +
+                "(id_activity INTEGER NOT NULL," +
+                "id_point INTEGER NOT NULL, " +
+                "lat REAL NOT NULL," +
+                "lon REAL NOT NULL," +
+                "ele REAL NOT NULL," +
+                "time REAL NOT NULL," +
+                "speed REAL," +
+                "hacc REAL," +
+                "course REAL," +
+                "vacc REAL," +
+                "paused INTEGER," +
+                "FOREIGN KEY(id_activity) REFERENCES " + TABLE_ACTIVITY + "(id_activity)," +
+                "PRIMARY KEY (id_point, id_activity))";
+
+        String insert = "INSERT INTO " + "point2" + " SELECT * FROM " + TABLE_POINT;
+
+        db.execSQL(createTablePoint);
+        db.execSQL(insert);
+
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_POINT);
+        db.execSQL("ALTER TABLE " + "point2" + " RENAME TO " + TABLE_POINT);
     }
 
     private void addTypes(String type) {
@@ -115,15 +135,14 @@ public class Database extends SQLiteOpenHelper {
         cv.put("lon", point.getLon());
         cv.put("ele", point.getEle());
         cv.put("time", point.getTime());
-        //if (point.getSpeed() != -1) {
-        cv.put("speed", point.getSpeed());
-        //}
-        //if (point.getCourse() != -1)
-        cv.put("course", point.getCourse());
-        //if (point.getHdop() != -1)
-        cv.put("hdop", point.getHdop());
-        //if (point.getVdop() != -1)
-        cv.put("vdop", point.getVdop());
+        if (point.getSpeed() != -1)
+            cv.put("speed", point.getSpeed());
+        if (point.getHacc() != -1)
+            cv.put("hacc", point.getHacc());
+        if (point.getCourse() != -1)
+            cv.put("course", point.getCourse());
+        if (point.getVacc() != -1)
+            cv.put("vacc", point.getVacc());
         if (point.getPaused()) {
             cv.put("paused", point.getPaused());
         }
@@ -307,11 +326,11 @@ public class Database extends SQLiteOpenHelper {
                 double ele = cursor.getDouble(4);
                 double time = cursor.getDouble(5);
                 double speed = cursor.getType(6) == 0 ? -1 : cursor.getDouble(6);
-                double hdop = cursor.getType(7) == 0 ? -1 : cursor.getDouble(7);
+                double hacc = cursor.getType(7) == 0 ? -1 : cursor.getDouble(7);
                 double course = cursor.getType(8) == 0 ? -1 : cursor.getDouble(8);
-                double vdop = cursor.getType(9) == 0 ? -1 : cursor.getDouble(9);
+                double vacc = cursor.getType(9) == 0 ? -1 : cursor.getDouble(9);
 
-                Point point = new Point(idActivity, idPoint, lat, lon, ele, time, speed, course, hdop, vdop);
+                Point point = new Point(idActivity, idPoint, lat, lon, ele, time, speed, hacc, course, vacc);
                 if (cursor.getType(10) != 0) {
                     if (cursor.getInt(10) == 1) {
                         point.setPaused(true);

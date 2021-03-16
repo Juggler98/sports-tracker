@@ -54,17 +54,17 @@ public class ServiceGPS extends Service {
             double elevation = round(location.getAltitude() * 10.0) / 10.0;
             double time = location.getTime();
             double speed = location.getSpeed();
-            double hdop = location.getAccuracy();
-            double vdop = -1;
-            if (Build.VERSION.SDK_INT >= 26) {
-                vdop = location.getVerticalAccuracyMeters();
-            }
+            double hacc = location.getAccuracy();
             double course = location.getBearing();
+            double vacc = -1;
+            if (Build.VERSION.SDK_INT >= 26) {
+                vacc = location.getVerticalAccuracyMeters();
+            }
 
             Log.d("GPS_LC_TIME", location.getTime() + "");
 
             Point point = new Point(routeID, database.getLastPointID(routeID) + 1,
-                    latitude, longitude, elevation, time, speed, course, hdop, vdop);
+                    latitude, longitude, elevation, time, speed, hacc, course, vacc);
 
             if (sharedPreferences.getBoolean(getString(R.string.pausePref), false)) {
                 point.setPaused(true);
@@ -76,7 +76,7 @@ public class ServiceGPS extends Service {
                 minHorizontal = max(minHorizontal, 4);
                 minVertical = max(minVertical, 4);
 
-                if (point.getHdop() <= minHorizontal && point.getVdop() <= minVertical) {
+                if (point.getHacc() <= minHorizontal && point.getVacc() <= minVertical) {
                     database.addPoint(point);
                     // send coordinates to record activity to write lines on map
                     Intent intent = new Intent(getString(R.string.intentExtra));

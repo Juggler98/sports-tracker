@@ -5,8 +5,8 @@ import androidx.annotation.NonNull;
 public class Route {
 
     private int id;
-    private int idType;
-    private double timeStart;
+    private final int idType;
+    private final double timeStart;
     private double timeEnd = 0.0;
     private String title = "";
     private boolean autoPause = true;
@@ -14,9 +14,6 @@ public class Route {
     public Route(int idType, double timeStart) {
         this.idType = idType;
         this.timeStart = timeStart;
-    }
-
-    public Route() {
     }
 
     @NonNull

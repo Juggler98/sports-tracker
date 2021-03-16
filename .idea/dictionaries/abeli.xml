@@ -5,6 +5,7 @@
       <w>gpxtpx</w>
       <w>gpxtrkx</w>
       <w>gpxx</w>
+      <w>hacc</w>
       <w>haversine</w>
       <w>hdop</w>
       <w>hmmss</w>
@@ -14,6 +15,7 @@
       <w>sssz</w>
       <w>trkpt</w>
       <w>trkseg</w>
+      <w>vacc</w>
       <w>vdop</w>
     </words>
   </dictionary>

@@ -1,10 +1,5 @@
 package com.example.sportstracker;
 
-import android.util.Log;
-import android.widget.Toast;
-
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.sportstracker.data.Point;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -20,7 +15,6 @@ import java.util.Locale;
 public class RoutesMethods {
 
     public RoutesMethods() {
-
     }
 
     /**
@@ -72,7 +66,7 @@ public class RoutesMethods {
                 elevationLoss = 0.0;
                 for (int i = 0; i < points.size(); i = i + 10) {
                     Point point = points.get(i);
-                    if (i != 0 && point.getVdop() < 8) {
+                    if (i != 0 && point.getVacc() < 8) {
                         ele2 = point.getEle();
                         elevationDifference = ele2 - ele1;
                         if (elevationDifference > difference) {
@@ -101,7 +95,7 @@ public class RoutesMethods {
         double maxAltitude = Integer.MIN_VALUE;
         double minAltitude = Integer.MAX_VALUE;
         for (Point point : points) {
-            if (point.getVdop() < 8) {
+            if (point.getVacc() < 8) {
                 double altitude = point.getEle();
                 if (altitude > maxAltitude)
                     maxAltitude = altitude;

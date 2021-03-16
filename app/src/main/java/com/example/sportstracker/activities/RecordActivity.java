@@ -19,7 +19,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.sportstracker.data.Database;
 import com.example.sportstracker.data.Point;
@@ -368,7 +367,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
                     Log.d("mapLC", "On Receive: " + lat + " " + lon);
                     if (firstChangeOfPosition) {
                         gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-                        gMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
+                        gMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker_start)));
                         firstChangeOfPosition = false;
                         Log.d("MAP_LC", "First Change of Position");
                     }
@@ -387,7 +386,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
                 gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLngArrayList.get(latLngArrayList.size() - 1), 15));
             }
             // marker for first position
-            gMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_start)));
+            gMap.addMarker(new MarkerOptions().position(latLngArrayList.get(0)).icon(BitmapDescriptorFactory.fromResource(R.mipmap.marker_start)));
             gMap.addPolyline(new PolylineOptions().addAll(latLngArrayList).color(Color.RED));
             firstChangeOfPosition = false;
             Log.d("MAP_LC", "Writing lines from: " + routeID);

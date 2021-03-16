@@ -25,7 +25,7 @@ public class App extends Application {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             if (notificationManager != null)
                 notificationManager.createNotificationChannel(notificationChannel);
-            Log.d("GPS_LC", "New Channel");
+            Log.d("LC_APP", "New Channel");
         }
     }
 

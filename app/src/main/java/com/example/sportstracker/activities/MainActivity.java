@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 trkptChild = trkptChild.getLength() == 0 ? trkptElement.getElementsByTagName("gpxtpx:course") : trkptChild;
                                 course = this.getDataFromNode(trkptChild);
                             }
-                            Point point = new Point(activityID, pointID++, lat, lon, ele, time, speed, course, -1, -1);
+                            Point point = new Point(activityID, pointID++, lat, lon, ele, time, speed, -1, course, -1);
                             points.add(point);
                         }
                     }
