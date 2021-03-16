@@ -11,5 +11,5 @@
     <color name="statsInfo">#606060</color>
 
     <color name="textColor">#FFFFFF</color>
-    <color name="navigation_icon">#4CAF50</color>
+<!--    <color name="navigation_icon">#4CAF50</color>-->
 </resources>

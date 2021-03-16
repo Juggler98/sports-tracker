@@ -1,13 +1,13 @@
 package com.example.sportstracker.data;
 
-import androidx.annotation.NonNull;
+//import androidx.annotation.NonNull;
 
 public class Type {
 
-    private int id;
-    private String type;
+//    private int id;
+//    private String type;
 
-    public Type(int id, String type) {
+    /*public Type(int id, String type) {
         this.id = id;
         this.type = type;
     }
@@ -39,4 +39,5 @@ public class Type {
     public void setType(String type) {
         this.type = type;
     }
+    */
 }

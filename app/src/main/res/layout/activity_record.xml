@@ -161,21 +161,19 @@
 
                     <TextView
                         android:id="@+id/distance"
+                        style="@style/recordTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:gravity="center" />
 
                     <TextView
                         android:id="@+id/altitude"
+                        style="@style/recordTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:gravity="center" />
 
 
                 </TableRow>
@@ -189,16 +187,14 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/info_time"
-                        android:textStyle="italic" />
+                        android:text="@string/info_time" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/info_time_mov"
-                        android:textStyle="italic" />
+                        android:text="@string/info_time_mov" />
 
                 </TableRow>
 
@@ -206,23 +202,19 @@
 
                     <TextView
                         android:id="@+id/time"
+                        style="@style/recordTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="24sp"
-
-                        android:textStyle="bold" />
+                        android:gravity="center" />
 
                     <TextView
                         android:id="@+id/timeMoving"
+                        style="@style/recordTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="24sp"
-
-                        android:textStyle="bold" />
+                        android:gravity="center" />
 
                 </TableRow>
 
@@ -236,8 +228,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/info_avg_speed"
-                        android:textStyle="italic" />
+                        android:text="@string/info_avg_speed" />
 
                     <TextView
                         android:id="@+id/avgMovingInfo"
@@ -245,8 +236,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:text="@string/info_avg_speed_mov"
-                        android:textStyle="italic" />
+                        android:text="@string/info_avg_speed_mov" />
 
                 </TableRow>
 
@@ -254,21 +244,19 @@
 
                     <TextView
                         android:id="@+id/avgSpeed"
+                        style="@style/recordTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:gravity="center" />
 
                     <TextView
                         android:id="@+id/avgSpeedMoving"
+                        style="@style/recordTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:gravity="center" />
 
                 </TableRow>
 
@@ -296,21 +284,19 @@
 
                     <TextView
                         android:id="@+id/elevationGain"
+                        style="@style/recordTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:gravity="center" />
 
                     <TextView
                         android:id="@+id/elevationLoss"
+                        style="@style/recordTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:gravity="center" />
 
                 </TableRow>
 
@@ -332,12 +318,11 @@
 
                     <TextView
                         android:id="@+id/speed"
+                        style="@style/recordTextStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:textSize="24sp"
-                        android:textStyle="bold" />
+                        android:gravity="center" />
 
                 </TableRow>
 

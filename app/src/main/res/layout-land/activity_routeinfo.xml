@@ -70,12 +70,11 @@
 
                 <TextView
                     android:id="@+id/distance"
+                    style="@style/routeTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:gravity="center" />
 
             </TableRow>
 
@@ -103,21 +102,19 @@
 
                 <TextView
                     android:id="@+id/time"
+                    style="@style/routeTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/timeMoving"
+                    style="@style/routeTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:gravity="center" />
 
             </TableRow>
 
@@ -147,21 +144,19 @@
 
                 <TextView
                     android:id="@+id/avgSpeed"
+                    style="@style/routeTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/avgSpeedMoving"
+                    style="@style/routeTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:gravity="center" />
 
             </TableRow>
 
@@ -189,21 +184,19 @@
 
                 <TextView
                     android:id="@+id/elevationGain"
+                    style="@style/routeTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/elevationLoss"
+                    style="@style/routeTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:gravity="center" />
 
             </TableRow>
 
@@ -231,21 +224,19 @@
 
                 <TextView
                     android:id="@+id/maxAltitude"
+                    style="@style/routeTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/minAltitude"
+                    style="@style/routeTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:gravity="center" />
 
             </TableRow>
 
@@ -268,14 +259,12 @@
 
                 <TextView
                     android:id="@+id/maxSpeed"
+                    style="@style/routeTextStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
+                    android:gravity="center" />
 
             </TableRow>
 

@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.sportstracker.data.Database;
 import com.example.sportstracker.data.Point;
@@ -436,9 +437,14 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             altitudeView.setText("-");
         }
 
-        double[] elevationGainLoss = routesMethods.getElevationGainLoss(points);
-        eleGainView.setText(getString(R.string.metres, (int) elevationGainLoss[0]));
-        eleLossView.setText(getString(R.string.metres, (int) elevationGainLoss[1]));
+        if (route.getIdType() != 4) {
+            double[] elevationGainLoss = routesMethods.getElevationGainLoss(points);
+            eleGainView.setText(getString(R.string.metres, (int) elevationGainLoss[0]));
+            eleLossView.setText(getString(R.string.metres, (int) elevationGainLoss[1]));
+        } else {
+            eleGainView.setText("-");
+            eleLossView.setText("-");
+        }
 
         if (hours[0] == 0)
             avgSpeed = 0.0;

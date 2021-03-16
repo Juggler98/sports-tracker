@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.example.sportstracker.fragments.PlaceholderFragment;
+import com.example.sportstracker.fragments.StatsTabFragment;
 
 import java.util.ArrayList;
 
@@ -23,7 +23,7 @@ public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        return StatsTabFragment.newInstance(position + 1);
     }
 
     @Nullable

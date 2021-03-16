@@ -17,5 +17,5 @@
     <color name="textColor">#000000</color>
 
     <color name="launcher_background">#4CAF50</color>
-    <color name="navigation_icon">#8BC34A</color>
+<!--    <color name="navigation_icon">#8BC34A</color>-->
 </resources>

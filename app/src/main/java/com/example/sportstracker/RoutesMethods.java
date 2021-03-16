@@ -1,5 +1,10 @@
 package com.example.sportstracker;
 
+import android.util.Log;
+import android.widget.Toast;
+
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.sportstracker.data.Point;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -23,7 +28,6 @@ public class RoutesMethods {
      * @return distance of route in metres
      */
     public double getDistance(ArrayList<Point> points) {
-        //Log.d("DB_LC", "DB_getDistance");
         double lat1;
         double lat2;
         double lon1;
@@ -45,7 +49,6 @@ public class RoutesMethods {
                 point = points.get(i);
             }
         }
-//        return round(distance / 10) / 100.0;
         return distance;
     }
 
@@ -60,19 +63,28 @@ public class RoutesMethods {
         double elevationGain = 0.0;
         double elevationLoss = 0.0;
         double elevationDifference;
-        for (int i = 0; i < points.size(); i = i + 3) {
-            Point point = points.get(i);
-            if (i != 0 && point.getVdop() < 8) {
-                ele2 = point.getEle();
-                elevationDifference = ele2 - ele1;
-                if (elevationDifference > 5) {
-                    elevationGain += elevationDifference;
-                } else if (elevationDifference < -8) {
-                    elevationLoss += elevationDifference;
+        int difference = 8;
+        for (int j = 0; j < 2; j++) {
+            double[] altitudeMaxMin = getAltitudeMaxMin(points);
+            if (altitudeMaxMin[0] - altitudeMaxMin[1] > elevationGain) {
+                difference = j == 1 ? 0 : difference;
+                elevationGain = 0.0;
+                elevationLoss = 0.0;
+                for (int i = 0; i < points.size(); i = i + 10) {
+                    Point point = points.get(i);
+                    if (i != 0 && point.getVdop() < 8) {
+                        ele2 = point.getEle();
+                        elevationDifference = ele2 - ele1;
+                        if (elevationDifference > difference) {
+                            elevationGain += elevationDifference;
+                        } else if (elevationDifference < difference * -1) {
+                            elevationLoss += elevationDifference;
+                        }
+                        ele1 = ele2;
+                    } else {
+                        ele1 = point.getEle();
+                    }
                 }
-                ele1 = ele2;
-            } else {
-                ele1 = point.getEle();
             }
         }
         elevationGainLoss[0] = elevationGain;
@@ -111,8 +123,6 @@ public class RoutesMethods {
         if (maxSpeed <= 0) {
             ArrayList<Point> twoPoints = new ArrayList<>();
             for (int i = 0; i < points.size(); i++) {
-                //if/ (point.getSpeed() > maxSpeed)
-                //maxSpeed = point.getSpeed();
                 if (i != 0) {
                     twoPoints.add(points.get(i));
                     double speed = this.getSpeed(twoPoints);
@@ -132,12 +142,12 @@ public class RoutesMethods {
         double timePast = points.get(0).getTime();
         double time = points.get(1).getTime();
         double timeDifference = (time - timePast) / 1000.0;
-        return this.getDistance(points) / timeDifference;
+        return timeDifference == 0 ? 0 : this.getDistance(points) / timeDifference;
     }
 
     /**
      * @param points points
-     * @return time of doing activity
+     * @return time of doing activity in hours
      */
     public double[] getHours(ArrayList<Point> points, boolean autoPause) {
         double[] hours = new double[2];
@@ -150,28 +160,20 @@ public class RoutesMethods {
         //moving time
         hours[1] = hours[0];
 
-//        Point point = null;
-//        Point pastPoint;
         ArrayList<Point> twoPoints = new ArrayList<>();
         for (int i = 0; i < points.size(); i++) {
             if (i != 0) {
-//                pastPoint = point;
-//                double timePast = pastPoint.getTime();
                 double timePast = twoPoints.get(0).getTime();
-//                point = points.get(i);
                 twoPoints.add(points.get(i));
-//                double time = point.getTime();
                 double time = twoPoints.get(1).getTime();
                 double timeDifference = time - timePast;
                 if (twoPoints.get(0).getPaused())
                     hours[0] -= timeDifference;
                 double speed = this.getDistance(twoPoints) / (timeDifference / 1000.0);
-//                if (timeDifference > 30 * 1000 || pastPoint.getPaused())
                 if (speed < 0.15 || twoPoints.get(0).getPaused())
                     hours[1] -= timeDifference;
                 twoPoints.remove(0);
             } else {
-//                point = points.get(i);
                 twoPoints.add(points.get(i));
             }
         }
@@ -200,9 +202,18 @@ public class RoutesMethods {
         return latLng;
     }
 
-    //this is haversine Formula for calculating distance between two coordinates
-    //https://en.wikipedia.org/wiki/Haversine_formula
-    //https://www.movable-type.co.uk/scripts/latlong.html
+
+    /**
+     * This is Haversine Formula for calculating distance between two coordinates
+     * https://en.wikipedia.org/wiki/Haversine_formula
+     * https://www.movable-type.co.uk/scripts/latlong.html
+     *
+     * @param lat1 latitude of first point
+     * @param lat2 latitude of second point
+     * @param lon1 longitude of first point
+     * @param lon2 longitude of second point
+     * @return metres between two points
+     */
     private double haversineFormula(double lat1, double lat2, double lon1, double lon2) {
         double r = 6371000;
         double fi1 = lat1 * Math.PI / 180;
@@ -215,6 +226,11 @@ public class RoutesMethods {
         return r * c;
     }
 
+    /**
+     * @param time    in ms
+     * @param pattern pattern of date
+     * @return Date in string according pattern
+     */
     public String getDate(double time, String pattern) {
         DateFormat dateFormat = new SimpleDateFormat(pattern, Locale.getDefault());
         Date date = new Date((long) time);

@@ -276,8 +276,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void run() {
                     loadingDialog.dismissDialog();
-                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                    Toast.makeText(getApplicationContext(), "Import Successful: " + points.size(), Toast.LENGTH_LONG).show();
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                    Toast.makeText(getApplicationContext(), "Import Successful", Toast.LENGTH_LONG).show();
                 }
             });
         }
@@ -357,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         } catch (ParserConfigurationException | SAXException | NumberFormatException | IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
         return points;
     }
@@ -387,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         } catch (ParserConfigurationException | SAXException | NumberFormatException | IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
+            //Toast.makeText(this, "" + e.getMessage(), Toast.LENGTH_LONG).show();
         }
         return routeName;
     }

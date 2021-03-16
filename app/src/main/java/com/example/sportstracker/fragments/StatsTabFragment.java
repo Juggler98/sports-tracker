@@ -20,12 +20,12 @@ import java.util.ArrayList;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class PlaceholderFragment extends Fragment {
+public class StatsTabFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    public static PlaceholderFragment newInstance(int index) {
-        PlaceholderFragment fragment = new PlaceholderFragment();
+    public static StatsTabFragment newInstance(int index) {
+        StatsTabFragment fragment = new StatsTabFragment();
         Bundle bundle = new Bundle();
         bundle.putInt(ARG_SECTION_NUMBER, index);
         fragment.setArguments(bundle);
@@ -79,7 +79,10 @@ public class PlaceholderFragment extends Fragment {
                 ArrayList<Point> points = database.getPoints(activityID);
                 double distancePartial = routesMethods.getDistance(points);
                 double timePartial = routesMethods.getHours(points, route.getAutoPause())[1];
-                double elevationGainPartial = routesMethods.getElevationGainLoss(points)[0];
+                double elevationGainPartial = 0;
+                if (route.getIdType() != 4) {
+                    elevationGainPartial = routesMethods.getElevationGainLoss(points)[0];
+                }
                 distanceD += distancePartial;
                 timeD += timePartial;
                 elevationGainD += elevationGainPartial;
@@ -113,8 +116,8 @@ public class PlaceholderFragment extends Fragment {
             elevationGain.setText(getString(R.string.metres, Math.round(elevationGainDYear)));
             elevationGainAll.setText(getString(R.string.metres, Math.round(elevationGainD)));
         } else {
-            elevationGain.setText(getString(R.string.metres, 0));
-            elevationGainAll.setText(getString(R.string.metres, 0));
+            elevationGain.setText("-");
+            elevationGainAll.setText("-");
         }
 
         activityCountAll.setText(getString(R.string.stats_count, activitiesCount));

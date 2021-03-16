@@ -146,13 +146,20 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         minutesSeconds = routesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
         timeMoving.setText(getString(R.string.route_time, hoursMinutesSeconds[0], minutesSeconds[0], minutesSeconds[1]));
 
-        double[] elevationGainLoss = routesMethods.getElevationGainLoss(points);
-        elevationGain.setText(getString(R.string.metres, (int) elevationGainLoss[0]));
-        elevationLoss.setText(getString(R.string.metres, (int) elevationGainLoss[1]));
+        if (route.getIdType() != 4) {
+            double[] elevationGainLoss = routesMethods.getElevationGainLoss(points);
+            elevationGain.setText(getString(R.string.metres, (int) elevationGainLoss[0]));
+            elevationLoss.setText(getString(R.string.metres, (int) elevationGainLoss[1]));
 
-        double[] altitudeMaxMin = routesMethods.getAltitudeMaxMin(points);
-        maxAltitude.setText(getString(R.string.metres, (int) altitudeMaxMin[0]));
-        minAltitude.setText(getString(R.string.metres, (int) altitudeMaxMin[1]));
+            double[] altitudeMaxMin = routesMethods.getAltitudeMaxMin(points);
+            maxAltitude.setText(getString(R.string.metres, (int) altitudeMaxMin[0]));
+            minAltitude.setText(getString(R.string.metres, (int) altitudeMaxMin[1]));
+        } else {
+            elevationGain.setText("-");
+            elevationLoss.setText("-");
+            maxAltitude.setText("-");
+            minAltitude.setText("-");
+        }
 
         maximumSpeed = routesMethods.getMaxSpeed(points) * 3.6;
 
