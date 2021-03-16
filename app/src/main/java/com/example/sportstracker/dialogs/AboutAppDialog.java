@@ -24,7 +24,7 @@ public class AboutAppDialog extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("About App").setMessage("\n" + "Created by Adam Beliansky" + "\n\n" + "Version: 14.3.2021").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setTitle("About App").setMessage("\n" + "Created by Adam Beliansky" + "\n\n" + "Version: 16.3.2021").setPositiveButton("Ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
             }

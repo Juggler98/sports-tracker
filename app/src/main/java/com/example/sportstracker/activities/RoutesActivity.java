@@ -66,8 +66,8 @@ public class RoutesActivity extends AppCompatActivity {
         adapter.setOnItemClickListener(new RouteAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                openStats(activities.get(position).getId());
                 activityOpen = position;
+                openStats(activities.get(activityOpen).getId());
             }
         });
 
@@ -91,18 +91,19 @@ public class RoutesActivity extends AppCompatActivity {
         Log.d("Routes_LC", "onResume Routes");
         SharedPreferences sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
         boolean isReloadNeeded = sharedPreferences.getBoolean(getString(R.string.reloadPref), false);
-        int oldSize = activities.size();
         if (isReloadNeeded) {
-            activities = database.getActivities();
-            sortRoutes(activities);
-            if (activities.size() == oldSize) {
+            int oldSize = activities.size();
+            int newSize = database.getActivities().size();
+            if (newSize == oldSize) {
                 routeItemsList.get(activityOpen).setTitle(activities.get(activityOpen).getTitle());
                 routeItemsList.get(activityOpen).setIcon(routesMethods.getIcon(activities.get(activityOpen).getIdType()));
                 adapter.notifyItemChanged(activityOpen);
-            } else if (activities.size() < oldSize) {
+            } else if (newSize < oldSize) {
                 routeItemsList.remove(activityOpen);
                 adapter.notifyItemRemoved(activityOpen);
             }
+            activities = database.getActivities();
+            sortRoutes(activities);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(getString(R.string.reloadPref), false);
             editor.apply();
@@ -140,21 +141,23 @@ public class RoutesActivity extends AppCompatActivity {
     private void sortRoutes(ArrayList<Route> sortingList) {
         sortBy = sharedPreferences.getInt(SORT_BY, 0);
         reverse = sharedPreferences.getBoolean(REVERSE, false);
-        for (int i = 1; i < sortingList.size(); i++) {
-            Route current = sortingList.get(i);
-            int j = i - 1;
-            while (j > -1 && this.compare(sortingList.get(j), current)) {
-                sortingList.set(j + 1, sortingList.get(j));
-                j--;
+        for (int k = 0; k <= sortBy; k++) {
+            for (int i = 1; i < sortingList.size(); i++) {
+                Route current = sortingList.get(i);
+                int j = i - 1;
+                while (j > -1 && this.compare(sortingList.get(j), current, k)) {
+                    sortingList.set(j + 1, sortingList.get(j));
+                    j--;
+                }
+                sortingList.set(j + 1, current);
             }
-            sortingList.set(j + 1, current);
         }
         reloadRouteItemsList();
         if (adapter != null && !sharedPreferences.getBoolean(getString(R.string.reloadPref), false))
             adapter.notifyDataSetChanged();
     }
 
-    private boolean compare(Route route1, Route route2) {
+    private boolean compare(Route route1, Route route2, int sortBy) {
         if (sortBy == 0) {
             return Double.compare(route1.getTimeStart(), route2.getTimeStart()) == (reverse ? -1 : 1);
         } else {

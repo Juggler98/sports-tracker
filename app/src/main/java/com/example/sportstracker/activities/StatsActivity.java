@@ -18,7 +18,7 @@ import com.example.sportstracker.data.Database;
 import com.example.sportstracker.dialogs.LoadingDialog;
 import com.example.sportstracker.R;
 import com.example.sportstracker.RoutesMethods;
-import com.example.sportstracker.adapters.SectionsPagerAdapter;
+import com.example.sportstracker.adapters.StatsPagerAdapter;
 import com.google.android.material.tabs.TabLayout;
 
 /**
@@ -29,7 +29,7 @@ public class StatsActivity extends AppCompatActivity {
     private final RoutesMethods routesMethods = new RoutesMethods();
     private Database database;
 
-    private SectionsPagerAdapter sectionsPagerAdapter;
+    private StatsPagerAdapter statsPagerAdapter;
     private ViewPager viewPager;
     private TabLayout tabLayout;
 
@@ -48,13 +48,13 @@ public class StatsActivity extends AppCompatActivity {
         tabLayout = findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), 0);
+        statsPagerAdapter = new StatsPagerAdapter(getSupportFragmentManager(), 0);
 
         for (int i = 1; i <= 8; i++) {
             if (i < 8)
-                sectionsPagerAdapter.addPage(database.getType(i));
+                statsPagerAdapter.addPage(database.getType(i));
             else
-                sectionsPagerAdapter.addPage("All");
+                statsPagerAdapter.addPage("All");
         }
 
         loadingDialog = new LoadingDialog(StatsActivity.this);
@@ -64,7 +64,7 @@ public class StatsActivity extends AppCompatActivity {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                viewPager.setAdapter(sectionsPagerAdapter);
+                viewPager.setAdapter(statsPagerAdapter);
                 for (int i = 0; i < 8; i++) {
                     TabLayout.Tab tab = tabLayout.getTabAt(i);
                     if (tab != null) {

@@ -116,6 +116,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean(getString(R.string.recordingPref), newRoute);
             editor.putInt(getString(R.string.routeNamePref), routeID);
+            editor.putBoolean(getString(R.string.pausePref), false);
             editor.apply();
 
             Intent intent = new Intent(view.getContext(), ServiceGPS.class);

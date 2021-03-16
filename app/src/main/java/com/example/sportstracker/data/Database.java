@@ -56,13 +56,6 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL(createTableActivity);
         db.execSQL(createTablePoint);
 
-        this.addTypes("Hike");
-        this.addTypes("Bike");
-        this.addTypes("Run");
-        this.addTypes("Swim");
-        this.addTypes("Ski");
-        this.addTypes("Walk");
-        this.addTypes("Skate");
     }
 
     @Override
@@ -107,6 +100,23 @@ public class Database extends SQLiteOpenHelper {
 
         cv.put("type", type);
         db.insert(TABLE_TYPE, null, cv);
+        db.close();
+    }
+
+    public void checkTypes() {
+        String queryString = "SELECT * FROM " + TABLE_TYPE;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString, null);
+        if (!cursor.moveToFirst()) {
+            this.addTypes("Hike");
+            this.addTypes("Bike");
+            this.addTypes("Run");
+            this.addTypes("Swim");
+            this.addTypes("Ski");
+            this.addTypes("Walk");
+            this.addTypes("Skate");
+        }
+        cursor.close();
         db.close();
     }
 

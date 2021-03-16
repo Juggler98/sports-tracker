@@ -22,12 +22,12 @@ import java.util.ArrayList;
  */
 public class StatsTabFragment extends Fragment {
 
-    private static final String ARG_SECTION_NUMBER = "section_number";
+    private static final String PAGE_NUMBER = "pageNumber";
 
     public static StatsTabFragment newInstance(int index) {
         StatsTabFragment fragment = new StatsTabFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(ARG_SECTION_NUMBER, index);
+        bundle.putInt(PAGE_NUMBER, index);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -61,7 +61,7 @@ public class StatsTabFragment extends Fragment {
 
         int sectionNumber = 1;
         if (getArguments() != null)
-            sectionNumber = getArguments().getInt(ARG_SECTION_NUMBER);
+            sectionNumber = getArguments().getInt(PAGE_NUMBER);
 
         int activitiesCount = 0;
         double distanceD = 0;

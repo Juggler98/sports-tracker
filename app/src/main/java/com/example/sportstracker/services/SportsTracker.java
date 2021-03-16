@@ -11,7 +11,7 @@ import com.example.sportstracker.R;
 /**
  * Creates Notification channel for android API >= 26.
  */
-public class App extends Application {
+public class SportsTracker extends Application {
 
     @Override
     public void onCreate() {

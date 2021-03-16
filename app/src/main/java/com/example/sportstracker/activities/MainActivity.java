@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             getSupportActionBar().setTitle(getString(R.string.title_activity_main));
 
         database = new Database(MainActivity.this);
+        database.checkTypes();
 
         drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);

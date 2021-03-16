@@ -10,11 +10,11 @@ import com.example.sportstracker.fragments.StatsTabFragment;
 
 import java.util.ArrayList;
 
-public class SectionsPagerAdapter extends FragmentStatePagerAdapter {
+public class StatsPagerAdapter extends FragmentStatePagerAdapter {
 
     private final ArrayList<String> pageTitles = new ArrayList<>();
 
-    public SectionsPagerAdapter(@NonNull FragmentManager fm, int behavior) {
+    public StatsPagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
 
