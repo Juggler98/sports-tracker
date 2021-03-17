@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         loadingDialog = new LoadingDialog(MainActivity.this);
         loadingDialog.setText("Importing...");
+
     }
 
     @Override
@@ -237,11 +238,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences defaultSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int activityType = Integer.parseInt(defaultSharedPreferences.getString(getString(R.string.routeTypePref), "1"));
 
-        ArrayList<Point> points = getPointsFromFile(uri);
+        ArrayList<Point> points = getPointsFromFile(uri, activityType);
 
         if (points.size() > 0) {
-            Route route = new Route(activityType, points.get(0).getTime());
-            database.createActivity(route);
             database.updateActivity(database.getLastActivityID(), 0, points.get(points.size() - 1).getTime(), "");
             database.updateActivity(database.getLastActivityID(), 0, 0, this.getNameFromFile(uri));
 
@@ -284,11 +283,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private ArrayList<Point> getPointsFromFile(Uri uri) {
+    private ArrayList<Point> getPointsFromFile(Uri uri, int activityType) {
         ArrayList<Point> points = new ArrayList<>();
         ArrayList<SimpleDateFormat> patterns = this.getDateFormats();
         int activityID = database.getLastActivityID() + 1;
-        int pointID = database.getLastPointID(activityID) + 1;
+        int pointID = 1;
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
@@ -348,6 +347,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 trkptChild = trkptElement.getElementsByTagName("course");
                                 trkptChild = trkptChild.getLength() == 0 ? trkptElement.getElementsByTagName("gpxtpx:course") : trkptChild;
                                 course = this.getDataFromNode(trkptChild);
+                            }
+                            if (trkseg == 0 && i == 0) {
+                                Route route = new Route(activityType, time);
+                                database.createActivity(route);
+                                activityID = database.getLastActivityID();
                             }
                             Point point = new Point(activityID, pointID++, lat, lon, ele, time, speed, -1, course, -1);
                             points.add(point);
