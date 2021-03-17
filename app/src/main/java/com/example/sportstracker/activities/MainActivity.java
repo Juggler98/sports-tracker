@@ -242,10 +242,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (points.size() > 0) {
             database.updateActivity(database.getLastActivityID(), 0, points.get(points.size() - 1).getTime(), "");
-            database.updateActivity(database.getLastActivityID(), 0, 0, this.getNameFromFile(uri));
+            String routeName = this.getNameFromFile(uri);
+            database.updateActivity(database.getLastActivityID(), 0, 0, routeName);
 
             //Import is running in new Thread
-            ImportRunnable runnable = new ImportRunnable(points);
+            ImportRunnable runnable = new ImportRunnable(points, routeName);
             new Thread(runnable).start();
 
         } else {
@@ -255,9 +256,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private class ImportRunnable implements Runnable {
         private final ArrayList<Point> points;
+        private final String routeName;
 
-        ImportRunnable(ArrayList<Point> points) {
+        ImportRunnable(ArrayList<Point> points, String routeName) {
             this.points = points;
+            this.routeName = routeName;
         }
 
         @Override
@@ -277,7 +280,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void run() {
                     loadingDialog.dismissDialog();
                     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
-                    Toast.makeText(getApplicationContext(), "Import Successful", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), routeName + ": Import Successful", Toast.LENGTH_LONG).show();
                 }
             });
         }
