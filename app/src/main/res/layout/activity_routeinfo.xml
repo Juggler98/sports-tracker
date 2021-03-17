@@ -256,7 +256,7 @@
                 style="@style/routeTextStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="8dp"
                 android:layout_weight="1"
                 android:gravity="center" />
 
