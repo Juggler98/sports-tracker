@@ -39,7 +39,7 @@ public class RoutesActivity extends AppCompatActivity {
     private final String SORT_BY = "sortByPref";
     private final String REVERSE = "reversePref";
 
-    private int activityOpen;
+    private int activityOpen = 0;
     private int sortBy = 0;
     private boolean reverse = false;
 
@@ -94,7 +94,7 @@ public class RoutesActivity extends AppCompatActivity {
         if (isReloadNeeded) {
             int oldSize = activities.size();
             int newSize = database.getActivities().size();
-            if (newSize == oldSize) {
+            if (newSize == oldSize && oldSize > 0) {
                 routeItemsList.get(activityOpen).setTitle(activities.get(activityOpen).getTitle());
                 routeItemsList.get(activityOpen).setIcon(routesMethods.getIcon(activities.get(activityOpen).getIdType()));
                 adapter.notifyItemChanged(activityOpen);

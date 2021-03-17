@@ -95,10 +95,9 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         Log.d("RouteInfo_LC", "onCreate Route: " + routeID);
 
         sharedPreferences = getSharedPreferences(getString(R.string.sharedPreferences), MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(getString(R.string.reloadPref));
+        //SharedPreferences.Editor editor = sharedPreferences.edit();
         //editor.putBoolean(NEVER_SHOW, false);
-        editor.apply();
+        //editor.apply();
 
         mapView = findViewById(R.id.mapView);
         avgInfo = findViewById(R.id.avgInfo);
