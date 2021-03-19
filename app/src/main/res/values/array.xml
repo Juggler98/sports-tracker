@@ -2,7 +2,7 @@
 <resources>
 
     <string-array name="night_mode">
-        <item>Follow System</item>
+        <item>Follow system</item>
         <item>Always on</item>
         <item>Do not use</item>
     </string-array>

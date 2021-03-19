@@ -150,8 +150,20 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         speedInfoView = findViewById(R.id.speedInfo);
 
         route = database.getActivity(routeID);
+        if (route == null) {
+            Intent intent = new Intent(getApplicationContext(), ServiceGPS.class);
+            stopService(intent);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(getString(R.string.pausePref), false);
+            editor.putBoolean(getString(R.string.recordingPref), true);
+            editor.remove(getString(R.string.routeNamePref));
+            editor.apply();
+            finish();
+            return;
+        }
 
         avgVsPace = route.getIdType() == 3;
+
 
         avgSpeedView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -294,7 +306,8 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         gMap.setMyLocationEnabled(false);
         gMap = null;
         mapView.onDestroy();
-        handler.removeCallbacks(this.runnable);
+        if (handler != null)
+            handler.removeCallbacks(this.runnable);
     }
 
     // return last camera position if map was rotated

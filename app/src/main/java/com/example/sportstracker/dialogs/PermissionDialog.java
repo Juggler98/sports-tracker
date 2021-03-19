@@ -16,7 +16,7 @@ public class PermissionDialog extends AppCompatDialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Activate ALWAYS GPS access").setMessage("\n" + "For correct running on background, you should also activate ALWAYS access to GPS.\n\n" +
-                "If you don't be asked for this, go to Settings -> Apps. " +
+                "If you're not be asked for this, go to Settings -> Apps. " +
                 "Find Sports Tracker and activate ALWAYS GPS access.").setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
