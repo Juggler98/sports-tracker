@@ -442,8 +442,9 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             }
             if (speed == oldSpeed) {
                 speed = 0;
+            } else {
+                oldSpeed = speed;
             }
-            oldSpeed = speed;
         } else {
             speed = 0;
             altitudeView.setText("-");
