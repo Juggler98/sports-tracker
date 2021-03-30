@@ -26,7 +26,7 @@ import com.google.android.material.tabs.TabLayout;
  */
 public class StatsActivity extends AppCompatActivity {
 
-    private final RoutesMethods routesMethods = new RoutesMethods();
+//    private final RoutesMethods routesMethods = new RoutesMethods();
     private Database database;
 
     private StatsPagerAdapter statsPagerAdapter;
@@ -69,7 +69,7 @@ public class StatsActivity extends AppCompatActivity {
                     TabLayout.Tab tab = tabLayout.getTabAt(i);
                     if (tab != null) {
                         if (i < 7)
-                            tab.setIcon(routesMethods.getIcon(i + 1));
+                            tab.setIcon(RoutesMethods.getIcon(i + 1));
                         else
                             tab.setIcon(R.drawable.ic_all);
                         if (tab.getIcon() != null)

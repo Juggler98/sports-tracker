@@ -27,7 +27,7 @@ import java.util.ArrayList;
  */
 public class RoutesActivity extends AppCompatActivity {
 
-    private final RoutesMethods routesMethods = new RoutesMethods();
+//    private final RoutesMethods routesMethods = new RoutesMethods();
     private Database database;
 
     private final ArrayList<RouteItem> routeItemsList = new ArrayList<>();
@@ -96,7 +96,7 @@ public class RoutesActivity extends AppCompatActivity {
             int newSize = database.getActivities().size();
             if (newSize == oldSize && oldSize > 0) {
                 routeItemsList.get(activityOpen).setTitle(activities.get(activityOpen).getTitle());
-                routeItemsList.get(activityOpen).setIcon(routesMethods.getIcon(activities.get(activityOpen).getIdType()));
+                routeItemsList.get(activityOpen).setIcon(RoutesMethods.getIcon(activities.get(activityOpen).getIdType()));
                 adapter.notifyItemChanged(activityOpen);
             } else if (newSize < oldSize) {
                 routeItemsList.remove(activityOpen);
@@ -126,7 +126,7 @@ public class RoutesActivity extends AppCompatActivity {
     private void reloadRouteItemsList() {
         routeItemsList.clear();
         for (Route route : activities) {
-            routeItemsList.add(new RouteItem(routesMethods.getIcon(route.getIdType()), routesMethods.getDate(route.getTimeStart(), "dd.MM.yyyy HH:mm"), route.getTitle()));
+            routeItemsList.add(new RouteItem(RoutesMethods.getIcon(route.getIdType()), RoutesMethods.getDate(route.getTimeStart(), "dd.MM.yyyy HH:mm"), route.getTitle()));
         }
     }
 

@@ -80,7 +80,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         private void changeIcon(Preference preferredType, String value) {
             int type = Integer.parseInt(value);
-            preferredType.setIcon(new RoutesMethods().getIcon(type));
+            preferredType.setIcon(RoutesMethods.getIcon(type));
             preferredType.getIcon().setTint(getResources().getColor(R.color.colorIcon, null));
         }
 

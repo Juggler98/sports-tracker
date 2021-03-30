@@ -56,7 +56,7 @@ public class StatsTabFragment extends Fragment {
         TextView elevationGainAll = root.findViewById(R.id.elevationGainAllTime);
 
         Database database = new Database(getContext());
-        RoutesMethods routesMethods = new RoutesMethods();
+//        RoutesMethods routesMethods = new RoutesMethods();
         ArrayList<Route> activities = database.getActivities();
 
         int sectionNumber = 1;
@@ -77,19 +77,19 @@ public class StatsTabFragment extends Fragment {
             if (route.getIdType() == sectionNumber || sectionNumber == 8) {
                 int activityID = route.getId();
                 ArrayList<Point> points = database.getPoints(activityID);
-                double distancePartial = routesMethods.getDistance(points);
-                double timePartial = routesMethods.getHours(points, route.getAutoPause())[1];
+                double distancePartial = RoutesMethods.getDistance(points);
+                double timePartial = RoutesMethods.getHours(points, route.getAutoPause())[1];
                 double elevationGainPartial = 0;
                 if (route.getIdType() != 4) {
-                    elevationGainPartial = routesMethods.getElevationGainLoss(points)[0];
+                    elevationGainPartial = RoutesMethods.getElevationGainLoss(points)[0];
                 }
                 distanceD += distancePartial;
                 timeD += timePartial;
                 elevationGainD += elevationGainPartial;
                 activitiesCount++;
 
-                int activityYear = Integer.parseInt(routesMethods.getDate(route.getTimeStart(), "yyyy"));
-                int actualYear = Integer.parseInt(routesMethods.getDate(System.currentTimeMillis(), "yyyy"));
+                int activityYear = Integer.parseInt(RoutesMethods.getDate(route.getTimeStart(), "yyyy"));
+                int actualYear = Integer.parseInt(RoutesMethods.getDate(System.currentTimeMillis(), "yyyy"));
 
                 if (activityYear == actualYear) {
                     distanceDYear += distancePartial;

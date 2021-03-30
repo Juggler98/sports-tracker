@@ -49,7 +49,7 @@ import static java.lang.Math.min;
  */
 public class RecordActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private final RoutesMethods routesMethods = new RoutesMethods();
+    //private final RoutesMethods routesMethods = new RoutesMethods();
     private MapView mapView;
     private GoogleMap gMap;
 
@@ -360,7 +360,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         }
         // load coordinates
         if (routeID != 0) {
-            latLngArrayList = routesMethods.getLatLng(database.getPoints(routeID));
+            latLngArrayList = RoutesMethods.getLatLng(database.getPoints(routeID));
         } else {
             Log.d("RECORD_LC", "Route ID is null");
         }
@@ -422,15 +422,15 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         if (points.size() > 0) {
             twoPoints.add(points.get(points.size() - 1));
         }
-        double distance = routesMethods.getDistance(points) / 1000.0;
+        double distance = RoutesMethods.getDistance(points) / 1000.0;
 
-        double[] hours = routesMethods.getHours(points, route.getAutoPause());
-        int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[0]);
-        String[] minutesSeconds = routesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
+        double[] hours = RoutesMethods.getHours(points, route.getAutoPause());
+        int[] hoursMinutesSeconds = RoutesMethods.getHoursMinutesSeconds(hours[0]);
+        String[] minutesSeconds = RoutesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
         timeView.setText(getString(R.string.route_time, hoursMinutesSeconds[0], minutesSeconds[0], minutesSeconds[1]));
 
-        hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[1]);
-        minutesSeconds = routesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
+        hoursMinutesSeconds = RoutesMethods.getHoursMinutesSeconds(hours[1]);
+        minutesSeconds = RoutesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
         timeMovingView.setText(getString(R.string.route_time, hoursMinutesSeconds[0], minutesSeconds[0], minutesSeconds[1]));
 
         distanceView.setText(String.format(Locale.US, getString(R.string.route_distance), distance));
@@ -438,7 +438,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             altitudeView.setText(getString(R.string.metres, (int) points.get(points.size() - 1).getEle()));
             speed = points.get(points.size() - 1).getSpeed();
             if (speed <= 0 && twoPoints.size() == 2) {
-                speed = routesMethods.getSpeed(twoPoints);
+                speed = RoutesMethods.getSpeed(twoPoints);
             }
             if (speed == oldSpeed) {
                 speed = 0;
@@ -451,7 +451,7 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
         }
 
         if (route.getIdType() != 4) {
-            double[] elevationGainLoss = routesMethods.getElevationGainLoss(points);
+            double[] elevationGainLoss = RoutesMethods.getElevationGainLoss(points);
             eleGainView.setText(getString(R.string.metres, (int) elevationGainLoss[0]));
             eleLossView.setText(getString(R.string.metres, (int) elevationGainLoss[1]));
         } else {
@@ -488,19 +488,19 @@ public class RecordActivity extends AppCompatActivity implements OnMapReadyCallb
             if (avgSpeed == 0) {
                 avgSpeedView.setText(getString(R.string.route_pace_null));
             } else {
-                String[] pace = routesMethods.getPace(avgSpeed);
+                String[] pace = RoutesMethods.getPace(avgSpeed);
                 avgSpeedView.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
             if (avgSpeedMoving == 0) {
                 avgSpeedMovingView.setText(getString(R.string.route_pace_null));
             } else {
-                String[] pace = routesMethods.getPace(avgSpeedMoving);
+                String[] pace = RoutesMethods.getPace(avgSpeedMoving);
                 avgSpeedMovingView.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
             if (speed == 0) {
                 speedView.setText(getString(R.string.route_pace_null));
             } else {
-                String[] pace = routesMethods.getPace(speed);
+                String[] pace = RoutesMethods.getPace(speed);
                 speedView.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
         } else {

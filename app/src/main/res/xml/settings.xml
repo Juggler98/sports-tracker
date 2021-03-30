@@ -36,7 +36,7 @@
             android:icon="@drawable/ic_all"
             android:key="@string/routeTypePref"
             android:negativeButtonText="Cancel"
-            android:title="Preferred Activity Type"
+            android:title="Preferred activity type"
             app:useSimpleSummaryProvider="true" />
 
         <EditTextPreference

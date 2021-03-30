@@ -37,7 +37,7 @@ public class ServiceGPS extends Service {
 
     private LocationManager locationManager;
     private int routeID;
-    private final RoutesMethods routesMethods = new RoutesMethods();
+//    private final RoutesMethods routesMethods = new RoutesMethods();
     private NotificationCompat.Builder notification;
 
     private final Database database = new Database(ServiceGPS.this);
@@ -87,7 +87,7 @@ public class ServiceGPS extends Service {
 
             // when location is changed notification is updated
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notification.setContentText(Math.round(routesMethods.getDistance(database.getPoints(routeID)) / 10) / 100.0 + " km ");
+            notification.setContentText(Math.round(RoutesMethods.getDistance(database.getPoints(routeID)) / 10) / 100.0 + " km ");
             if (notificationManager != null)
                 notificationManager.notify(1, notification.build());
 

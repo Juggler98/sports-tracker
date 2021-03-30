@@ -52,7 +52,7 @@ import static java.lang.Math.round;
  */
 public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCallback, RenameDialog.RenameDialogListener {
 
-    private final RoutesMethods routesMethods = new RoutesMethods();
+//    private final RoutesMethods routesMethods = new RoutesMethods();
 
     private TextView avgSpeed;
     private TextView avgInfo;
@@ -118,7 +118,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
         route = database.getActivity(routeID);
         points = database.getPoints(routeID);
-        latLngArrayList = routesMethods.getLatLng(points);
+        latLngArrayList = RoutesMethods.getLatLng(points);
 
         setIcon();
 
@@ -131,26 +131,26 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
         if (getSupportActionBar() != null)
             getSupportActionBar().setTitle(name);
 
-        dateView.setText(routesMethods.getDate(route.getTimeStart(), "dd.MM.yyyy HH:mm:ss"));
+        dateView.setText(RoutesMethods.getDate(route.getTimeStart(), "dd.MM.yyyy HH:mm:ss"));
 
-        double distanceD = routesMethods.getDistance(points) / 1000.0;
+        double distanceD = RoutesMethods.getDistance(points) / 1000.0;
         distance.setText(String.format(Locale.US, getString(R.string.route_distance), distanceD));
 
-        double[] hours = routesMethods.getHours(points, route.getAutoPause());
-        int[] hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[0]);
-        String[] minutesSeconds = routesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
+        double[] hours = RoutesMethods.getHours(points, route.getAutoPause());
+        int[] hoursMinutesSeconds = RoutesMethods.getHoursMinutesSeconds(hours[0]);
+        String[] minutesSeconds = RoutesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
         time.setText(getString(R.string.route_time, hoursMinutesSeconds[0], minutesSeconds[0], minutesSeconds[1]));
 
-        hoursMinutesSeconds = routesMethods.getHoursMinutesSeconds(hours[1]);
-        minutesSeconds = routesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
+        hoursMinutesSeconds = RoutesMethods.getHoursMinutesSeconds(hours[1]);
+        minutesSeconds = RoutesMethods.getMinutesSeconds(hoursMinutesSeconds[1], hoursMinutesSeconds[2]);
         timeMoving.setText(getString(R.string.route_time, hoursMinutesSeconds[0], minutesSeconds[0], minutesSeconds[1]));
 
         if (route.getIdType() != 4) {
-            double[] elevationGainLoss = routesMethods.getElevationGainLoss(points);
+            double[] elevationGainLoss = RoutesMethods.getElevationGainLoss(points);
             elevationGain.setText(getString(R.string.metres, (int) elevationGainLoss[0]));
             elevationLoss.setText(getString(R.string.metres, (int) elevationGainLoss[1]));
 
-            double[] altitudeMaxMin = routesMethods.getAltitudeMaxMin(points);
+            double[] altitudeMaxMin = RoutesMethods.getAltitudeMaxMin(points);
             maxAltitude.setText(getString(R.string.metres, (int) altitudeMaxMin[0]));
             minAltitude.setText(getString(R.string.metres, (int) altitudeMaxMin[1]));
         } else {
@@ -160,7 +160,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             minAltitude.setText("-");
         }
 
-        maximumSpeed = routesMethods.getMaxSpeed(points) * 3.6;
+        maximumSpeed = RoutesMethods.getMaxSpeed(points) * 3.6;
 
         if (hours[0] == 0)
             this.avg = 0.0;
@@ -320,19 +320,19 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
             if (avg == 0) {
                 avgSpeed.setText(getString(R.string.route_pace_null));
             } else {
-                String[] pace = routesMethods.getPace(avg);
+                String[] pace = RoutesMethods.getPace(avg);
                 avgSpeed.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
             if (avgMov == 0) {
                 avgSpeedMoving.setText(getString(R.string.route_pace_null));
             } else {
-                String[] pace = routesMethods.getPace(avgMov);
+                String[] pace = RoutesMethods.getPace(avgMov);
                 avgSpeedMoving.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
             if (maximumSpeed == 0) {
                 maxSpeed.setText(getString(R.string.route_pace_null));
             } else {
-                String[] pace = routesMethods.getPace(maximumSpeed);
+                String[] pace = RoutesMethods.getPace(maximumSpeed);
                 maxSpeed.setText(getString(R.string.route_pace, pace[0], pace[1]));
             }
         } else {
@@ -383,7 +383,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void setIcon() {
         ImageView imageView = findViewById(R.id.icon);
-        imageView.setImageResource(routesMethods.getIcon(route.getIdType()));
+        imageView.setImageResource(RoutesMethods.getIcon(route.getIdType()));
     }
 
     private void setReloadIsNeeded() {
@@ -394,7 +394,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
 
     private void createGpx() {
         if (route.getTitle().equals(""))
-            routeName = routesMethods.getDate(route.getTimeStart(), "yyyy-MM-dd_HH-mm-ss");
+            routeName = RoutesMethods.getDate(route.getTimeStart(), "yyyy-MM-dd_HH-mm-ss");
         else
             routeName = route.getTitle();
         Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
@@ -434,7 +434,7 @@ public class RouteInfoActivity extends AppCompatActivity implements OnMapReadyCa
                 for (Point point : points) {
                     String trkpt = "<trkpt lat=\"" + point.getLat() + "\" lon=\"" + point.getLon() + "\">\n";
                     String ele = "\t<ele>" + point.getEle() + "</ele>\n";
-                    String time = "\t<time>" + routesMethods.getDate(point.getTime(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") + "</time>\n";
+                    String time = "\t<time>" + RoutesMethods.getDate(point.getTime(), "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'") + "</time>\n";
                     String speed = "\t<speed>" + round(point.getSpeed() * 100) / 100.0 + "</speed>\n";
                     String course = "\t<course>" + round(point.getCourse() * 10) / 10.0 + "</course>\n";
                     fileOutputStream.write(trkpt.getBytes());
