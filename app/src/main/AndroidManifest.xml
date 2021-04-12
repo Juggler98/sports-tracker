@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sportstracker">
+    package="com.belsoft.sportstracker">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".services.SportsTracker"
+        android:name="com.belsoft.sportstracker.services.SportsTracker"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -18,33 +18,33 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activities.StatsActivity"
+            android:name="com.belsoft.sportstracker.activities.StatsActivity"
             android:label="@string/title_all_stats"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName="com.belsoft.sportstracker.activities.MainActivity" />
 
         <activity
-            android:name=".activities.RecordActivity"
-            android:parentActivityName=".activities.MainActivity"
+            android:name="com.belsoft.sportstracker.activities.RecordActivity"
+            android:parentActivityName="com.belsoft.sportstracker.activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.RouteInfoActivity"
+            android:name="com.belsoft.sportstracker.activities.RouteInfoActivity"
             android:label="@string/title_activity_stats"
-            android:parentActivityName=".activities.RoutesActivity" />
+            android:parentActivityName="com.belsoft.sportstracker.activities.RoutesActivity" />
         <activity
-            android:name=".activities.RoutesActivity"
+            android:name="com.belsoft.sportstracker.activities.RoutesActivity"
             android:label="@string/title_activity_routes"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName="com.belsoft.sportstracker.activities.MainActivity" />
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name="com.belsoft.sportstracker.activities.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".activities.MainActivity" />
+            android:parentActivityName="com.belsoft.sportstracker.activities.MainActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.belsoft.sportstracker.activities.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -53,8 +53,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".services.NotificationReceiver" />
-        <service android:name=".services.ServiceGPS" />
+        <receiver android:name="com.belsoft.sportstracker.services.NotificationReceiver" />
+        <service android:name="com.belsoft.sportstracker.services.ServiceGPS" />
 
     </application>
 
