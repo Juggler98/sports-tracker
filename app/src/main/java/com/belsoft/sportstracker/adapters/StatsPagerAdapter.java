@@ -22,7 +22,7 @@ public class StatsPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // getItem is called to instantiate the fragment for the given page.
-        // Return a StatsTabFragmentvytv (defined as a static inner class below).
+        // Return a StatsTabFragment(defined as a static inner class below).
         return StatsTabFragment.newInstance(position + 1);
     }
 
